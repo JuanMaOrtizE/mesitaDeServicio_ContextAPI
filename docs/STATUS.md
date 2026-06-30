@@ -4,8 +4,8 @@
 
 - Proyecto inicializado con la plantilla React + JavaScript de Vite.
 - React funciona dentro de `StrictMode`.
-- La pantalla y los estilos todavía son los de demostración de Vite.
-- No existen funcionalidades del Help Desk.
+- La demostración de Vite fue reemplazada por una lista estática de tickets.
+- La primera vista del Help Desk está dividida en componentes de presentación.
 - React Router, Tailwind CSS y JSON Server todavía no están instalados ni configurados.
 - No existen contextos, reducers, rutas ni servicios HTTP.
 - Alcance, modelo de datos y roadmap aprobados.
@@ -16,10 +16,13 @@
 - Definición del alcance incluido y excluido.
 - Definición inicial de entidades y relaciones.
 - Planificación de las fases de aprendizaje y desarrollo.
+- Lista estática de tres tickets con datos acordes al modelo inicial.
+- Componentes `TicketList` y `TicketItem` comunicados mediante props.
+- Estado vacío de la lista y claves estables durante el renderizado.
 
 ## Tarea actual
 
-### Tarea 1 — Lista estática de tickets
+### Tarea 1 — Lista estática de tickets (completada)
 
 Reemplazar la demostración de Vite por una vista que muestre entre tres y cinco tickets estáticos mediante componentes reutilizables.
 
@@ -74,7 +77,7 @@ Para esta tarea también pueden existir colecciones estáticas mínimas de clien
 
 ## Próximo paso
 
-Revisar la implementación de la Tarea 1. Solo después de aprobarla se definirá la primera tarea de estado local con `useState`.
+Definir la primera tarea de estado local con `useState`. No debe comenzarse hasta recibir sus instrucciones y criterios de aceptación.
 
 ## Bloqueos
 
