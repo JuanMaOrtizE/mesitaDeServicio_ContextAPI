@@ -1,6 +1,7 @@
 import TicketList from "./components/TicketList";
 import TicketSearch from "./components/TicketSearch";
 import { useState } from "react";
+import TicketStatusFilter from "./components/TicketStatusFilter";
 
 const tickets = [
   {
@@ -43,10 +44,11 @@ const tickets = [
 const emptyMessage =
   tickets.length === 0
     ? "No hay tickets registrados."
-    : "No hay tickets que coincidan con la búsqueda.";
+    : "No hay tickets que coincidan con los criterios seleccionados.";
 
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const normalizedSearchTerm = searchTerm.trim().toLowerCase();
 
   const filteredTickets = tickets.filter(
@@ -55,10 +57,18 @@ function App() {
       ticket.description.toLowerCase().includes(normalizedSearchTerm),
   );
 
+  const filteredStatusTickets = filteredTickets.filter(
+    (ticket) => statusFilter === "all" || ticket.status === statusFilter,
+  );
+
   return (
     <div>
       <TicketSearch searchTerm={searchTerm} onSearchChange={setSearchTerm} />
-      <TicketList tickets={filteredTickets} emptyMessage={emptyMessage} />
+      <TicketStatusFilter
+        statusFilter={statusFilter}
+        onStatusFilterChange={setStatusFilter}
+      />
+      <TicketList tickets={filteredStatusTickets} emptyMessage={emptyMessage} />
     </div>
   );
 }
