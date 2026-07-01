@@ -1,8 +1,8 @@
 import TicketItem from "./TicketItem";
 
-function TicketList({ tickets }) {
+function TicketList({ tickets, emptyMessage }) {
   if (tickets.length === 0) {
-    return <p>No hay tickets registrados.</p>;
+    return <div>{emptyMessage}</div>;
   }
 
   return tickets.map((ticket) => (

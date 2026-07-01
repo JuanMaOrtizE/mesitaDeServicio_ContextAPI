@@ -1,4 +1,6 @@
 import TicketList from "./components/TicketList";
+import TicketSearch from "./components/TicketSearch";
+import { useState } from "react";
 
 const tickets = [
   {
@@ -38,11 +40,25 @@ const tickets = [
     updatedAt: "2026-06-29",
   },
 ];
+const emptyMessage =
+  tickets.length === 0
+    ? "No hay tickets registrados."
+    : "No hay tickets que coincidan con la búsqueda.";
 
 function App() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+
+  const filteredTickets = tickets.filter(
+    (ticket) =>
+      ticket.title.toLowerCase().includes(normalizedSearchTerm) ||
+      ticket.description.toLowerCase().includes(normalizedSearchTerm),
+  );
+
   return (
     <div>
-      <TicketList tickets={tickets} />
+      <TicketSearch searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+      <TicketList tickets={filteredTickets} emptyMessage={emptyMessage} />
     </div>
   );
 }
