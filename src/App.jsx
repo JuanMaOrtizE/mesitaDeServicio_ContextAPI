@@ -2,6 +2,7 @@ import TicketList from "./components/TicketList";
 import TicketSearch from "./components/TicketSearch";
 import { useState } from "react";
 import TicketStatusFilter from "./components/TicketStatusFilter";
+import TicketForm from "./components/TicketForm";
 
 const initialTickets = [
   {
@@ -41,10 +42,23 @@ const initialTickets = [
     updatedAt: "2026-06-29",
   },
 ];
+
 const emptyMessage =
   initialTickets.length === 0
     ? "No hay tickets registrados."
     : "No hay tickets que coincidan con los criterios seleccionados.";
+
+const categories = [
+  { id: 1, name: "Acceso" },
+  { id: 2, name: "Pagos" },
+  { id: 3, name: "Entregas" },
+];
+
+const customers = [
+  { id: 1, name: "Laura Gómez" },
+  { id: 2, name: "Carlos Pérez" },
+  { id: 3, name: "Ana Torres" },
+];
 
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -71,6 +85,21 @@ function App() {
     );
   }
 
+  function handleCreateTicket(draft) {
+    const now = new Date().toISOString();
+
+    const newTicket = {
+      ...draft,
+      id: Date.now(),
+      status: "open",
+      agentId: null,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    setTickets((previousTickets) => [newTicket, ...previousTickets]);
+  }
+
   return (
     <div>
       <TicketSearch searchTerm={searchTerm} onSearchChange={setSearchTerm} />
@@ -82,6 +111,11 @@ function App() {
         tickets={filteredStatusTickets}
         emptyMessage={emptyMessage}
         onTicketStatusChange={handleTicketStatusChange}
+      />
+      <TicketForm
+        customers={customers}
+        categories={categories}
+        onCreateTicket={handleCreateTicket}
       />
     </div>
   );
