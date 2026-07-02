@@ -15,76 +15,85 @@
 - **Tarea 1:** lista estática de tickets, props, claves estables y estado vacío.
 - **Tarea 2:** input controlado y búsqueda local derivada por título y descripción.
 - **Tarea 3:** filtro controlado por estado combinado con la búsqueda existente.
+- **Tarea 4:** actualización inmutable del estado de tickets desde cada elemento.
 - Normalización de la búsqueda sin distinguir mayúsculas, minúsculas ni espacios exteriores.
 - Mensajes diferenciados para colección vacía y criterios sin coincidencias.
 - Validación satisfactoria mediante `npm run lint` y `npm run build`.
 
 ## Tarea actual
 
-### Tarea 3 — Filtro local por estado (completada)
+### Tarea 4 — Actualizar el estado de un ticket en memoria (completada)
 
-Añadir un selector controlado que filtre los tickets por estado y funcione al mismo tiempo que la búsqueda existente.
+Permitir cambiar el estado de cada ticket desde su tarjeta y conservar el cambio en el estado local de React.
 
 #### Objetivo de aprendizaje
 
-- Manejar más de un estado local con responsabilidades distintas.
-- Combinar criterios usando estado derivado.
-- Construir un `select` controlado y accesible.
+- Convertir una colección inicial en estado local.
+- Actualizar arrays y objetos sin mutarlos.
+- Elevar un evento desde un componente hijo hasta el propietario del estado.
+- Comprender cómo una actualización afecta los resultados filtrados.
 
 #### Archivos que el estudiante debe modificar o crear
 
-- `src/App.jsx`: mantener el estado seleccionado y calcular la lista visible usando búsqueda y estado.
-- `src/components/TicketStatusFilter.jsx`: mostrar el selector y comunicar el nuevo valor mediante props.
-- `src/components/TicketList.jsx`: no requiere cambios salvo que sea necesario adaptar el mensaje vacío.
+- `src/App.jsx`: convertir la colección en estado y definir la función que actualiza un ticket.
+- `src/components/TicketList.jsx`: recibir la función y entregarla a cada `TicketItem`.
+- `src/components/TicketItem.jsx`: sustituir el texto de estado por un selector controlado.
 
 #### Interfaz esperada
 
-`TicketStatusFilter` recibirá:
+`TicketList` recibirá, además de sus props actuales:
 
-- `statusFilter`: valor seleccionado.
-- `onStatusFilterChange`: función que recibe el nuevo valor.
+- `onTicketStatusChange`: función que recibe el identificador del ticket y el nuevo estado.
 
-El selector tendrá estas opciones:
+`TicketItem` recibirá:
 
-- `all`: Todos los estados.
+- `ticket`: ticket que debe representar.
+- `onStatusChange`: función que comunica `ticket.id` y el nuevo estado.
+
+El selector de cada ticket tendrá estas opciones:
+
 - `open`: Abierto.
 - `in-progress`: En progreso.
 - `resolved`: Resuelto.
 
 #### Comportamiento esperado
 
-- El valor inicial será `all` y mostrará todos los tickets.
-- Elegir un estado mostrará únicamente los tickets con ese valor exacto.
-- La búsqueda y el estado se combinarán con una condición lógica AND.
-- Cambiar un filtro no borrará ni modificará el otro.
-- Si no hay coincidencias, se mostrará un mensaje aplicable a búsqueda y filtros.
+- La constante exterior se renombrará conceptualmente como `initialTickets`.
+- `App` inicializará `tickets` mediante `useState(initialTickets)`.
+- La actualización usará la forma funcional de `setTickets` y `map` para crear un array nuevo.
+- Solo el ticket cuyo `id` coincida recibirá un nuevo objeto con el estado actualizado.
+- Los demás tickets conservarán sus datos.
+- La búsqueda y el filtro global seguirán funcionando sobre el estado actual de `tickets`.
+- Si un ticket deja de cumplir el filtro global después del cambio, desaparecerá de la lista; este comportamiento es correcto.
 
 #### Criterios de aceptación
 
-- El selector está asociado a un `label` mediante `htmlFor` e `id`.
-- Es un componente controlado mediante `value` y `onChange`.
-- `App` mantiene un único estado nuevo llamado conceptualmente `statusFilter`, con valor inicial `all`.
-- `TicketStatusFilter` no recibe la colección ni realiza el filtrado.
-- La lista visible se calcula durante el renderizado; no se guarda en otro `useState`.
-- El filtro usa los valores internos acordados: `open`, `in-progress` y `resolved`.
-- Buscar texto y seleccionar estado al mismo tiempo produce la intersección correcta.
-- Volver a `all` conserva la búsqueda activa y elimina solamente el filtro de estado.
-- Una combinación sin resultados muestra un mensaje claro.
+- `tickets` es estado local de `App` y se inicializa con la colección existente.
+- No se mantiene una copia adicional de la colección en estado.
+- La actualización se realiza con `setTickets(previousTickets => ...)`.
+- No se asigna directamente `ticket.status` ni se usan métodos mutables.
+- El selector de cada ticket está controlado por `ticket.status`.
+- Cada selector tiene un `label` asociado mediante un `id` único basado en `ticket.id`.
+- Los valores internos siguen siendo `open`, `in-progress` y `resolved`.
+- El evento sigue el flujo `TicketItem → TicketList → App` mediante props.
+- Cambiar un ticket no modifica los demás.
+- Búsqueda, filtro global y mensajes vacíos siguen funcionando.
 - No se instalan dependencias ni se añaden Router, Tailwind, JSON Server, Context API o `useReducer`.
 - `npm run lint` y `npm run build` finalizan correctamente.
 
 #### Errores comunes
 
-- Guardar la lista filtrada en estado.
-- Filtrar dentro de `TicketStatusFilter` o `TicketList`.
-- Usar textos visibles en español como valores internos.
-- Aplicar búsqueda y estado como alternativas OR en lugar de exigir ambos criterios.
-- Reiniciar `searchTerm` al cambiar el estado.
-- Duplicar el array original o modificarlo.
+- Modificar `ticket.status` directamente.
+- Usar `splice`, asignaciones directas o reutilizar el mismo array.
+- Actualizar tickets por la posición del array en vez de por `id`.
+- Colocar el estado de cada ticket dentro de `TicketItem`.
+- Hacer que `TicketList` sea propietario de la colección.
+- Usar el filtro global `all` como estado válido de un ticket.
+- Perder la búsqueda o el filtro al actualizar la colección.
 
 ## Próximo paso
 
-Definir la siguiente tarea de la fase de estado local. No comenzar formularios ni otras funcionalidades hasta recibir sus instrucciones y criterios de aceptación.
+Definir el formulario controlado para crear tickets en memoria. No comenzar su implementación hasta recibir objetivo, alcance y criterios de aceptación.
 
 ## Bloqueos
 
