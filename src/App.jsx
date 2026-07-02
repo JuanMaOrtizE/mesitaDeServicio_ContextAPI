@@ -64,6 +64,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [tickets, setTickets] = useState(initialTickets);
+  const [editingTicketId, setEditingTicketId] = useState(null);
 
   const normalizedSearchTerm = searchTerm.trim().toLowerCase();
 
@@ -100,6 +101,30 @@ function App() {
     setTickets((previousTickets) => [newTicket, ...previousTickets]);
   }
 
+  const editingTicket =
+    tickets.find((ticket) => ticket.id === editingTicketId) ?? null;
+
+  function handleUpdateTicket(draft) {
+    const updatedAt = new Date().toISOString();
+
+    setTickets((previousTickets) =>
+      previousTickets.map((ticket) =>
+        ticket.id === editingTicketId
+          ? { ...ticket, ...draft, updatedAt }
+          : ticket,
+      ),
+    );
+    setEditingTicketId(null);
+  }
+
+  function handleStartEdit(ticketId) {
+    setEditingTicketId(ticketId);
+  }
+
+  function handleCancelEdit() {
+    setEditingTicketId(null);
+  }
+
   return (
     <div>
       <TicketSearch searchTerm={searchTerm} onSearchChange={setSearchTerm} />
@@ -111,11 +136,15 @@ function App() {
         tickets={filteredStatusTickets}
         emptyMessage={emptyMessage}
         onTicketStatusChange={handleTicketStatusChange}
+        onEditTicket={handleStartEdit}
       />
       <TicketForm
         customers={customers}
         categories={categories}
-        onCreateTicket={handleCreateTicket}
+        onSubmitTicket={editingTicket ? handleUpdateTicket : handleCreateTicket}
+        onCancelEdit={handleCancelEdit}
+        key={editingTicket?.id ?? "new"}
+        initialTicket={editingTicket}
       />
     </div>
   );
