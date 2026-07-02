@@ -3,7 +3,7 @@ import TicketSearch from "./components/TicketSearch";
 import { useState } from "react";
 import TicketStatusFilter from "./components/TicketStatusFilter";
 
-const tickets = [
+const initialTickets = [
   {
     id: 1,
     title: "No puedo iniciar sesión",
@@ -42,13 +42,15 @@ const tickets = [
   },
 ];
 const emptyMessage =
-  tickets.length === 0
+  initialTickets.length === 0
     ? "No hay tickets registrados."
     : "No hay tickets que coincidan con los criterios seleccionados.";
 
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [tickets, setTickets] = useState(initialTickets);
+
   const normalizedSearchTerm = searchTerm.trim().toLowerCase();
 
   const filteredTickets = tickets.filter(
@@ -61,6 +63,14 @@ function App() {
     (ticket) => statusFilter === "all" || ticket.status === statusFilter,
   );
 
+  function handleTicketStatusChange(ticketId, newStatus) {
+    setTickets((previousTickets) =>
+      previousTickets.map((ticket) =>
+        ticket.id === ticketId ? { ...ticket, status: newStatus } : ticket,
+      ),
+    );
+  }
+
   return (
     <div>
       <TicketSearch searchTerm={searchTerm} onSearchChange={setSearchTerm} />
@@ -68,7 +78,11 @@ function App() {
         statusFilter={statusFilter}
         onStatusFilterChange={setStatusFilter}
       />
-      <TicketList tickets={filteredStatusTickets} emptyMessage={emptyMessage} />
+      <TicketList
+        tickets={filteredStatusTickets}
+        emptyMessage={emptyMessage}
+        onTicketStatusChange={handleTicketStatusChange}
+      />
     </div>
   );
 }
