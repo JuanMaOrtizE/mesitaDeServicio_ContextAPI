@@ -1,13 +1,35 @@
 import { useState } from "react";
 
-function TicketForm({ customers, categories, onCreateTicket }) {
-  const [formData, setFormData] = useState({
+function getInitialFormData(initialTicket, customers, categories) {
+  if (initialTicket) {
+    return {
+      title: initialTicket.title,
+      description: initialTicket.description,
+      priority: initialTicket.priority,
+      customerId: String(initialTicket.customerId),
+      categoryId: String(initialTicket.categoryId),
+    };
+  }
+
+  return {
     title: "",
     description: "",
     priority: "medium",
     customerId: String(customers[0].id),
     categoryId: String(categories[0].id),
-  });
+  };
+}
+
+function TicketForm({
+  customers,
+  categories,
+  onSubmitTicket,
+  initialTicket,
+  onCancelEdit,
+}) {
+  const [formData, setFormData] = useState(
+    getInitialFormData(initialTicket, customers, categories),
+  );
 
   const [formError, setFormError] = useState("");
 
@@ -35,7 +57,7 @@ function TicketForm({ customers, categories, onCreateTicket }) {
       categoryId: Number(formData.categoryId),
     };
 
-    onCreateTicket(draft);
+    onSubmitTicket(draft);
 
     setFormData({
       title: "",
@@ -120,7 +142,17 @@ function TicketForm({ customers, categories, onCreateTicket }) {
 
       {formError && <p role="alert">{formError}</p>}
 
-      <button type="submit">Crear ticket</button>
+      <button type="submit">
+        {" "}
+        {initialTicket ? "Guardar cambios" : "Crear Ticket"}{" "}
+      </button>
+      {initialTicket ? (
+        <button type="button" onClick={() => onCancelEdit()}>
+          Cancelar edit
+        </button>
+      ) : (
+        ""
+      )}
     </form>
   );
 }

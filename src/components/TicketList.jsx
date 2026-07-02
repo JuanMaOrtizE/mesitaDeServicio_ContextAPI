@@ -1,6 +1,11 @@
 import TicketItem from "./TicketItem";
 
-function TicketList({ tickets, emptyMessage, onTicketStatusChange }) {
+function TicketList({
+  tickets,
+  emptyMessage,
+  onTicketStatusChange,
+  onEditTicket,
+}) {
   if (tickets.length === 0) {
     return <div>{emptyMessage}</div>;
   }
@@ -10,6 +15,7 @@ function TicketList({ tickets, emptyMessage, onTicketStatusChange }) {
       key={ticket.id}
       ticket={ticket}
       onStatusChange={onTicketStatusChange}
+      onEdit={onEditTicket}
     />
   ));
 }
