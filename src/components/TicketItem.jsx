@@ -1,4 +1,4 @@
-function TicketItem({ ticket, onStatusChange, onEdit }) {
+function TicketItem({ ticket, onStatusChange, onEdit, onDelete }) {
   const selectId = `ticket-status-${ticket.id}`;
   return (
     <div>
@@ -21,6 +21,13 @@ function TicketItem({ ticket, onStatusChange, onEdit }) {
         aria-label={`Editar ticket: ${ticket.title}`}
       >
         Editar ticket
+      </button>
+      <button
+        onClick={() => onDelete(ticket.id)}
+        type="button"
+        aria-label={`Eliminar ticket: ${ticket.title}`}
+      >
+        Eliminar ticket
       </button>
     </div>
   );

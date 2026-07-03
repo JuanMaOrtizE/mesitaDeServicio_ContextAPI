@@ -43,11 +43,6 @@ const initialTickets = [
   },
 ];
 
-const emptyMessage =
-  initialTickets.length === 0
-    ? "No hay tickets registrados."
-    : "No hay tickets que coincidan con los criterios seleccionados.";
-
 const categories = [
   { id: 1, name: "Acceso" },
   { id: 2, name: "Pagos" },
@@ -67,6 +62,10 @@ function App() {
   const [editingTicketId, setEditingTicketId] = useState(null);
 
   const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+  const emptyMessage =
+    tickets.length === 0
+      ? "No hay tickets registrados."
+      : "No hay tickets que coincidan con los criterios seleccionados.";
 
   const filteredTickets = tickets.filter(
     (ticket) =>
@@ -125,6 +124,25 @@ function App() {
     setEditingTicketId(null);
   }
 
+  function handleDeleteTicket(ticketId) {
+    const ticketToDelete = tickets.find((ticket) => ticket.id === ticketId);
+    if (!ticketToDelete) return;
+
+    const respuesta = window.confirm(
+      `¿Deseas eliminar el ticket "${ticketToDelete.title}"?`,
+    );
+
+    if (!respuesta) return;
+
+    setTickets((previousTickets) =>
+      previousTickets.filter((ticket) => ticket.id !== ticketId),
+    );
+
+    setEditingTicketId((previousEditingTicketId) =>
+      previousEditingTicketId === ticketId ? null : previousEditingTicketId,
+    );
+  }
+
   return (
     <div>
       <TicketSearch searchTerm={searchTerm} onSearchChange={setSearchTerm} />
@@ -137,6 +155,7 @@ function App() {
         emptyMessage={emptyMessage}
         onTicketStatusChange={handleTicketStatusChange}
         onEditTicket={handleStartEdit}
+        onDeleteTicket={handleDeleteTicket}
       />
       <TicketForm
         customers={customers}

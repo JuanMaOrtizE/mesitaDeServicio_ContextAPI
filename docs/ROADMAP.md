@@ -1,13 +1,13 @@
 # Roadmap
 
-## Fase 0 — Planificación
+## Fase 0 — Planificación (completada)
 
 - Definir alcance, modelo de datos, relaciones y orden de desarrollo.
 - Mantener documentación suficiente para continuar en sesiones futuras.
 
 **Resultado:** alcance y arquitectura inicial acordados.
 
-## Fase 1 — Componentes y datos estáticos
+## Fase 1 — Componentes y datos estáticos (completada)
 
 - Sustituir la demostración de Vite por una lista estática de tickets.
 - Separar la pantalla en componentes pequeños.
@@ -15,7 +15,7 @@
 
 **Resultado:** primera vista funcional sin estado ni dependencias nuevas.
 
-## Fase 2 — Estado local con `useState`
+## Fase 2 — Estado local con `useState` (completada)
 
 - Añadir búsqueda y filtros locales.
 - Crear formularios controlados.
@@ -87,4 +87,3 @@
 ## Regla de avance
 
 Cada tarea se revisará antes de comenzar la siguiente. Una fase solo se cerrará cuando sus criterios de aceptación se cumplan y `lint` y `build` finalicen correctamente.
-

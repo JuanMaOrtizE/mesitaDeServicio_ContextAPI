@@ -5,6 +5,7 @@ function TicketList({
   emptyMessage,
   onTicketStatusChange,
   onEditTicket,
+  onDeleteTicket,
 }) {
   if (tickets.length === 0) {
     return <div>{emptyMessage}</div>;
@@ -16,6 +17,7 @@ function TicketList({
       ticket={ticket}
       onStatusChange={onTicketStatusChange}
       onEdit={onEditTicket}
+      onDelete={onDeleteTicket}
     />
   ));
 }
