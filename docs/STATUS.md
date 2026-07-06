@@ -2,129 +2,142 @@
 
 ## Estado actual
 
-- Los tickets se mantienen en estado local de `App`.
-- Existen búsqueda, filtro, creación, edición y cambio de estado en memoria.
-- `TicketForm` se reutiliza en modos creación y edición.
-- React Router, Tailwind CSS y JSON Server aún no están instalados ni configurados.
-- No existen contextos, reducers, rutas ni servicios HTTP.
+- Las fases 0, 1 y 2 están completadas.
+- React Router DOM `7.18.1` está instalado.
+- Se utilizará el modo Data Router introducido en React Router 6.4.
+- El CRUD de tickets funciona con estado local.
+- Tailwind CSS y JSON Server todavía no están instalados.
 
 ## Trabajo completado
 
-- **Tarea 1:** lista estática, props, claves y estado vacío.
-- **Tarea 2:** búsqueda por título y descripción.
-- **Tarea 3:** filtro por estado combinado con la búsqueda.
-- **Tarea 4:** actualización del estado de un ticket.
-- **Tarea 5:** creación de tickets mediante formulario controlado.
-- **Tarea 6:** edición inmutable reutilizando el formulario.
-- **Tarea 7:** eliminación confirmada e inmutable de tickets.
+- Alcance, modelo general y roadmap.
+- Componentes, búsqueda, filtros y CRUD local.
+- **Tarea 8:** instalación verificada de React Router.
+- **Tarea 9:** estructura base con Data Router, layout y páginas iniciales.
 - Las tareas cerradas pasan `npm run lint` y `npm run build`.
 
 ## Tarea actual
 
-### Tarea 7 — Eliminar tickets en memoria (completada)
+### Tarea 9 — Estructura base con Data Router (completada)
 
-Permitir eliminar un ticket después de una confirmación, actualizando la colección de forma inmutable y manteniendo coherente el modo de edición.
+Configurar `createBrowserRouter` y `RouterProvider`, crear un layout compartido y separar la funcionalidad actual en una página de tickets.
+
+#### Decisión técnica
+
+No se utilizarán `BrowserRouter`, `Routes` ni `Route`. El árbol de rutas se declarará como objetos mediante `createBrowserRouter`.
+
+Tampoco se añadirán todavía `loader`, `action`, `useLoaderData` o formularios de React Router. Esas herramientas se incorporarán cuando JSON Server aporte operaciones remotas reales.
 
 #### Objetivos de aprendizaje
 
-- Eliminar elementos de un array mediante `filter` sin mutarlo.
-- Separar la intención del usuario, la confirmación y la actualización del estado.
-- Coordinar dos estados relacionados: colección de tickets y ticket en edición.
-- Diferenciar una colección realmente vacía de una lista sin coincidencias.
+- Distinguir configuración del router, proveedor, layout y páginas.
+- Comprender rutas hijas y contenido compartido mediante `Outlet`.
+- Navegar con `NavLink` y `Link` sin recargar el documento.
+- Mantener una única instancia del router fuera del árbol de componentes.
 
-#### Archivos que el estudiante debe modificar
+#### Archivos que el estudiante debe modificar o crear
 
-- `src/App.jsx`: confirmar, eliminar, cancelar una edición afectada y calcular el mensaje vacío actual.
-- `src/components/TicketList.jsx`: reenviar la acción de eliminación.
-- `src/components/TicketItem.jsx`: ofrecer un botón accesible para eliminar.
+- `src/main.jsx`: renderizar únicamente `RouterProvider` dentro de `StrictMode`.
+- `src/router.jsx`: crear y exportar la instancia de `createBrowserRouter`.
+- `src/App.jsx`: convertirse en el layout compartido.
+- `src/pages/TicketsPage.jsx`: recibir todo el código funcional actual de tickets.
+- `src/pages/DashboardPage.jsx`: placeholder del dashboard.
+- `src/pages/NotFoundPage.jsx`: página para URLs desconocidas.
 
-`TicketForm` no necesita cambios.
+#### Paso 1 — Página de tickets
 
-#### Flujo de la acción
+Mover desde `App.jsx` hacia `TicketsPage.jsx`:
 
-- `TicketItem` recibe `onDelete` y llama a `onDelete(ticket.id)`.
-- `TicketList` recibe `onDeleteTicket` y lo entrega a cada elemento como `onDelete`.
-- `App` entrega `handleDeleteTicket` a la lista.
-- El botón será `type="button"` y su nombre accesible incluirá el título del ticket.
+- Datos iniciales y catálogos temporales.
+- Estados de tickets, búsqueda, filtro y edición.
+- Manejadores de creación, edición, eliminación y estado.
+- Valores derivados y JSX de la funcionalidad actual.
 
-#### Confirmación
+Renombrar el componente a `TicketsPage`, ajustar imports hacia `../components/` y no alterar el comportamiento del CRUD durante el traslado.
 
-`handleDeleteTicket(ticketId)` debe:
+#### Paso 2 — Layout en `App`
 
-1. Buscar el ticket para obtener su título.
-2. Si no existe, terminar sin modificar estado.
-3. Solicitar confirmación con `window.confirm`, mencionando el título.
-4. Si el usuario cancela, terminar sin modificar estado.
-5. Si confirma, eliminar el ticket y resolver cualquier edición activa relacionada.
+Después de mover el dominio, `App.jsx` debe contener exclusivamente:
 
-`window.confirm` es una solución temporal adecuada para esta etapa. No crear un modal ni instalar una librería.
+- Encabezado con “Mesa de servicio”.
+- Navegación semántica con `NavLink` a `/dashboard` y `/tickets`.
+- Un `<main>` con `Outlet`.
 
-#### Eliminación inmutable
+No añadir estilos complejos; Tailwind corresponde a la siguiente fase.
 
-- Usar la forma funcional de `setTickets`.
-- Crear una colección nueva con `filter`, conservando los tickets cuyo `id` sea diferente.
-- No usar `splice`, `pop`, asignaciones directas ni mutar `initialTickets`.
+#### Paso 3 — Configuración en `router.jsx`
 
-#### Relación con la edición
+Crear una única instancia con `createBrowserRouter` fuera de cualquier componente.
 
-- Si se elimina el ticket cuyo identificador coincide con `editingTicketId`, establecer la selección en `null` después de confirmar.
-- Si se elimina otro ticket, conservar la edición actual.
-- Cancelar la confirmación no debe salir del modo edición.
+La configuración tendrá una ruta raíz:
 
-#### Mensaje vacío
+- `path: "/"`.
+- `element`: `App` como layout.
+- `children`: rutas hijas relativas.
 
-El mensaje actual se calcula fuera de `App` usando `initialTickets`, por lo que quedaría incorrecto al eliminar todos los tickets.
+Rutas hijas iniciales:
 
-- Mover su cálculo dentro de `App`, después de declarar `tickets`.
-- Si `tickets.length === 0`, mostrar “No hay tickets registrados.”
-- Si existen tickets pero búsqueda/filtro no producen resultados, mostrar “No hay tickets que coincidan con los criterios seleccionados.”
+- Índice: `Navigate` hacia `tickets` con `replace`.
+- `dashboard`: `DashboardPage`.
+- `tickets`: `TicketsPage`.
+- `*`: `NotFoundPage`.
 
-Este mensaje sigue siendo estado derivado; no debe guardarse con `useState`.
+No añadir todavía login, clientes, agentes o detalle de ticket.
 
-#### Comportamiento con búsqueda y filtros
+#### Paso 4 — Proveedor en `main.jsx`
 
-- Eliminar no reinicia `searchTerm` ni `statusFilter`.
-- Si el ticket eliminado era el único resultado visible, mostrar el mensaje correspondiente.
-- Si aún existen tickets pero ninguno coincide con los filtros, mostrar el mensaje de criterios.
-- Si se elimina el último ticket de la colección, mostrar el mensaje de colección vacía.
+- Importar `RouterProvider` y la instancia `router`.
+- Mantener `StrictMode` y `createRoot`.
+- Renderizar `<RouterProvider router={router} />`.
+- Eliminar el import y render directo de `App`.
+- No importar ni renderizar `BrowserRouter`.
+
+#### Paso 5 — Páginas auxiliares
+
+- `DashboardPage`: encabezado “Dashboard” y texto indicando que las métricas llegarán después.
+- `NotFoundPage`: encabezado “Página no encontrada” y `Link` hacia `/tickets`.
+- No usar `<a href>` para navegación interna.
+
+#### Limitación temporal
+
+Al salir de `/tickets`, `TicketsPage` se desmontará y su estado en memoria se reiniciará al regresar. Se acepta temporalmente porque JSON Server será responsable de la persistencia. No añadir Context, `localStorage` ni estado global para ocultar esta limitación.
 
 #### Criterios de aceptación
 
-- Cada ticket tiene un botón Eliminar de tipo `button` y con nombre accesible específico.
-- El evento sigue `TicketItem → TicketList → App` mediante props.
-- La confirmación menciona el ticket seleccionado.
-- Cancelar no modifica tickets ni la selección de edición.
-- Confirmar elimina únicamente el ticket seleccionado usando `filter` y la forma funcional del setter.
-- Eliminar el ticket editado devuelve el formulario al modo creación.
-- Eliminar otro ticket conserva el formulario de edición actual.
-- El mensaje vacío depende de `tickets`, no de `initialTickets` ni de otro estado.
-- Crear, editar, buscar, filtrar y cambiar estados continúan funcionando.
-- No se añaden modal personalizado, Router, Tailwind, JSON Server, Context API o `useReducer`.
+- Existe una sola instancia de `createBrowserRouter` en `router.jsx`.
+- `main.jsx` renderiza un único `RouterProvider`.
+- No existen `BrowserRouter`, `Routes` o `Route` en el proyecto.
+- `App.jsx` funciona como layout y no contiene lógica de tickets.
+- El CRUD conserva su comportamiento dentro de `/tickets`.
+- `/` redirige a `/tickets` usando `replace`.
+- `/dashboard`, `/tickets` y una URL desconocida muestran la página correcta.
+- El layout permanece visible entre rutas hijas.
+- La navegación usa `NavLink` o `Link`.
+- No se añaden loaders, actions, rutas futuras, Context API, Tailwind o JSON Server.
 - `npm run lint` y `npm run build` finalizan correctamente.
 
 #### Pruebas manuales
 
-1. Cancelar una eliminación y comprobar que nada cambia.
-2. Confirmar una eliminación y comprobar que desaparece solo ese ticket.
-3. Editar un ticket, intentar eliminarlo y cancelar: el formulario debe permanecer en edición.
-4. Editar un ticket y confirmar su eliminación: el formulario debe regresar a creación.
-5. Editar un ticket y eliminar otro: la edición debe conservarse.
-6. Eliminar todos los tickets: debe aparecer “No hay tickets registrados.”
-7. Aplicar un filtro sin coincidencias mientras aún existen tickets: debe aparecer el mensaje de criterios.
+1. Abrir `/` y verificar la redirección a `/tickets`.
+2. Navegar entre Dashboard y Tickets sin recarga completa.
+3. Confirmar que el CRUD funciona dentro de Tickets.
+4. Abrir una ruta inexistente y regresar con el enlace.
+5. Probar atrás y adelante del navegador.
+6. Recargar directamente `/dashboard` y `/tickets` durante desarrollo.
 
 #### Errores comunes
 
-- Ejecutar `filter` antes de que el usuario confirme.
-- Usar `splice` o modificar el array anterior.
-- Limpiar siempre `editingTicketId`, aunque se elimine otro ticket.
-- Limpiar la edición antes de saber si el usuario confirmó.
-- Calcular el mensaje usando la colección inicial.
-- Usar el índice del array para identificar el ticket.
-- Colocar la lógica de eliminación dentro de `TicketItem`.
+- Crear el router dentro de un componente y recrearlo en cada render.
+- Combinar `RouterProvider` con `BrowserRouter`.
+- Renderizar `App` directamente además de usarlo como `element` raíz.
+- Declarar rutas hijas como `tickets/tickets`.
+- Olvidar `Outlet` y obtener páginas vacías.
+- Dejar lógica duplicada en `App` y `TicketsPage`.
+- Introducir loaders o actions sin una fuente de datos remota.
 
 ## Próximo paso
 
-Preparar la Fase 3 de navegación: justificar React Router y definir el primer mapa de rutas antes de instalarlo o configurarlo.
+Definir la ampliación progresiva del mapa de páginas de la Fase 3. No añadir rutas nuevas hasta recibir sus criterios de aceptación.
 
 ## Bloqueos
 
