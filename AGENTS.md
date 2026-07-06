@@ -94,6 +94,23 @@ Puedes utilizar fragmentos pequeños o pseudocódigo para explicar:
 
 Cuando exista un error, primero intenta guiarme para que lo resuelva. Proporciona la solución completa solamente cuando la pida o cuando varios intentos guiados no hayan funcionado.
 
+## Explicaciones de Tailwind CSS
+
+El estudiante está aprendiendo Tailwind CSS.
+
+Cuando recomiendes o muestres una clase de Tailwind que todavía no haya sido explicada:
+
+1. Explica en lenguaje sencillo qué efecto visual produce.
+2. Indica qué propiedad o comportamiento de CSS representa de forma general.
+3. Explica por qué es adecuada para el elemento o situación concreta.
+4. Si aparecen varias clases juntas, explica por separado la responsabilidad de cada clase nueva.
+5. No proporciones únicamente una lista de clases sin explicar su propósito.
+6. No repitas innecesariamente la explicación de clases ya conocidas, salvo que yo la solicite o que se utilicen de una manera diferente.
+
+Ejemplo de explicación:
+
+- `mr-4`: agrega margen al lado derecho del elemento. Representa `margin-right` y se utiliza para separar ese elemento del contenido que aparece después.
+
 ## Planificación
 
 Tú decides el orden de construcción basándote en:
