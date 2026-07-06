@@ -3,9 +3,9 @@
 ## Estado actual
 
 - Las fases 0, 1 y 2 están completadas.
-- La Fase 3 usa Data Router mediante `createBrowserRouter` y `RouterProvider`.
-- Existen layout compartido, Dashboard, Tickets y página no encontrada.
-- El CRUD de tickets continúa funcionando en memoria dentro de `/tickets`.
+- La Fase 3 utiliza Data Router con layout compartido.
+- Existen Dashboard, Tickets, detalle dinámico y página no encontrada.
+- El CRUD de tickets funciona en memoria dentro de `/tickets`.
 - Tailwind CSS y JSON Server todavía no están instalados.
 
 ## Trabajo completado
@@ -14,108 +14,103 @@
 - Componentes, búsqueda, filtros y CRUD local.
 - **Tarea 8:** instalación de React Router.
 - **Tarea 9:** Data Router, layout y primeras páginas.
-- **Tarea 10:** ruta dinámica y página provisional de detalle de ticket.
+- **Tarea 10:** ruta dinámica de detalle de ticket.
+- **Tarea 11:** rutas y páginas placeholder de Clientes y Agentes.
 - Las tareas cerradas pasan `npm run lint` y `npm run build`.
 
 ## Tarea actual
 
-### Tarea 10 — Ruta dinámica de detalle de ticket (completada)
+### Tarea 11 — Rutas placeholder de Clientes y Agentes (completada)
 
-Añadir una URL `/tickets/:ticketId` y navegar hacia ella desde cada ticket para aprender parámetros dinámicos.
+Añadir las páginas `/customers` y `/agents` al mapa de navegación, sin implementar todavía administración de datos.
 
-#### Alcance de esta etapa
+#### Por qué se hace ahora
 
-La página de detalle mostrará el identificador recibido en la URL y explicará que los datos completos se incorporarán posteriormente.
-
-No debe buscar el ticket en una copia de `initialTickets`, usar Context ni recibir datos mediante estado de navegación. La carga real se implementará con JSON Server y un `loader` en una fase posterior, permitiendo también recargar o compartir la URL directamente.
+Estas áreas forman parte del alcance aprobado y deben tener una ubicación clara antes de comenzar el sistema visual. Construir solo placeholders permite cerrar la estructura de navegación sin mezclar Router con nuevos formularios o relaciones del dominio.
 
 #### Objetivos de aprendizaje
 
-- Declarar segmentos dinámicos con `:ticketId`.
-- Leer parámetros mediante `useParams`.
-- Construir enlaces dinámicos con `Link`.
-- Comprender que los parámetros de URL llegan como cadenas.
+- Ampliar una configuración central de rutas sin alterar las existentes.
+- Mantener nombres coherentes entre URL, página e import.
+- Diferenciar una página placeholder de una funcionalidad terminada.
+- Ampliar una navegación semántica con `NavLink`.
 
 #### Archivos que el estudiante debe modificar o crear
 
-- `src/router.jsx`: registrar la ruta dinámica.
-- `src/components/TicketItem.jsx`: añadir un enlace hacia el detalle.
-- `src/pages/TicketDetailPage.jsx`: leer y mostrar el parámetro.
+- `src/pages/CustomersPage.jsx`: placeholder de clientes.
+- `src/pages/AgentsPage.jsx`: placeholder de agentes.
+- `src/router.jsx`: importar y registrar ambas páginas.
+- `src/App.jsx`: añadir ambos destinos a la navegación.
 
-No modificar `TicketsPage` ni los manejadores CRUD.
+No modificar páginas o componentes de tickets.
 
-#### Paso 1 — Página de detalle
+#### Páginas placeholder
 
-Crear `TicketDetailPage` e importar `useParams` y `Link`.
+`CustomersPage` debe incluir:
 
-La página debe:
+- Encabezado “Clientes”.
+- Párrafo indicando que la administración de clientes se incorporará posteriormente.
 
-- Obtener `ticketId` con `useParams`.
-- Mostrar un encabezado “Detalle del ticket”.
-- Mostrar el identificador recibido, por ejemplo “Ticket #2”.
-- Explicar que el contenido completo llegará al conectar la API simulada.
-- Incluir un `Link` absoluto para regresar a `/tickets`.
+`AgentsPage` debe incluir:
 
-No convertir el parámetro a número todavía porque solo se presenta como texto.
+- Encabezado “Agentes”.
+- Párrafo indicando que la administración y asignación de agentes se incorporará posteriormente.
 
-#### Paso 2 — Ruta dinámica
+No añadir arrays, estado, formularios, botones CRUD ni datos simulados en estas páginas.
 
-Importar `TicketDetailPage` en `router.jsx` y añadir como hija del layout:
+#### Configuración de rutas
 
-- `path`: `tickets/:ticketId`.
-- `element`: `TicketDetailPage`.
+Añadir como hijas del layout y antes de la ruta `*`:
 
-Debe quedar al mismo nivel que `tickets`, `dashboard` y `*`. No crear un segundo segmento `tickets` dentro de una ruta padre que ya lo contenga.
+- `customers`: renderiza `CustomersPage`.
+- `agents`: renderiza `AgentsPage`.
 
-#### Paso 3 — Enlace desde cada ticket
+Los paths serán relativos porque ya pertenecen a la ruta raíz. No crear otro router ni otro layout.
 
-En `TicketItem`, importar `Link` y añadir un enlace visible “Ver detalle”.
+#### Navegación
 
-El destino se construirá usando `ticket.id`:
+Dentro del `<nav>` existente, añadir dos elementos de lista con:
 
-```text
-/tickets/[id del ticket]
-```
+- `NavLink` hacia `/customers` y texto “Clientes”.
+- `NavLink` hacia `/agents` y texto “Agentes”.
 
-Usar `Link`, no un botón con `navigate` ni `<a href>`, porque esta es navegación interna declarativa.
+Usar destinos absolutos como en Dashboard y Tickets. No utilizar `<a href>`.
 
-#### Comportamiento temporal del estado
+#### Alcance de la Fase 3
 
-Al entrar al detalle, `TicketsPage` se desmonta. Al regresar, el CRUD local se reinicia. Esta limitación sigue aceptada hasta JSON Server; no intentar resolverla en esta tarea.
+Al aprobar esta tarea, la Fase 3 se considerará completada. La ruta `/login` se pospone hasta la fase de autenticación simulada porque todavía no existe sesión que representar.
 
 #### Criterios de aceptación
 
-- Cada ticket muestra un enlace accesible “Ver detalle”.
-- El enlace del ticket 2 navega a `/tickets/2`.
-- La ruta usa exactamente el parámetro `:ticketId`.
-- `TicketDetailPage` obtiene el mismo nombre `ticketId` mediante `useParams`.
-- La página muestra el identificador y un enlace de regreso absoluto.
-- El layout permanece visible en la página de detalle.
-- Abrir directamente `/tickets/2` funciona durante desarrollo.
-- No se duplican datos ni se añaden loaders, Context, Tailwind o JSON Server.
-- El CRUD de `/tickets` conserva su comportamiento.
+- Existen `CustomersPage` y `AgentsPage` con nombres singulares/plurales coherentes.
+- `/customers` muestra el placeholder de Clientes dentro del layout.
+- `/agents` muestra el placeholder de Agentes dentro del layout.
+- El layout incluye enlaces visibles a Dashboard, Tickets, Clientes y Agentes.
+- Las nuevas rutas se declaran antes de `*`.
+- Las rutas existentes y el CRUD de tickets continúan funcionando.
+- Una ruta desconocida sigue mostrando `NotFoundPage`.
+- No se añaden estado, datos simulados, formularios, login, Tailwind, Context o JSON Server.
 - `npm run lint` y `npm run build` finalizan correctamente.
 
 #### Pruebas manuales
 
-1. Abrir `/tickets` y pulsar “Ver detalle” en los tres tickets.
-2. Confirmar que cada URL contiene el identificador correcto.
-3. Usar el enlace de regreso a Tickets.
-4. Abrir directamente `/tickets/999` y confirmar que muestra “Ticket #999”.
-5. Comprobar atrás y adelante del navegador.
+1. Navegar a Clientes y Agentes desde el layout.
+2. Confirmar que la URL cambia a `/customers` y `/agents` sin recarga completa.
+3. Usar atrás y adelante.
+4. Regresar a Tickets y verificar el CRUD.
+5. Abrir `/customers/inexistente` y verificar la página no encontrada.
 
 #### Errores comunes
 
-- Escribir `tickets/tickets/:ticketId`.
-- Usar nombres distintos entre `:ticketId` y `useParams`.
-- Usar `id` como posición del array.
-- Copiar `initialTickets` dentro de la página de detalle.
-- Pasar el ticket mediante `Link state`, lo que fallaría al recargar directamente.
-- Usar `<a href>` y recargar la aplicación.
+- Crear rutas absolutas fuera del árbol raíz en vez de hijas relativas.
+- Colocar las rutas nuevas después de `*`.
+- Escribir nombres inconsistentes como `CustomerPage` para una lista de clientes.
+- Implementar CRUD de clientes o agentes antes de definir su modelo de interfaz.
+- Duplicar el layout o el router.
 
 ## Próximo paso
 
-Definir las páginas placeholder y rutas de Clientes y Agentes. No comenzar su implementación hasta recibir criterios de aceptación.
+Preparar la Fase 4: justificar Tailwind CSS, definir el sistema visual inicial y solicitar su instalación antes de configurar estilos.
 
 ## Bloqueos
 

@@ -4,7 +4,7 @@ function App() {
   return (
     <div>
       <header>
-        <h1> Mesa de servicio</h1>
+        <h1>Mesa de servicio</h1>
       </header>
 
       <nav>
@@ -14,6 +14,12 @@ function App() {
           </li>
           <li>
             <NavLink to="/tickets">Tickets</NavLink>
+          </li>
+          <li>
+            <NavLink to="/customers">Clientes</NavLink>
+          </li>
+          <li>
+            <NavLink to="/agents">Agentes</NavLink>
           </li>
         </ul>
       </nav>

@@ -24,7 +24,7 @@
 
 **Resultado:** flujo interactivo completo antes de incorporar infraestructura.
 
-## Fase 3 — Navegación con React Router
+## Fase 3 — Navegación con React Router (completada)
 
 - Justificar e instalar React Router.
 - Crear layout y rutas para login, dashboard, tickets, detalle, clientes y agentes.
