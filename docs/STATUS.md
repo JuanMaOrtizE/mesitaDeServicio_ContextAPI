@@ -3,141 +3,119 @@
 ## Estado actual
 
 - Las fases 0, 1 y 2 están completadas.
-- React Router DOM `7.18.1` está instalado.
-- Se utilizará el modo Data Router introducido en React Router 6.4.
-- El CRUD de tickets funciona con estado local.
+- La Fase 3 usa Data Router mediante `createBrowserRouter` y `RouterProvider`.
+- Existen layout compartido, Dashboard, Tickets y página no encontrada.
+- El CRUD de tickets continúa funcionando en memoria dentro de `/tickets`.
 - Tailwind CSS y JSON Server todavía no están instalados.
 
 ## Trabajo completado
 
 - Alcance, modelo general y roadmap.
 - Componentes, búsqueda, filtros y CRUD local.
-- **Tarea 8:** instalación verificada de React Router.
-- **Tarea 9:** estructura base con Data Router, layout y páginas iniciales.
+- **Tarea 8:** instalación de React Router.
+- **Tarea 9:** Data Router, layout y primeras páginas.
+- **Tarea 10:** ruta dinámica y página provisional de detalle de ticket.
 - Las tareas cerradas pasan `npm run lint` y `npm run build`.
 
 ## Tarea actual
 
-### Tarea 9 — Estructura base con Data Router (completada)
+### Tarea 10 — Ruta dinámica de detalle de ticket (completada)
 
-Configurar `createBrowserRouter` y `RouterProvider`, crear un layout compartido y separar la funcionalidad actual en una página de tickets.
+Añadir una URL `/tickets/:ticketId` y navegar hacia ella desde cada ticket para aprender parámetros dinámicos.
 
-#### Decisión técnica
+#### Alcance de esta etapa
 
-No se utilizarán `BrowserRouter`, `Routes` ni `Route`. El árbol de rutas se declarará como objetos mediante `createBrowserRouter`.
+La página de detalle mostrará el identificador recibido en la URL y explicará que los datos completos se incorporarán posteriormente.
 
-Tampoco se añadirán todavía `loader`, `action`, `useLoaderData` o formularios de React Router. Esas herramientas se incorporarán cuando JSON Server aporte operaciones remotas reales.
+No debe buscar el ticket en una copia de `initialTickets`, usar Context ni recibir datos mediante estado de navegación. La carga real se implementará con JSON Server y un `loader` en una fase posterior, permitiendo también recargar o compartir la URL directamente.
 
 #### Objetivos de aprendizaje
 
-- Distinguir configuración del router, proveedor, layout y páginas.
-- Comprender rutas hijas y contenido compartido mediante `Outlet`.
-- Navegar con `NavLink` y `Link` sin recargar el documento.
-- Mantener una única instancia del router fuera del árbol de componentes.
+- Declarar segmentos dinámicos con `:ticketId`.
+- Leer parámetros mediante `useParams`.
+- Construir enlaces dinámicos con `Link`.
+- Comprender que los parámetros de URL llegan como cadenas.
 
 #### Archivos que el estudiante debe modificar o crear
 
-- `src/main.jsx`: renderizar únicamente `RouterProvider` dentro de `StrictMode`.
-- `src/router.jsx`: crear y exportar la instancia de `createBrowserRouter`.
-- `src/App.jsx`: convertirse en el layout compartido.
-- `src/pages/TicketsPage.jsx`: recibir todo el código funcional actual de tickets.
-- `src/pages/DashboardPage.jsx`: placeholder del dashboard.
-- `src/pages/NotFoundPage.jsx`: página para URLs desconocidas.
+- `src/router.jsx`: registrar la ruta dinámica.
+- `src/components/TicketItem.jsx`: añadir un enlace hacia el detalle.
+- `src/pages/TicketDetailPage.jsx`: leer y mostrar el parámetro.
 
-#### Paso 1 — Página de tickets
+No modificar `TicketsPage` ni los manejadores CRUD.
 
-Mover desde `App.jsx` hacia `TicketsPage.jsx`:
+#### Paso 1 — Página de detalle
 
-- Datos iniciales y catálogos temporales.
-- Estados de tickets, búsqueda, filtro y edición.
-- Manejadores de creación, edición, eliminación y estado.
-- Valores derivados y JSX de la funcionalidad actual.
+Crear `TicketDetailPage` e importar `useParams` y `Link`.
 
-Renombrar el componente a `TicketsPage`, ajustar imports hacia `../components/` y no alterar el comportamiento del CRUD durante el traslado.
+La página debe:
 
-#### Paso 2 — Layout en `App`
+- Obtener `ticketId` con `useParams`.
+- Mostrar un encabezado “Detalle del ticket”.
+- Mostrar el identificador recibido, por ejemplo “Ticket #2”.
+- Explicar que el contenido completo llegará al conectar la API simulada.
+- Incluir un `Link` absoluto para regresar a `/tickets`.
 
-Después de mover el dominio, `App.jsx` debe contener exclusivamente:
+No convertir el parámetro a número todavía porque solo se presenta como texto.
 
-- Encabezado con “Mesa de servicio”.
-- Navegación semántica con `NavLink` a `/dashboard` y `/tickets`.
-- Un `<main>` con `Outlet`.
+#### Paso 2 — Ruta dinámica
 
-No añadir estilos complejos; Tailwind corresponde a la siguiente fase.
+Importar `TicketDetailPage` en `router.jsx` y añadir como hija del layout:
 
-#### Paso 3 — Configuración en `router.jsx`
+- `path`: `tickets/:ticketId`.
+- `element`: `TicketDetailPage`.
 
-Crear una única instancia con `createBrowserRouter` fuera de cualquier componente.
+Debe quedar al mismo nivel que `tickets`, `dashboard` y `*`. No crear un segundo segmento `tickets` dentro de una ruta padre que ya lo contenga.
 
-La configuración tendrá una ruta raíz:
+#### Paso 3 — Enlace desde cada ticket
 
-- `path: "/"`.
-- `element`: `App` como layout.
-- `children`: rutas hijas relativas.
+En `TicketItem`, importar `Link` y añadir un enlace visible “Ver detalle”.
 
-Rutas hijas iniciales:
+El destino se construirá usando `ticket.id`:
 
-- Índice: `Navigate` hacia `tickets` con `replace`.
-- `dashboard`: `DashboardPage`.
-- `tickets`: `TicketsPage`.
-- `*`: `NotFoundPage`.
+```text
+/tickets/[id del ticket]
+```
 
-No añadir todavía login, clientes, agentes o detalle de ticket.
+Usar `Link`, no un botón con `navigate` ni `<a href>`, porque esta es navegación interna declarativa.
 
-#### Paso 4 — Proveedor en `main.jsx`
+#### Comportamiento temporal del estado
 
-- Importar `RouterProvider` y la instancia `router`.
-- Mantener `StrictMode` y `createRoot`.
-- Renderizar `<RouterProvider router={router} />`.
-- Eliminar el import y render directo de `App`.
-- No importar ni renderizar `BrowserRouter`.
-
-#### Paso 5 — Páginas auxiliares
-
-- `DashboardPage`: encabezado “Dashboard” y texto indicando que las métricas llegarán después.
-- `NotFoundPage`: encabezado “Página no encontrada” y `Link` hacia `/tickets`.
-- No usar `<a href>` para navegación interna.
-
-#### Limitación temporal
-
-Al salir de `/tickets`, `TicketsPage` se desmontará y su estado en memoria se reiniciará al regresar. Se acepta temporalmente porque JSON Server será responsable de la persistencia. No añadir Context, `localStorage` ni estado global para ocultar esta limitación.
+Al entrar al detalle, `TicketsPage` se desmonta. Al regresar, el CRUD local se reinicia. Esta limitación sigue aceptada hasta JSON Server; no intentar resolverla en esta tarea.
 
 #### Criterios de aceptación
 
-- Existe una sola instancia de `createBrowserRouter` en `router.jsx`.
-- `main.jsx` renderiza un único `RouterProvider`.
-- No existen `BrowserRouter`, `Routes` o `Route` en el proyecto.
-- `App.jsx` funciona como layout y no contiene lógica de tickets.
-- El CRUD conserva su comportamiento dentro de `/tickets`.
-- `/` redirige a `/tickets` usando `replace`.
-- `/dashboard`, `/tickets` y una URL desconocida muestran la página correcta.
-- El layout permanece visible entre rutas hijas.
-- La navegación usa `NavLink` o `Link`.
-- No se añaden loaders, actions, rutas futuras, Context API, Tailwind o JSON Server.
+- Cada ticket muestra un enlace accesible “Ver detalle”.
+- El enlace del ticket 2 navega a `/tickets/2`.
+- La ruta usa exactamente el parámetro `:ticketId`.
+- `TicketDetailPage` obtiene el mismo nombre `ticketId` mediante `useParams`.
+- La página muestra el identificador y un enlace de regreso absoluto.
+- El layout permanece visible en la página de detalle.
+- Abrir directamente `/tickets/2` funciona durante desarrollo.
+- No se duplican datos ni se añaden loaders, Context, Tailwind o JSON Server.
+- El CRUD de `/tickets` conserva su comportamiento.
 - `npm run lint` y `npm run build` finalizan correctamente.
 
 #### Pruebas manuales
 
-1. Abrir `/` y verificar la redirección a `/tickets`.
-2. Navegar entre Dashboard y Tickets sin recarga completa.
-3. Confirmar que el CRUD funciona dentro de Tickets.
-4. Abrir una ruta inexistente y regresar con el enlace.
-5. Probar atrás y adelante del navegador.
-6. Recargar directamente `/dashboard` y `/tickets` durante desarrollo.
+1. Abrir `/tickets` y pulsar “Ver detalle” en los tres tickets.
+2. Confirmar que cada URL contiene el identificador correcto.
+3. Usar el enlace de regreso a Tickets.
+4. Abrir directamente `/tickets/999` y confirmar que muestra “Ticket #999”.
+5. Comprobar atrás y adelante del navegador.
 
 #### Errores comunes
 
-- Crear el router dentro de un componente y recrearlo en cada render.
-- Combinar `RouterProvider` con `BrowserRouter`.
-- Renderizar `App` directamente además de usarlo como `element` raíz.
-- Declarar rutas hijas como `tickets/tickets`.
-- Olvidar `Outlet` y obtener páginas vacías.
-- Dejar lógica duplicada en `App` y `TicketsPage`.
-- Introducir loaders o actions sin una fuente de datos remota.
+- Escribir `tickets/tickets/:ticketId`.
+- Usar nombres distintos entre `:ticketId` y `useParams`.
+- Usar `id` como posición del array.
+- Copiar `initialTickets` dentro de la página de detalle.
+- Pasar el ticket mediante `Link state`, lo que fallaría al recargar directamente.
+- Usar `<a href>` y recargar la aplicación.
 
 ## Próximo paso
 
-Definir la ampliación progresiva del mapa de páginas de la Fase 3. No añadir rutas nuevas hasta recibir sus criterios de aceptación.
+Definir las páginas placeholder y rutas de Clientes y Agentes. No comenzar su implementación hasta recibir criterios de aceptación.
 
 ## Bloqueos
 

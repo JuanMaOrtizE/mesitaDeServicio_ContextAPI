@@ -1,8 +1,11 @@
+import { Link } from "react-router-dom";
+
 function TicketItem({ ticket, onStatusChange, onEdit, onDelete }) {
   const selectId = `ticket-status-${ticket.id}`;
   return (
     <div>
       <h3>{ticket.title}</h3>
+      <Link to={`/tickets/${ticket.id}`}>Ver detalle</Link>
       <p>{ticket.description}</p>
       <label htmlFor={selectId}>Estado del ticket: </label>
       <select
