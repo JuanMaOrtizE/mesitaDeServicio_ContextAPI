@@ -144,12 +144,15 @@ function TicketsPage() {
   }
 
   return (
-    <div>
-      <TicketSearch searchTerm={searchTerm} onSearchChange={setSearchTerm} />
-      <TicketStatusFilter
-        statusFilter={statusFilter}
-        onStatusFilterChange={setStatusFilter}
-      />
+    <div className="mx-auto max-w-3xl">
+      <section className="mb-6 grid gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:grid-cols-2">
+        <TicketSearch searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+        <TicketStatusFilter
+          statusFilter={statusFilter}
+          onStatusFilterChange={setStatusFilter}
+        />
+      </section>
+
       <TicketList
         tickets={filteredStatusTickets}
         emptyMessage={emptyMessage}

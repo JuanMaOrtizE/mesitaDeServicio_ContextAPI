@@ -1,8 +1,14 @@
 function TicketStatusFilter({ statusFilter, onStatusFilterChange }) {
   return (
-    <div>
-      <label htmlFor="ticketStatus">Estado del ticket: </label>
+    <div className="flex flex-col">
+      <label
+        className="text-sm font-medium text-slate-700"
+        htmlFor="ticketStatus"
+      >
+        Estado del ticket
+      </label>
       <select
+        className="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500"
         id="ticketStatus"
         value={statusFilter}
         onChange={(e) => onStatusFilterChange(e.target.value)}
