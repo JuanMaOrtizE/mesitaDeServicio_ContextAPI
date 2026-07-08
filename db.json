@@ -74,25 +74,25 @@
       "id": "1",
       "title": "No puedo iniciar sesión",
       "description": "El cliente recibe un error al ingresar.",
-      "status": "open",
+      "status": "resolved",
       "priority": "high",
       "customerId": 1,
       "agentId": null,
       "categoryId": 1,
       "createdAt": "2026-06-30T09:00:00.000Z",
-      "updatedAt": "2026-06-30T09:00:00.000Z"
+      "updatedAt": "2026-07-08T20:31:45.460Z"
     },
     {
       "id": "2",
       "title": "Error en la página de pagos",
       "description": "El cliente no puede completar el pago.",
-      "status": "in-progress",
+      "status": "open",
       "priority": "medium",
       "customerId": 2,
       "agentId": 1,
       "categoryId": 2,
       "createdAt": "2026-06-29T14:30:00.000Z",
-      "updatedAt": "2026-06-30T10:15:00.000Z"
+      "updatedAt": "2026-07-08T20:36:12.709Z"
     },
     {
       "id": "3",
@@ -172,10 +172,10 @@
       "priority": "medium",
       "customerId": 1,
       "categoryId": 1,
-      "status": "open",
+      "status": "in-progress",
       "agentId": null,
       "createdAt": "2026-07-08T19:33:18.482Z",
-      "updatedAt": "2026-07-08T19:33:18.482Z",
+      "updatedAt": "2026-07-08T20:31:27.022Z",
       "id": "htvpyOgjtf4"
     },
     {

@@ -3,7 +3,11 @@ import TicketSearch from "../components/TicketSearch";
 import { useState, useEffect } from "react";
 import TicketStatusFilter from "../components/TicketStatusFilter";
 import TicketForm from "../components/TicketForm";
-import { createTicket, getTickets } from "../services/ticketsApi";
+import {
+  createTicket,
+  getTickets,
+  updateTicketStatus,
+} from "../services/ticketsApi";
 
 const categories = [
   { id: 1, name: "Acceso" },
@@ -60,12 +64,20 @@ function TicketsPage() {
     (ticket) => statusFilter === "all" || ticket.status === statusFilter,
   );
 
-  function handleTicketStatusChange(ticketId, newStatus) {
-    setTickets((previousTickets) =>
-      previousTickets.map((ticket) =>
-        ticket.id === ticketId ? { ...ticket, status: newStatus } : ticket,
-      ),
-    );
+  async function handleTicketStatusChange(ticketId, newStatus) {
+    try {
+      setLoadError("");
+      const updatedTicket = await updateTicketStatus(ticketId, newStatus);
+      setTickets((previousTickets) =>
+        previousTickets.map((ticket) =>
+          ticket.id === ticketId ? updatedTicket : ticket,
+        ),
+      );
+    } catch (error) {
+      setLoadError(
+        error.message ?? "Ocurrió un error al actualizar el estado.",
+      );
+    }
   }
 
   async function handleCreateTicket(draft) {

@@ -25,3 +25,19 @@ export async function createTicket(ticket) {
   }
   return response.json();
 }
+
+export async function updateTicketStatus(ticketId, status) {
+  const updatedAt = new Date().toISOString();
+  const response = await fetch(`${API_URL}/tickets/${ticketId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ status, updatedAt }),
+  });
+
+  if (!response.ok) {
+    throw new Error("No se pudo actualizar el estado del ticket.");
+  }
+  return response.json();
+}
