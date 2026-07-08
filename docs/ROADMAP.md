@@ -32,7 +32,7 @@
 
 **Resultado:** aplicación organizada en páginas navegables.
 
-## Fase 4 — Sistema visual con Tailwind CSS
+## Fase 4 — Sistema visual con Tailwind CSS (completada)
 
 - Justificar e instalar Tailwind CSS.
 - Definir estilos base, layout, tablas, formularios y estados visuales.
@@ -40,7 +40,7 @@
 
 **Resultado:** interfaz coherente y responsive sin cambiar la lógica existente.
 
-## Fase 5 — Persistencia con JSON Server
+## Fase 5 — Persistencia con JSON Server (siguiente)
 
 - Justificar e instalar JSON Server.
 - Crear las colecciones y datos iniciales según el modelo acordado.

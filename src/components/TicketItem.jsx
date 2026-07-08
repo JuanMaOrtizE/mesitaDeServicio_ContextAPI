@@ -9,6 +9,18 @@ function TicketItem({ ticket, onStatusChange, onEdit, onDelete }) {
     isLongDescription && !isDescriptionExpanded ? "line-clamp-3" : ""
   }`;
 
+  const priorityLabels = {
+    low: "Baja",
+    medium: "Media",
+    high: "Alta",
+  };
+
+  const priorityClassNames = {
+    low: "border-emerald-200 bg-emerald-50 text-emerald-700",
+    medium: "border-amber-200 bg-amber-50 text-amber-700",
+    high: "border-red-200 bg-red-50 text-red-700",
+  };
+
   return (
     <div className="min-w-0 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
@@ -18,10 +30,9 @@ function TicketItem({ ticket, onStatusChange, onEdit, onDelete }) {
 
         <div className="flex flex-wrap items-center gap-3">
           <p
-            className="inline-flex rounded-full border border-slate-200 px-2.5 py-1 text-xs font-medium
-  capitalize text-slate-700"
+            className={`inline-flex rounded-full border  px-2.5 py-1 text-xs font-medium  ${priorityClassNames[ticket.priority] ?? "border-slate-200 bg-white text-slate-700"}`}
           >
-            {ticket.priority}
+            {priorityLabels[ticket.priority] ?? ticket.priority}
           </p>
           <Link
             className="text-sm font-medium text-slate-600 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500"

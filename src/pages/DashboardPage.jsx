@@ -1,10 +1,17 @@
 function DashboardPage() {
   return (
-    <div>
+    <div className="mx-auto max-w-4xl">
       <header>
-        <h1 className="text-3xl font-bold text-blue-700">Dashboard</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+          Dashboard
+        </h1>
       </header>
-      <p>Aquí irán muchas métricas</p>
+      <p className="mt-2 text-sm text-slate-600">
+        Resumen general del estado de los tickets y actividad del Help Desk.
+      </p>
+      <div className="mt-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        Esto será el panel informativo
+      </div>
     </div>
   );
 }

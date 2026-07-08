@@ -1,8 +1,17 @@
 function AgentsPage() {
   return (
-    <div>
-      <h1>Agentes</h1>
-      <p>Se implementará después la administración y asignación de agentes</p>
+    <div className="mx-auto max-w-4xl">
+      <header>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+          Agentes
+        </h1>
+      </header>
+      <p className="mt-2 text-sm text-slate-600">
+        Aquí se administrarán los agentes del equipo de soporte.
+      </p>
+      <div className="mt-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        Esto será el panel informativo
+      </div>
     </div>
   );
 }
