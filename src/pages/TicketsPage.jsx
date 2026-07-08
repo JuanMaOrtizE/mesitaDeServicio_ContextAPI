@@ -3,7 +3,7 @@ import TicketSearch from "../components/TicketSearch";
 import { useState, useEffect } from "react";
 import TicketStatusFilter from "../components/TicketStatusFilter";
 import TicketForm from "../components/TicketForm";
-import { getTickets } from "../services/ticketsApi";
+import { createTicket, getTickets } from "../services/ticketsApi";
 
 const categories = [
   { id: 1, name: "Acceso" },
@@ -23,6 +23,7 @@ function TicketsPage() {
   const [tickets, setTickets] = useState([]);
   const [editingTicketId, setEditingTicketId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [loadError, setLoadError] = useState("");
 
   useEffect(() => {
@@ -67,19 +68,29 @@ function TicketsPage() {
     );
   }
 
-  function handleCreateTicket(draft) {
-    const now = new Date().toISOString();
+  async function handleCreateTicket(draft) {
+    try {
+      setLoadError("");
+      setIsSubmitting(true);
 
-    const newTicket = {
-      ...draft,
-      id: Date.now(),
-      status: "open",
-      agentId: null,
-      createdAt: now,
-      updatedAt: now,
-    };
+      const now = new Date().toISOString();
 
-    setTickets((previousTickets) => [newTicket, ...previousTickets]);
+      const newTicket = {
+        ...draft,
+        status: "open",
+        agentId: null,
+        createdAt: now,
+        updatedAt: now,
+      };
+
+      const createdTicket = await createTicket(newTicket);
+
+      setTickets((previousTickets) => [createdTicket, ...previousTickets]);
+    } catch (error) {
+      setLoadError(error.message ?? "Ocurrió un error al crear el ticket.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   const editingTicket =
@@ -146,6 +157,12 @@ function TicketsPage() {
       {isLoading && (
         <p className="rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center text-sm text-slate-600">
           Cargando tickets...
+        </p>
+      )}
+
+      {isSubmitting && (
+        <p className="mb-4 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-600 shadow-sm">
+          Creando ticket...
         </p>
       )}
 

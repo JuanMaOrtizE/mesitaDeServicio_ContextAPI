@@ -10,3 +10,18 @@ export async function getTickets() {
 
   return data;
 }
+
+export async function createTicket(ticket) {
+  const response = await fetch(`${API_URL}/tickets`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(ticket),
+  });
+
+  if (!response.ok) {
+    throw new Error("No se pudo crear el ticket.");
+  }
+  return response.json();
+}

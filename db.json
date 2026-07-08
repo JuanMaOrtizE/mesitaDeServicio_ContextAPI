@@ -1,14 +1,14 @@
 {
   "users": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Admin Demo",
       "email": "admin@helpdesk.demo",
       "role": "admin",
       "agentId": null
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Sofía Martínez",
       "email": "sofia@helpdesk.demo",
       "role": "agent",
@@ -17,21 +17,21 @@
   ],
   "customers": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Laura Gómez",
       "email": "laura.gomez@example.com",
       "company": "Comercial Andina",
       "phone": "+57 300 111 2233"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Carlos Pérez",
       "email": "carlos.perez@example.com",
       "company": "Pagos del Norte",
       "phone": "+57 301 222 3344"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Ana Torres",
       "email": "ana.torres@example.com",
       "company": "Logística Central",
@@ -40,13 +40,13 @@
   ],
   "agents": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Sofía Martínez",
       "email": "sofia@helpdesk.demo",
       "isActive": true
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Mateo Rodríguez",
       "email": "mateo@helpdesk.demo",
       "isActive": true
@@ -54,24 +54,24 @@
   ],
   "categories": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Acceso",
       "description": "Problemas relacionados con inicio de sesión, credenciales y permisos."
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Pagos",
       "description": "Incidencias relacionadas con pagos, facturación o transacciones."
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Entregas",
       "description": "Consultas o problemas relacionados con envíos y entregas."
     }
   ],
   "tickets": [
     {
-      "id": 1,
+      "id": "1",
       "title": "No puedo iniciar sesión",
       "description": "El cliente recibe un error al ingresar.",
       "status": "open",
@@ -83,7 +83,7 @@
       "updatedAt": "2026-06-30T09:00:00.000Z"
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "Error en la página de pagos",
       "description": "El cliente no puede completar el pago.",
       "status": "in-progress",
@@ -95,7 +95,7 @@
       "updatedAt": "2026-06-30T10:15:00.000Z"
     },
     {
-      "id": 3,
+      "id": "3",
       "title": "Problema con la entrega",
       "description": "El cliente no ha recibido su pedido.",
       "status": "resolved",
@@ -105,11 +105,347 @@
       "categoryId": 3,
       "createdAt": "2026-06-28T11:20:00.000Z",
       "updatedAt": "2026-06-29T16:45:00.000Z"
+    },
+    {
+      "title": "sdfsd",
+      "description": "dafdsaf",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:31:08.342Z",
+      "updatedAt": "2026-07-08T19:31:08.342Z",
+      "id": "cN7zdxWWglo"
+    },
+    {
+      "title": "sdfsda",
+      "description": "fsdafdsa",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:31:19.406Z",
+      "updatedAt": "2026-07-08T19:31:19.406Z",
+      "id": "cSd7z8jLxYo"
+    },
+    {
+      "title": "fdgdsfg",
+      "description": "dfgdfssg",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:31:36.875Z",
+      "updatedAt": "2026-07-08T19:31:36.875Z",
+      "id": "jo653ZQk96Y"
+    },
+    {
+      "title": "hjghj",
+      "description": "gfhjghjjkjh",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:32:51.502Z",
+      "updatedAt": "2026-07-08T19:32:51.502Z",
+      "id": "neJTTY0fgn4"
+    },
+    {
+      "title": "ncgjnbcnv",
+      "description": "bnmnmn",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:33:08.020Z",
+      "updatedAt": "2026-07-08T19:33:08.020Z",
+      "id": "S3AMdspYGpg"
+    },
+    {
+      "title": "asdf",
+      "description": "adsfdsa",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:33:18.482Z",
+      "updatedAt": "2026-07-08T19:33:18.482Z",
+      "id": "htvpyOgjtf4"
+    },
+    {
+      "title": "sdafgf",
+      "description": "dfgdfgfdg",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:33:29.116Z",
+      "updatedAt": "2026-07-08T19:33:29.116Z",
+      "id": "G_gVsPiMYV4"
+    },
+    {
+      "title": "sdafdsa",
+      "description": "ggdfagfdg",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:33:37.690Z",
+      "updatedAt": "2026-07-08T19:33:37.690Z",
+      "id": "Qf14SY5q3u4"
+    },
+    {
+      "title": "dsafasdf",
+      "description": "dsafasdfg",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:36:25.885Z",
+      "updatedAt": "2026-07-08T19:36:25.885Z",
+      "id": "QDODCINrq38"
+    },
+    {
+      "title": "adfasf",
+      "description": "dasfasdfdsf",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:36:51.938Z",
+      "updatedAt": "2026-07-08T19:36:51.938Z",
+      "id": "NohVCHVed4c"
+    },
+    {
+      "title": "dfgdfgfd",
+      "description": "dfgdsfg",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:39:57.683Z",
+      "updatedAt": "2026-07-08T19:39:57.683Z",
+      "id": "-7__yYzw3GU"
+    },
+    {
+      "title": "fgsdfg",
+      "description": "gsfhgfsh",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:43:33.270Z",
+      "updatedAt": "2026-07-08T19:43:33.270Z",
+      "id": "x5r74H3A1YA"
+    },
+    {
+      "title": "hijo",
+      "description": "jaja",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:46:03.680Z",
+      "updatedAt": "2026-07-08T19:46:03.680Z",
+      "id": "_5oFhN1F_nI"
+    },
+    {
+      "title": "holita",
+      "description": "dsfsafd",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:48:06.898Z",
+      "updatedAt": "2026-07-08T19:48:06.898Z",
+      "id": "WOb8Zjcahrk"
+    },
+    {
+      "title": "golggag",
+      "description": "dsgadfsg",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:48:18.272Z",
+      "updatedAt": "2026-07-08T19:48:18.272Z",
+      "id": "XXRo5-IGDTE"
+    },
+    {
+      "title": "sda",
+      "description": "sdfdsf",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:49:28.880Z",
+      "updatedAt": "2026-07-08T19:49:28.880Z",
+      "id": "QNfYzzWRV0c"
+    },
+    {
+      "title": "fdgdfg",
+      "description": "hhhhhhhhhhhhhhhhh",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:49:55.299Z",
+      "updatedAt": "2026-07-08T19:49:55.299Z",
+      "id": "IrgMXbkszqQ"
+    },
+    {
+      "title": "adfsgadfg",
+      "description": "sdfsdf",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:52:43.407Z",
+      "updatedAt": "2026-07-08T19:52:43.407Z",
+      "id": "nKUDMbEe4P0"
+    },
+    {
+      "title": "sdfasd",
+      "description": "sadfdas",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:53:15.309Z",
+      "updatedAt": "2026-07-08T19:53:15.309Z",
+      "id": "2rasiQSIfHY"
+    },
+    {
+      "title": "asdgasdg",
+      "description": "sdfasf",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:53:27.595Z",
+      "updatedAt": "2026-07-08T19:53:27.595Z",
+      "id": "uECSC7s1lr0"
+    },
+    {
+      "title": "asdfasdfasdf",
+      "description": "gdfgdfgdf",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:53:46.021Z",
+      "updatedAt": "2026-07-08T19:53:46.021Z",
+      "id": "PdPMR2hV2DY"
+    },
+    {
+      "title": "cambiar estado",
+      "description": "lala",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:54:36.902Z",
+      "updatedAt": "2026-07-08T19:54:36.902Z",
+      "id": "EUvHbyLX-28"
+    },
+    {
+      "title": "reinicio",
+      "description": "affafa",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:54:56.378Z",
+      "updatedAt": "2026-07-08T19:54:56.378Z",
+      "id": "SyOQDz9pc7M"
+    },
+    {
+      "title": "sdfas",
+      "description": "asdf",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:55:04.187Z",
+      "updatedAt": "2026-07-08T19:55:04.187Z",
+      "id": "04r9FbZUmYo"
+    },
+    {
+      "title": "fgdfg",
+      "description": "dfgdfg",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:55:28.481Z",
+      "updatedAt": "2026-07-08T19:55:28.481Z",
+      "id": "Osl1k4XKMgo"
+    },
+    {
+      "title": "fdgdfg",
+      "description": "gfd",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:55:56.870Z",
+      "updatedAt": "2026-07-08T19:55:56.870Z",
+      "id": "hsSip3gaZSs"
+    },
+    {
+      "title": "fg",
+      "description": "dfgdsfgdgfdgdfh",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T19:58:01.578Z",
+      "updatedAt": "2026-07-08T19:58:01.578Z",
+      "id": "7yG2en49ttY"
+    },
+    {
+      "title": "fgdfgfd",
+      "description": "fdhgsfdh",
+      "priority": "medium",
+      "customerId": 1,
+      "categoryId": 1,
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-08T20:00:06.242Z",
+      "updatedAt": "2026-07-08T20:00:06.242Z",
+      "id": "tYimX2V_Pig"
     }
   ],
   "comments": [
     {
-      "id": 1,
+      "id": "1",
       "ticketId": 1,
       "authorId": 1,
       "authorName": "Admin Demo",
@@ -117,7 +453,7 @@
       "createdAt": "2026-06-30T09:05:00.000Z"
     },
     {
-      "id": 2,
+      "id": "2",
       "ticketId": 2,
       "authorId": 2,
       "authorName": "Sofía Martínez",
@@ -125,12 +461,13 @@
       "createdAt": "2026-06-30T10:20:00.000Z"
     },
     {
-      "id": 3,
+      "id": "3",
       "ticketId": 3,
       "authorId": 2,
       "authorName": "Sofía Martínez",
       "body": "Se confirma con logística que la entrega fue completada.",
       "createdAt": "2026-06-29T16:40:00.000Z"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
