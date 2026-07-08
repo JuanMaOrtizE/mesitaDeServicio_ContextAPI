@@ -3,6 +3,7 @@ import TicketSearch from "../components/TicketSearch";
 import { useState, useEffect } from "react";
 import TicketStatusFilter from "../components/TicketStatusFilter";
 import TicketForm from "../components/TicketForm";
+import { getTickets } from "../services/ticketsApi";
 
 const categories = [
   { id: 1, name: "Acceso" },
@@ -29,16 +30,12 @@ function TicketsPage() {
       try {
         setIsLoading(true);
         setLoadError("");
-
-        const response = await fetch("http://localhost:3000/tickets");
-        if (!response.ok) {
-          throw new Error("No se pudieron cargar los datos de los tickets");
-        }
-
-        const data = await response.json();
+        const data = await getTickets();
         setTickets(data);
       } catch (error) {
-        setLoadError(error.message);
+        setLoadError(
+          error.message ?? "Ocurrió un error al cargar los tickets.",
+        );
       } finally {
         setIsLoading(false);
       }

@@ -11,6 +11,7 @@
 - El script `npm run server` está configurado para ejecutar `json-server db.json`.
 - El diseño inicial de datos para JSON Server está documentado en `docs/API_DATA_DESIGN.md`.
 - La pantalla de tickets carga la lista inicial desde `http://localhost:3000/tickets` mediante `fetch`.
+- La lectura de tickets está extraída a `src/services/ticketsApi.js` mediante `getTickets`.
 - La creación, edición, eliminación y cambio de estado siguen siendo locales en memoria.
 - Context API y `useReducer` aún no se han incorporado.
 
@@ -60,18 +61,18 @@
 
 ## Tarea actual
 
-Ninguna tarea activa. La lectura inicial de tickets desde JSON Server queda cerrada.
+Ninguna tarea activa. La extracción de lectura de tickets a servicio queda cerrada.
 
 ## Próximo paso
 
 Continuar la **Fase 5 — Persistencia con JSON Server**.
 
-La siguiente tarea debe ser extraer la lectura de tickets a una función de acceso a datos:
+La siguiente tarea debe ser migrar la creación de tickets a JSON Server:
 
-- crear una carpeta/archivo de servicio para la API;
-- mover el `fetch` de tickets fuera de `TicketsPage.jsx`;
-- mantener `TicketsPage.jsx` responsable del estado y renderizado;
-- no migrar todavía escritura (`POST`, `PATCH`, `DELETE`).
+- agregar una función `createTicket` en `src/services/ticketsApi.js`;
+- enviar tickets nuevos mediante `POST /tickets`;
+- actualizar el estado local con la respuesta del servidor;
+- mantener edición, eliminación y cambio de estado todavía locales.
 
 ## Bloqueos
 
