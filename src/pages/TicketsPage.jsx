@@ -144,7 +144,7 @@ function TicketsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl">
+    <div className="mx-auto max-w-4xl">
       <section className="mb-6 grid gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:grid-cols-2">
         <TicketSearch searchTerm={searchTerm} onSearchChange={setSearchTerm} />
         <TicketStatusFilter
