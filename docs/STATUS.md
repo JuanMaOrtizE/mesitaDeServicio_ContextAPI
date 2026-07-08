@@ -6,7 +6,12 @@
 - Tailwind CSS `4.3.2` está instalado, configurado y usado en el layout, formularios, lista de tickets y páginas secundarias.
 - React Router está configurado con Data Router.
 - La aplicación mantiene datos locales en memoria mediante `useState`.
-- JSON Server aún no está instalado ni configurado.
+- JSON Server `1.0.0-beta.15` está instalado como dependencia de desarrollo.
+- `db.json` está creado con las colecciones iniciales de la API simulada.
+- El script `npm run server` está configurado para ejecutar `json-server db.json`.
+- El diseño inicial de datos para JSON Server está documentado en `docs/API_DATA_DESIGN.md`.
+- La pantalla de tickets carga la lista inicial desde `http://localhost:3000/tickets` mediante `fetch`.
+- La creación, edición, eliminación y cambio de estado siguen siendo locales en memoria.
 - Context API y `useReducer` aún no se han incorporado.
 
 ## Trabajo completado
@@ -55,18 +60,18 @@
 
 ## Tarea actual
 
-Ninguna tarea activa. La tarea visual de páginas secundarias queda cerrada.
+Ninguna tarea activa. La lectura inicial de tickets desde JSON Server queda cerrada.
 
 ## Próximo paso
 
-Iniciar la **Fase 5 — Persistencia con JSON Server**.
+Continuar la **Fase 5 — Persistencia con JSON Server**.
 
-La primera tarea de esa fase debe ser preparar el diseño de la API simulada antes de instalar o configurar JSON Server:
+La siguiente tarea debe ser extraer la lectura de tickets a una función de acceso a datos:
 
-- revisar el modelo documentado;
-- definir colecciones iniciales;
-- definir relaciones entre tickets, clientes, agentes, categorías y comentarios;
-- decidir qué datos locales actuales pasarán después a `db.json`.
+- crear una carpeta/archivo de servicio para la API;
+- mover el `fetch` de tickets fuera de `TicketsPage.jsx`;
+- mantener `TicketsPage.jsx` responsable del estado y renderizado;
+- no migrar todavía escritura (`POST`, `PATCH`, `DELETE`).
 
 ## Bloqueos
 

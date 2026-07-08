@@ -1,47 +1,8 @@
 import TicketList from "../components/TicketList";
 import TicketSearch from "../components/TicketSearch";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TicketStatusFilter from "../components/TicketStatusFilter";
 import TicketForm from "../components/TicketForm";
-
-const initialTickets = [
-  {
-    id: 1,
-    title: "No puedo iniciar sesión",
-    description: "El cliente recibe un error al ingresar.",
-    status: "open",
-    priority: "high",
-    customerId: 1,
-    agentId: null,
-    categoryId: 1,
-    createdAt: "2026-06-30",
-    updatedAt: "2026-06-30",
-  },
-  {
-    id: 2,
-    title: "Error en la página de pagos",
-    description: "El cliente no puede completar el pago.",
-    status: "in-progress",
-    priority: "medium",
-    customerId: 2,
-    agentId: 1,
-    categoryId: 2,
-    createdAt: "2026-06-29",
-    updatedAt: "2026-06-30",
-  },
-  {
-    id: 3,
-    title: "Problema con la entrega",
-    description: "El cliente no ha recibido su pedido.",
-    status: "resolved",
-    priority: "low",
-    customerId: 3,
-    agentId: 2,
-    categoryId: 3,
-    createdAt: "2026-06-28",
-    updatedAt: "2026-06-29",
-  },
-];
 
 const categories = [
   { id: 1, name: "Acceso" },
@@ -58,8 +19,32 @@ const customers = [
 function TicketsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [tickets, setTickets] = useState(initialTickets);
+  const [tickets, setTickets] = useState([]);
   const [editingTicketId, setEditingTicketId] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+
+  useEffect(() => {
+    async function loadTickets() {
+      try {
+        setIsLoading(true);
+        setLoadError("");
+
+        const response = await fetch("http://localhost:3000/tickets");
+        if (!response.ok) {
+          throw new Error("No se pudieron cargar los datos de los tickets");
+        }
+
+        const data = await response.json();
+        setTickets(data);
+      } catch (error) {
+        setLoadError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadTickets();
+  }, []);
 
   const normalizedSearchTerm = searchTerm.trim().toLowerCase();
   const emptyMessage =
@@ -153,13 +138,30 @@ function TicketsPage() {
         />
       </section>
 
-      <TicketList
-        tickets={filteredStatusTickets}
-        emptyMessage={emptyMessage}
-        onTicketStatusChange={handleTicketStatusChange}
-        onEditTicket={handleStartEdit}
-        onDeleteTicket={handleDeleteTicket}
-      />
+      {loadError && (
+        <p
+          className="mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
+          role="alert"
+        >
+          {loadError}
+        </p>
+      )}
+      {isLoading && (
+        <p className="rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center text-sm text-slate-600">
+          Cargando tickets...
+        </p>
+      )}
+
+      {!isLoading && !loadError && (
+        <TicketList
+          tickets={filteredStatusTickets}
+          emptyMessage={emptyMessage}
+          onTicketStatusChange={handleTicketStatusChange}
+          onEditTicket={handleStartEdit}
+          onDeleteTicket={handleDeleteTicket}
+        />
+      )}
+
       <TicketForm
         customers={customers}
         categories={categories}
