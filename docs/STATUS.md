@@ -12,10 +12,16 @@
 - El diseño inicial de datos para JSON Server está documentado en `docs/API_DATA_DESIGN.md`.
 - La pantalla de tickets carga la lista inicial desde `http://localhost:3000/tickets` mediante `fetch`.
 - La lectura de tickets está extraída a `src/services/ticketsApi.js` mediante `getTickets`.
+- Clientes y categorías se cargan desde JSON Server mediante `GET /customers` y `GET /categories`.
+- Agentes se cargan desde JSON Server mediante `GET /agents`.
+- Las funciones de API están separadas por recurso en `ticketsApi.js`, `customersApi.js` y `categoriesApi.js`.
+- Las cards de tickets muestran el cliente y la categoría relacionados a partir de `customerId` y `categoryId`.
+- Las cards de tickets muestran el agente asignado a partir de `agentId`, usando `Sin asignar` cuando no existe asignación.
 - La creación de tickets está conectada a JSON Server mediante `POST /tickets`.
 - El cambio de estado de tickets está conectado a JSON Server mediante `PATCH /tickets/:id`.
 - La edición completa de tickets está conectada a JSON Server mediante `PATCH /tickets/:id`.
 - La eliminación de tickets está conectada a JSON Server mediante `DELETE /tickets/:id`.
+- La asignación de agentes está conectada a JSON Server mediante `PATCH /tickets/:id`.
 - Vite ignora cambios en `db.json` para evitar recargas cuando JSON Server persiste datos.
 - Context API y `useReducer` aún no se han incorporado.
 
@@ -48,6 +54,16 @@
   - Agentes;
   - Detalle de ticket;
   - Not Found.
+- Visualización de relaciones básicas en tickets:
+  - cliente asociado;
+  - categoría asociada;
+  - agente asignado;
+  - fallbacks cuando una relación no existe.
+- Asignación de agentes desde las cards de tickets:
+  - selector de agente por ticket;
+  - opción `Sin asignar`;
+  - persistencia de `agentId` en JSON Server;
+  - actualización local con el ticket devuelto por la API.
 
 ## Validación
 
@@ -62,21 +78,26 @@
 - La descripción larga de una card se limita visualmente y puede expandirse con estado local en `TicketItem`.
 - La lista de tickets usa cards en grid responsive y `items-start` para evitar que una card corta se estire por la altura de otra.
 - Se acepta cerrar la tarea de páginas secundarias aunque algunos textos puedan refinarse posteriormente.
+- Se decidió separar servicios de API por recurso para mantener responsabilidades claras sin introducir una capa de arquitectura más compleja.
+- Se decidió normalizar identificadores y relaciones como `string`, alineado con el comportamiento observado de JSON Server `1.0.0-beta.15`.
+- Los tickets siguen guardando solo IDs de relaciones; la UI resuelve los nombres visibles cruzando `tickets`, `customers`, `categories` y `agents` en memoria.
+- En la UI, el selector de agente usa `""` para representar `Sin asignar`, pero antes de persistir se convierte a `null` para mantener limpio el modelo de datos.
 
 ## Tarea actual
 
-Ninguna tarea activa. El CRUD principal de tickets con JSON Server queda cerrado.
+Ninguna tarea activa. La asignación de agentes desde las cards de tickets queda cerrada.
 
 ## Próximo paso
 
 Continuar la **Fase 5 — Persistencia con JSON Server**.
 
-La siguiente tarea debe ser cargar clientes y categorías desde JSON Server:
+La siguiente tarea recomendada es construir la pantalla de detalle de ticket con datos reales:
 
-- agregar funciones de lectura para `customers` y `categories`;
-- reemplazar los arrays locales de `TicketsPage.jsx`;
-- manejar carga/error de esos datos auxiliares;
-- mantener el formulario funcionando con datos provenientes de la API.
+- leer el `ticketId` desde la URL;
+- cargar el ticket correspondiente desde JSON Server;
+- mostrar sus datos principales;
+- resolver y mostrar cliente, categoría y agente;
+- preparar la base para comentarios en una tarea posterior.
 
 ## Bloqueos
 

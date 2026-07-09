@@ -8,20 +8,12 @@ import {
   deleteTicket,
   getTickets,
   updateTicket,
+  updateTicketAgent,
   updateTicketStatus,
 } from "../services/ticketsApi";
-
-const categories = [
-  { id: 1, name: "Acceso" },
-  { id: 2, name: "Pagos" },
-  { id: 3, name: "Entregas" },
-];
-
-const customers = [
-  { id: 1, name: "Laura Gómez" },
-  { id: 2, name: "Carlos Pérez" },
-  { id: 3, name: "Ana Torres" },
-];
+import { getCustomers } from "../services/customersApi";
+import { getCategories } from "../services/categoriesApi";
+import { getAgents } from "../services/agentsApi";
 
 function TicketsPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -32,17 +24,30 @@ function TicketsPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loadError, setLoadError] = useState("");
 
+  const [customers, setCustomers] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [agents, setAgents] = useState([]);
+
   useEffect(() => {
     async function loadTickets() {
       try {
         setIsLoading(true);
         setLoadError("");
-        const data = await getTickets();
-        setTickets(data);
+
+        const [ticketsData, customersData, categoriesData, agentsData] =
+          await Promise.all([
+            getTickets(),
+            getCustomers(),
+            getCategories(),
+            getAgents(),
+          ]);
+
+        setTickets(ticketsData);
+        setCustomers(customersData);
+        setCategories(categoriesData);
+        setAgents(agentsData);
       } catch (error) {
-        setLoadError(
-          error.message ?? "Ocurrió un error al cargar los tickets.",
-        );
+        setLoadError(error.message ?? "Ocurrió un error al cargar los datos.");
       } finally {
         setIsLoading(false);
       }
@@ -78,6 +83,22 @@ function TicketsPage() {
     } catch (error) {
       setLoadError(
         error.message ?? "Ocurrió un error al actualizar el estado.",
+      );
+    }
+  }
+
+  async function handleTicketAgentChange(ticketId, newAgentId) {
+    try {
+      setLoadError("");
+      const updatedAgent = await updateTicketAgent(ticketId, newAgentId);
+      setTickets((previousTickets) =>
+        previousTickets.map((ticket) =>
+          ticket.id === ticketId ? updatedAgent : ticket,
+        ),
+      );
+    } catch (error) {
+      setLoadError(
+        error.message ?? "Ocurrió un error al actualizar el agente encargado.",
       );
     }
   }
@@ -199,22 +220,30 @@ function TicketsPage() {
 
       {!isLoading && !loadError && (
         <TicketList
+          agents={agents}
+          customers={customers}
+          categories={categories}
           tickets={filteredStatusTickets}
           emptyMessage={emptyMessage}
           onTicketStatusChange={handleTicketStatusChange}
+          onTicketAgentChange={handleTicketAgentChange}
           onEditTicket={handleStartEdit}
           onDeleteTicket={handleDeleteTicket}
         />
       )}
 
-      <TicketForm
-        customers={customers}
-        categories={categories}
-        onSubmitTicket={editingTicket ? handleUpdateTicket : handleCreateTicket}
-        onCancelEdit={handleCancelEdit}
-        key={editingTicket?.id ?? "new"}
-        initialTicket={editingTicket}
-      />
+      {customers.length > 0 && categories.length > 0 && (
+        <TicketForm
+          customers={customers}
+          categories={categories}
+          onSubmitTicket={
+            editingTicket ? handleUpdateTicket : handleCreateTicket
+          }
+          onCancelEdit={handleCancelEdit}
+          key={editingTicket?.id ?? "new"}
+          initialTicket={editingTicket}
+        />
+      )}
     </div>
   );
 }

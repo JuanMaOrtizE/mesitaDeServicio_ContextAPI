@@ -53,8 +53,8 @@ function TicketForm({
       title,
       description,
       priority: formData.priority,
-      customerId: Number(formData.customerId),
-      categoryId: Number(formData.categoryId),
+      customerId: formData.customerId,
+      categoryId: formData.categoryId,
     };
 
     onSubmitTicket(draft);

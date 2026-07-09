@@ -12,7 +12,7 @@
       "name": "Sofía Martínez",
       "email": "sofia@helpdesk.demo",
       "role": "agent",
-      "agentId": 1
+      "agentId": "1"
     }
   ],
   "customers": [
@@ -74,13 +74,13 @@
       "id": "2",
       "title": "Error en la página de pagos",
       "description": "El cliente no puede completar el pago.",
-      "status": "open",
+      "status": "in-progress",
       "priority": "medium",
-      "customerId": 2,
-      "agentId": 1,
-      "categoryId": 2,
+      "customerId": "2",
+      "agentId": null,
+      "categoryId": "2",
       "createdAt": "2026-06-29T14:30:00.000Z",
-      "updatedAt": "2026-07-08T20:36:12.709Z"
+      "updatedAt": "2026-07-09T23:18:28.525Z"
     },
     {
       "id": "3",
@@ -88,34 +88,34 @@
       "description": "El cliente no ha recibido su pedido.",
       "status": "resolved",
       "priority": "low",
-      "customerId": 3,
-      "agentId": 2,
-      "categoryId": 3,
+      "customerId": "3",
+      "agentId": null,
+      "categoryId": "3",
       "createdAt": "2026-06-28T11:20:00.000Z",
-      "updatedAt": "2026-06-29T16:45:00.000Z"
+      "updatedAt": "2026-07-09T23:16:15.645Z"
     }
   ],
   "comments": [
     {
       "id": "1",
-      "ticketId": 1,
-      "authorId": 1,
+      "ticketId": "1",
+      "authorId": "1",
       "authorName": "Admin Demo",
       "body": "Se registra el incidente de acceso para revisión inicial.",
       "createdAt": "2026-06-30T09:05:00.000Z"
     },
     {
       "id": "2",
-      "ticketId": 2,
-      "authorId": 2,
+      "ticketId": "2",
+      "authorId": "2",
       "authorName": "Sofía Martínez",
       "body": "Se reproduce el error en el flujo de pagos y queda en revisión.",
       "createdAt": "2026-06-30T10:20:00.000Z"
     },
     {
       "id": "3",
-      "ticketId": 3,
-      "authorId": 2,
+      "ticketId": "3",
+      "authorId": "2",
       "authorName": "Sofía Martínez",
       "body": "Se confirma con logística que la entrega fue completada.",
       "createdAt": "2026-06-29T16:40:00.000Z"

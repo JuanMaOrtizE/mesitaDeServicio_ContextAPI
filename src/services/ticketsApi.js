@@ -42,6 +42,22 @@ export async function updateTicketStatus(ticketId, status) {
   return response.json();
 }
 
+export async function updateTicketAgent(ticketId, agentId) {
+  const updatedAt = new Date().toISOString();
+  const response = await fetch(`${API_URL}/tickets/${ticketId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ agentId, updatedAt }),
+  });
+
+  if (!response.ok) {
+    throw new Error("No se pudo actualizar el agente del ticket.");
+  }
+  return response.json();
+}
+
 export async function updateTicket(ticketId, updates) {
   const response = await fetch(`${API_URL}/tickets/${ticketId}`, {
     method: "PATCH",
