@@ -77,10 +77,10 @@
       "status": "in-progress",
       "priority": "medium",
       "customerId": "2",
-      "agentId": null,
+      "agentId": "1",
       "categoryId": "2",
       "createdAt": "2026-06-29T14:30:00.000Z",
-      "updatedAt": "2026-07-09T23:18:28.525Z"
+      "updatedAt": "2026-07-09T23:39:39.472Z"
     },
     {
       "id": "3",
@@ -89,10 +89,10 @@
       "status": "resolved",
       "priority": "low",
       "customerId": "3",
-      "agentId": null,
+      "agentId": "1",
       "categoryId": "3",
       "createdAt": "2026-06-28T11:20:00.000Z",
-      "updatedAt": "2026-07-09T23:16:15.645Z"
+      "updatedAt": "2026-07-09T23:39:42.690Z"
     }
   ],
   "comments": [
