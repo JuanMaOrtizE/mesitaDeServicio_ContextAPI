@@ -5,6 +5,7 @@ import TicketStatusFilter from "../components/TicketStatusFilter";
 import TicketForm from "../components/TicketForm";
 import {
   createTicket,
+  deleteTicket,
   getTickets,
   updateTicket,
   updateTicketStatus,
@@ -140,23 +141,30 @@ function TicketsPage() {
     setEditingTicketId(null);
   }
 
-  function handleDeleteTicket(ticketId) {
-    const ticketToDelete = tickets.find((ticket) => ticket.id === ticketId);
-    if (!ticketToDelete) return;
+  async function handleDeleteTicket(ticketId) {
+    try {
+      setLoadError("");
+      const ticketToDelete = tickets.find((ticket) => ticket.id === ticketId);
+      if (!ticketToDelete) return;
 
-    const respuesta = window.confirm(
-      `¿Deseas eliminar el ticket "${ticketToDelete.title}"?`,
-    );
+      const respuesta = window.confirm(
+        `¿Deseas eliminar el ticket "${ticketToDelete.title}"?`,
+      );
 
-    if (!respuesta) return;
+      if (!respuesta) return;
 
-    setTickets((previousTickets) =>
-      previousTickets.filter((ticket) => ticket.id !== ticketId),
-    );
+      await deleteTicket(ticketId);
 
-    setEditingTicketId((previousEditingTicketId) =>
-      previousEditingTicketId === ticketId ? null : previousEditingTicketId,
-    );
+      setTickets((previousTickets) =>
+        previousTickets.filter((ticket) => ticket.id !== ticketId),
+      );
+
+      setEditingTicketId((previousEditingTicketId) =>
+        previousEditingTicketId === ticketId ? null : previousEditingTicketId,
+      );
+    } catch (error) {
+      setLoadError(error.message ?? "Ocurrió un error al eliminar el ticket.");
+    }
   }
 
   return (

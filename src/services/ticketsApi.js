@@ -57,3 +57,15 @@ export async function updateTicket(ticketId, updates) {
   return response.json();
 }
 
+export async function deleteTicket(ticketId) {
+  const response = await fetch(`${API_URL}/tickets/${ticketId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("No se pudo eliminar el ticket.");
+  }
+}
