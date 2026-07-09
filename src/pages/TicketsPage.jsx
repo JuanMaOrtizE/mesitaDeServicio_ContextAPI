@@ -6,6 +6,7 @@ import TicketForm from "../components/TicketForm";
 import {
   createTicket,
   getTickets,
+  updateTicket,
   updateTicketStatus,
 } from "../services/ticketsApi";
 
@@ -108,17 +109,27 @@ function TicketsPage() {
   const editingTicket =
     tickets.find((ticket) => ticket.id === editingTicketId) ?? null;
 
-  function handleUpdateTicket(draft) {
-    const updatedAt = new Date().toISOString();
+  async function handleUpdateTicket(draft) {
+    try {
+      setLoadError("");
+      const updatedAt = new Date().toISOString();
 
-    setTickets((previousTickets) =>
-      previousTickets.map((ticket) =>
-        ticket.id === editingTicketId
-          ? { ...ticket, ...draft, updatedAt }
-          : ticket,
-      ),
-    );
-    setEditingTicketId(null);
+      const updatedTicket = await updateTicket(editingTicketId, {
+        ...draft,
+        updatedAt,
+      });
+
+      setTickets((previousTickets) =>
+        previousTickets.map((ticket) =>
+          ticket.id === editingTicketId ? updatedTicket : ticket,
+        ),
+      );
+      setEditingTicketId(null);
+    } catch (error) {
+      setLoadError(
+        error.message ?? "Ocurrió un error al actualizar el ticket.",
+      );
+    }
   }
 
   function handleStartEdit(ticketId) {

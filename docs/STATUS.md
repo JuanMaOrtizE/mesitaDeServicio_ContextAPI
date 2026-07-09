@@ -13,7 +13,9 @@
 - La pantalla de tickets carga la lista inicial desde `http://localhost:3000/tickets` mediante `fetch`.
 - La lectura de tickets está extraída a `src/services/ticketsApi.js` mediante `getTickets`.
 - La creación de tickets está conectada a JSON Server mediante `POST /tickets`.
-- La edición, eliminación y cambio de estado siguen siendo locales en memoria.
+- El cambio de estado de tickets está conectado a JSON Server mediante `PATCH /tickets/:id`.
+- La edición completa de tickets está conectada a JSON Server mediante `PATCH /tickets/:id`.
+- La eliminación sigue siendo local en memoria.
 - Vite ignora cambios en `db.json` para evitar recargas cuando JSON Server persiste datos.
 - Context API y `useReducer` aún no se han incorporado.
 
@@ -63,18 +65,18 @@
 
 ## Tarea actual
 
-Ninguna tarea activa. La creación persistente de tickets con JSON Server queda cerrada.
+Ninguna tarea activa. La edición persistente de tickets con JSON Server queda cerrada.
 
 ## Próximo paso
 
 Continuar la **Fase 5 — Persistencia con JSON Server**.
 
-La siguiente tarea debe ser migrar el cambio de estado de tickets a JSON Server:
+La siguiente tarea debe ser migrar la eliminación de tickets a JSON Server:
 
-- agregar una función para actualizar parcialmente un ticket mediante `PATCH /tickets/:id`;
-- usarla en `handleTicketStatusChange`;
-- actualizar el estado local con la respuesta del servidor;
-- mantener edición completa y eliminación todavía locales.
+- agregar una función para eliminar un ticket mediante `DELETE /tickets/:id`;
+- usarla en `handleDeleteTicket`;
+- actualizar el estado local solo después de que el servidor confirme la eliminación;
+- mantener la confirmación antes de eliminar.
 
 ## Bloqueos
 
