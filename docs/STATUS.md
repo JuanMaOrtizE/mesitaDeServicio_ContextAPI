@@ -25,6 +25,7 @@
 - La pantalla de detalle de ticket carga un ticket real desde JSON Server mediante `GET /tickets/:id`.
 - La pantalla de detalle muestra cliente, categoría y agente resolviendo relaciones desde JSON Server.
 - La pantalla de detalle muestra comentarios del ticket mediante lectura desde JSON Server.
+- La pantalla de detalle permite crear comentarios nuevos y persistirlos en JSON Server mediante `POST /comments`.
 - Vite ignora cambios en `db.json` para evitar recargas cuando JSON Server persiste datos.
 - Context API y `useReducer` aún no se han incorporado.
 
@@ -82,6 +83,12 @@
   - lectura de comentarios;
   - filtrado por `ticketId`;
   - mensaje vacío cuando un ticket no tiene comentarios.
+- Creación de comentarios en el detalle de ticket:
+  - formulario simple controlado;
+  - validación para evitar comentarios vacíos;
+  - autor demo fijo;
+  - persistencia en `db.json`;
+  - actualización local de la lista sin recargar.
 
 ## Validación
 
@@ -103,21 +110,23 @@
 - La pantalla de detalle comienza cargando solo el ticket individual; las relaciones y comentarios se incorporan en tareas posteriores para mantener la progresión incremental.
 - La pantalla de detalle resuelve relaciones en memoria usando las listas de clientes, categorías y agentes ya expuestas por sus servicios.
 - Debido al comportamiento de `json-server@1.0.0-beta.15`, los comentarios se leen desde `/comments` y se filtran en el servicio con comparación string contra string.
+- La creación de comentarios usa temporalmente `authorId: "1"` y `authorName: "Admin Demo"` hasta incorporar autenticación simulada y roles.
 
 ## Tarea actual
 
-Ninguna tarea activa. La visualización de comentarios en la pantalla de detalle queda cerrada.
+Ninguna tarea activa. La creación de comentarios desde la pantalla de detalle queda cerrada.
 
 ## Próximo paso
 
 Continuar la **Fase 5 — Persistencia con JSON Server**.
 
-La siguiente tarea recomendada es permitir crear comentarios desde la pantalla de detalle:
+La siguiente tarea recomendada es mejorar la presentación visual de la pantalla de detalle:
 
-- agregar función de creación en `commentsApi.js`;
-- agregar un formulario simple en el detalle;
-- crear comentarios asociados al `ticketId` actual;
-- actualizar la lista local de comentarios después de crear.
+- organizar la información principal del ticket en secciones;
+- mejorar la legibilidad de cliente, categoría, agente, estado y prioridad;
+- estilizar la lista de comentarios;
+- estilizar el formulario de nuevo comentario;
+- mantener la lógica actual sin introducir nuevas funcionalidades.
 
 ## Bloqueos
 

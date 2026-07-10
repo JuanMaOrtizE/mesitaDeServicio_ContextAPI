@@ -93,6 +93,18 @@
       "categoryId": "3",
       "createdAt": "2026-06-28T11:20:00.000Z",
       "updatedAt": "2026-07-09T23:39:42.690Z"
+    },
+    {
+      "title": "sdfds",
+      "description": "sdaf",
+      "priority": "medium",
+      "customerId": "1",
+      "categoryId": "1",
+      "status": "open",
+      "agentId": null,
+      "createdAt": "2026-07-10T22:06:25.529Z",
+      "updatedAt": "2026-07-10T22:06:25.529Z",
+      "id": "EKDMbIvULW0"
     }
   ],
   "comments": [
@@ -151,6 +163,14 @@
       "body": "sdfsadfsdf",
       "createdAt": "2026-07-10T21:51:50.791Z",
       "id": "06ehe8Eio2k"
+    },
+    {
+      "ticketId": "3",
+      "authorId": "1",
+      "authorName": "Admin Demo",
+      "body": "sdfsdafgagdsg",
+      "createdAt": "2026-07-10T22:10:22.338Z",
+      "id": "C67nZRY0arc"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

@@ -101,6 +101,8 @@ function TicketDetailPage() {
     }
   }
 
+  const classNameMetaData = `font-medium text-slate-700`;
+
   return (
     <div className="mx-auto max-w-4xl">
       <header>
@@ -116,43 +118,100 @@ function TicketDetailPage() {
 
         {!isLoading && !loadError && ticket && (
           <>
-            <h2>{ticket.title}</h2>
-            <p>{ticket.description}</p>
-            <p>Cliente: {customerName}</p>
-            <p>Categoría: {categoryName}</p>
-            <p>Agente: {agentName}</p>
-            <p>Estado: {ticket.status}</p>
-            <p>Prioridad: {ticket.priority}</p>
-            <p>Creado: {ticket.createdAt}</p>
-            <p>Actualizado: {ticket.updatedAt}</p>
-            <section>
-              <h3>Comentarios</h3>
+            <section className="space-y-6">
+              <div>
+                <h2 className="text-xl font-semibold text-slate-900">
+                  {ticket.title}
+                </h2>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  {ticket.description}
+                </p>
+              </div>
+
+              <div className="grid gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm sm:grid-cols-2">
+                <p>
+                  <span className={classNameMetaData}>Cliente:</span>{" "}
+                  {customerName}
+                </p>
+                <p>
+                  <span className={classNameMetaData}>Categoría:</span>{" "}
+                  {categoryName}
+                </p>
+                <p>
+                  <span className={classNameMetaData}>Agente:</span> {agentName}
+                </p>
+                <p>
+                  <span className={classNameMetaData}>Estado:</span>{" "}
+                  {ticket.status}
+                </p>
+                <p>
+                  <span className={classNameMetaData}>Prioridad:</span>{" "}
+                  {ticket.priority}
+                </p>
+                <p>
+                  <span className={classNameMetaData}>Creado:</span>{" "}
+                  {ticket.createdAt}
+                </p>
+                <p>
+                  <span className={classNameMetaData}>Actualizado:</span>{" "}
+                  {ticket.updatedAt}
+                </p>
+              </div>
+            </section>
+            <section className="mt-8">
+              <h3 className="text-lg font-semibold text-slate-900">
+                Comentarios
+              </h3>
 
               {comments.length === 0 ? (
-                <p>Este ticket aún no tiene comentarios.</p>
+                <p className="mt-3 rounded-lg border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-600">
+                  Este ticket aún no tiene comentarios.
+                </p>
               ) : (
-                <div>
+                <div className="mt-4 space-y-3">
                   {comments.map((comment) => (
-                    <article key={comment.id}>
-                      <p>{comment.authorName}</p>
-                      <p>{comment.body}</p>
-                      <p>{comment.createdAt}</p>
+                    <article
+                      className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
+                      key={comment.id}
+                    >
+                      <p className="text-sm font-medium text-slate-900">
+                        {comment.authorName}
+                      </p>
+                      <p className="mt-2 text-sm leading-6 text-slate-700">
+                        {comment.body}
+                      </p>
+                      <p className="mt-2 text-xs text-slate-500">
+                        {comment.createdAt}
+                      </p>
                     </article>
                   ))}
                 </div>
               )}
             </section>
 
-            <form onSubmit={handleCreateComment}>
-              <label htmlFor="comment-body">Nuevo comentario</label>
+            <form
+              className="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-4"
+              onSubmit={handleCreateComment}
+            >
+              <label
+                className="block text-sm font-medium text-slate-700"
+                htmlFor="comment-body"
+              >
+                Nuevo comentario
+              </label>
 
               <textarea
+                className="mt-2 min-h-28 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500"
                 id="comment-body"
                 value={commentBody}
                 onChange={(e) => setCommentBody(e.target.value)}
               />
 
-              <button type="submit" disabled={isCreatingComment}>
+              <button
+                className="mt-3 rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
+                type="submit"
+                disabled={isCreatingComment}
+              >
                 {isCreatingComment ? "Guardando..." : "Agregar comentario"}
               </button>
             </form>
