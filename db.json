@@ -77,10 +77,10 @@
       "status": "in-progress",
       "priority": "medium",
       "customerId": "2",
-      "agentId": "1",
+      "agentId": null,
       "categoryId": "2",
       "createdAt": "2026-06-29T14:30:00.000Z",
-      "updatedAt": "2026-07-09T23:39:39.472Z"
+      "updatedAt": "2026-07-10T17:32:18.542Z"
     },
     {
       "id": "3",
@@ -119,6 +119,38 @@
       "authorName": "Sofía Martínez",
       "body": "Se confirma con logística que la entrega fue completada.",
       "createdAt": "2026-06-29T16:40:00.000Z"
+    },
+    {
+      "ticketId": "3",
+      "authorId": "1",
+      "authorName": "Admin Demo",
+      "body": "new",
+      "createdAt": "2026-07-10T21:48:56.693Z",
+      "id": "krmOfCFGK5U"
+    },
+    {
+      "ticketId": "3",
+      "authorId": "1",
+      "authorName": "Admin Demo",
+      "body": "fdggggggggggggggggggggggggggg",
+      "createdAt": "2026-07-10T21:49:07.895Z",
+      "id": "T_TxAEfNLMw"
+    },
+    {
+      "ticketId": "3",
+      "authorId": "1",
+      "authorName": "Admin Demo",
+      "body": "dsfsdfdgfg",
+      "createdAt": "2026-07-10T21:49:51.287Z",
+      "id": "HLoRoA7AWfQ"
+    },
+    {
+      "ticketId": "3",
+      "authorId": "1",
+      "authorName": "Admin Demo",
+      "body": "sdfsadfsdf",
+      "createdAt": "2026-07-10T21:51:50.791Z",
+      "id": "06ehe8Eio2k"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

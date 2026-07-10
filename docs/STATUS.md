@@ -22,6 +22,9 @@
 - La edición completa de tickets está conectada a JSON Server mediante `PATCH /tickets/:id`.
 - La eliminación de tickets está conectada a JSON Server mediante `DELETE /tickets/:id`.
 - La asignación de agentes está conectada a JSON Server mediante `PATCH /tickets/:id`.
+- La pantalla de detalle de ticket carga un ticket real desde JSON Server mediante `GET /tickets/:id`.
+- La pantalla de detalle muestra cliente, categoría y agente resolviendo relaciones desde JSON Server.
+- La pantalla de detalle muestra comentarios del ticket mediante lectura desde JSON Server.
 - Vite ignora cambios en `db.json` para evitar recargas cuando JSON Server persiste datos.
 - Context API y `useReducer` aún no se han incorporado.
 
@@ -64,6 +67,21 @@
   - opción `Sin asignar`;
   - persistencia de `agentId` en JSON Server;
   - actualización local con el ticket devuelto por la API.
+- Pantalla de detalle de ticket con datos reales:
+  - lectura de `ticketId` desde la URL;
+  - carga del ticket individual desde JSON Server;
+  - estados de carga y error;
+  - visualización de título, descripción, estado, prioridad y fechas.
+- Relaciones visibles en el detalle de ticket:
+  - cliente asociado;
+  - categoría asociada;
+  - agente asignado o `Sin asignar`;
+  - protección contra `ticket` nulo durante la carga inicial.
+- Comentarios visibles en el detalle de ticket:
+  - servicio `commentsApi.js`;
+  - lectura de comentarios;
+  - filtrado por `ticketId`;
+  - mensaje vacío cuando un ticket no tiene comentarios.
 
 ## Validación
 
@@ -82,22 +100,24 @@
 - Se decidió normalizar identificadores y relaciones como `string`, alineado con el comportamiento observado de JSON Server `1.0.0-beta.15`.
 - Los tickets siguen guardando solo IDs de relaciones; la UI resuelve los nombres visibles cruzando `tickets`, `customers`, `categories` y `agents` en memoria.
 - En la UI, el selector de agente usa `""` para representar `Sin asignar`, pero antes de persistir se convierte a `null` para mantener limpio el modelo de datos.
+- La pantalla de detalle comienza cargando solo el ticket individual; las relaciones y comentarios se incorporan en tareas posteriores para mantener la progresión incremental.
+- La pantalla de detalle resuelve relaciones en memoria usando las listas de clientes, categorías y agentes ya expuestas por sus servicios.
+- Debido al comportamiento de `json-server@1.0.0-beta.15`, los comentarios se leen desde `/comments` y se filtran en el servicio con comparación string contra string.
 
 ## Tarea actual
 
-Ninguna tarea activa. La asignación de agentes desde las cards de tickets queda cerrada.
+Ninguna tarea activa. La visualización de comentarios en la pantalla de detalle queda cerrada.
 
 ## Próximo paso
 
 Continuar la **Fase 5 — Persistencia con JSON Server**.
 
-La siguiente tarea recomendada es construir la pantalla de detalle de ticket con datos reales:
+La siguiente tarea recomendada es permitir crear comentarios desde la pantalla de detalle:
 
-- leer el `ticketId` desde la URL;
-- cargar el ticket correspondiente desde JSON Server;
-- mostrar sus datos principales;
-- resolver y mostrar cliente, categoría y agente;
-- preparar la base para comentarios en una tarea posterior.
+- agregar función de creación en `commentsApi.js`;
+- agregar un formulario simple en el detalle;
+- crear comentarios asociados al `ticketId` actual;
+- actualizar la lista local de comentarios después de crear.
 
 ## Bloqueos
 
