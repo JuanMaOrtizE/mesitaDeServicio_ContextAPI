@@ -50,23 +50,51 @@
 
 **Resultado:** datos persistentes en una API simulada.
 
-## Fase 6 — Sesión compartida con Context API (siguiente)
+## Fase 6 — Backend Express Auth (siguiente)
 
-- Implementar autenticación simulada.
-- Compartir el usuario activo y las operaciones de sesión.
-- Proteger rutas y adaptar acciones visibles según el rol.
+- Crear documentación y estructura base del backend.
+- Crear servidor Express local.
+- Configurar PostgreSQL local y Prisma.
+- Implementar registro, login, logout, sesión actual y recuperación de contraseña.
+- Usar JWT en cookie `httpOnly`.
 
-**Resultado:** sesión accesible en las partes de la aplicación que la necesitan.
+**Resultado:** autenticación real disponible desde una API Express local.
 
-## Fase 7 — Flujos complejos con `useReducer`
+## Fase 7 — Integración frontend con AuthContext
+
+- Crear servicios frontend para autenticación.
+- Compartir el usuario activo mediante Context API.
+- Crear páginas de login, registro y recuperación.
+- Consultar la sesión actual desde el backend.
+
+**Resultado:** frontend conectado a la autenticación real del backend.
+
+## Fase 8 — Roles y rutas protegidas
+
+- Proteger rutas del frontend según sesión.
+- Adaptar navegación según rol.
+- Usar `admin` y `agent` para restricciones iniciales.
+- Reemplazar autor demo de comentarios por el usuario autenticado.
+
+**Resultado:** experiencia autenticada y diferenciada por rol.
+
+## Fase 9 — Migración gradual del dominio a Express
+
+- Migrar tickets, clientes, agentes, categorías y comentarios desde JSON Server a Express + PostgreSQL.
+- Reemplazar servicios frontend para apuntar al backend Express.
+- Retirar JSON Server cuando el dominio esté cubierto.
+
+**Resultado:** aplicación full-stack sin dependencia de JSON Server.
+
+## Fase 10 — Flujos complejos con `useReducer`
 
 - Identificar un flujo con varias transiciones relacionadas.
-- Aplicar `useReducer` al formulario completo de tickets o a la sesión, según la complejidad observada.
+- Aplicar `useReducer` al formulario completo de tickets, a la sesión o a otro flujo que lo justifique.
 - Definir acciones explícitas y mantener el reducer como función pura.
 
 **Resultado:** uso justificado de reducer, no una sustitución general de `useState`.
 
-## Fase 8 — Dominio completo
+## Fase 11 — Dominio completo
 
 - Completar clientes, agentes, asignaciones y categorías.
 - Incorporar comentarios cronológicos.
@@ -75,12 +103,13 @@
 
 **Resultado:** flujo principal del Help Desk completo.
 
-## Fase 9 — Dashboard y cierre de portfolio
+## Fase 12 — Deploy futuro y cierre de portfolio
 
 - Calcular métricas a partir de los tickets existentes.
 - Completar estados vacíos, carga y error.
 - Revisar accesibilidad, responsive y consistencia visual.
 - Actualizar README y preparar datos demostrativos.
+- Planificar deploy de frontend, backend y PostgreSQL gestionado.
 
 **Resultado:** versión final presentable en portfolio.
 

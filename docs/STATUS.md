@@ -38,6 +38,7 @@
 - **Fase 3:** navegación con React Router usando `createBrowserRouter` y `RouterProvider`.
 - **Fase 4:** sistema visual con Tailwind CSS.
 - **Fase 5:** persistencia con JSON Server, servicios de API, CRUD de tickets, relaciones y comentarios.
+- **Fase 6:** iniciada con backend Express mínimo.
 
 ## Últimas tareas cerradas
 
@@ -97,6 +98,29 @@
   - comentarios en entradas visuales separadas;
   - formulario de nuevo comentario estilizado;
   - estados de carga/error y enlace de regreso consistentes.
+- Backend Express mínimo:
+  - carpeta `backend/`;
+  - `package.json` propio;
+  - dependencias base (`express`, `cors`, `helmet`, `dotenv`);
+  - script de desarrollo con `nodemon`;
+  - endpoint `GET /api/health`;
+  - configuración ESLint separada para Node.
+- Estructura inicial del backend:
+  - `src/app.js` para configurar Express, middlewares y rutas;
+  - `src/server.js` para arrancar el servidor;
+  - `src/routes/healthRoutes.js` para el health check.
+- Prisma y PostgreSQL:
+  - `@prisma/client` y `prisma` instalados en `backend/`;
+  - `@prisma/adapter-pg` y `pg` instalados para conectar Prisma 7 con PostgreSQL;
+  - `prisma.config.ts` creado por Prisma 7;
+  - `schema.prisma` configurado para PostgreSQL;
+  - modelo `User` creado;
+  - migración inicial `init_auth` aplicada en PostgreSQL.
+- Cliente Prisma:
+  - `src/lib/prisma.js` carga `DATABASE_URL`;
+  - crea `PrismaPg`;
+  - instancia `PrismaClient` con adapter;
+  - permite consultar PostgreSQL desde rutas Express.
 
 ## Validación
 
@@ -121,22 +145,36 @@
 - La creación de comentarios usa temporalmente `authorId: "1"` y `authorName: "Admin Demo"` hasta incorporar autenticación simulada y roles.
 - La mejora visual del detalle no cambió la lógica existente; solo organizó presentación y estados visuales.
 - La Fase 5 queda cerrada con servicios separados por recurso y persistencia funcional en tickets, relaciones y comentarios.
+- El proyecto cambia de alcance hacia una evolución full-stack local con Express, PostgreSQL, Prisma y autenticación real.
+- El deploy se considerará más adelante; por ahora el trabajo seguirá en entorno local.
+- Backend Express mínimo creado en `backend/` con endpoint `GET /api/health`.
+- ESLint distingue entre frontend navegador y backend Node.js.
+- Prisma instalado y conectado a PostgreSQL local.
+- Migración inicial `init_auth` creada con modelo `User`.
+- Cliente Prisma reutilizable creado en `backend/src/lib/prisma.js`.
+- Ruta temporal `GET /api/users` creada para validar Express + Prisma + PostgreSQL.
+- El backend Express usa puerto `4000`; Vite sigue en `5173` y JSON Server en `3000`.
+- El backend ya tiene Prisma conectado a PostgreSQL, pero todavía no tiene endpoints de autenticación.
+- Las rutas del backend empiezan a organizarse con `Router` de Express para evitar concentrar todo en `server.js`.
+- Con Prisma 7, la URL de conexión se lee desde `prisma.config.ts` usando `process.env["DATABASE_URL"]`.
+- Con Prisma 7 y el generador actual, `PrismaClient` se instancia con `@prisma/adapter-pg`.
+- `GET /api/users` es una ruta temporal de aprendizaje para validar conexión; no representa todavía una API pública final.
 
 ## Tarea actual
 
-Ninguna tarea activa. La Fase 5 queda cerrada.
+Ninguna tarea activa. Cliente Prisma reutilizable y ruta temporal de usuarios cerrados.
 
 ## Próximo paso
 
-Continuar la **Fase 6 — Sesión compartida con Context API**.
+Continuar la **Fase 6 — Backend Express Auth**.
 
-La siguiente tarea recomendada es diseñar la autenticación simulada antes de implementarla:
+La siguiente tarea recomendada es preparar utilidades base de autenticación:
 
-- definir usuario activo;
-- definir roles iniciales (`admin` y `agent`);
-- decidir qué datos compartirá el contexto;
-- decidir qué acciones expondrá el contexto;
-- preparar la implementación de `AuthContext` en una tarea posterior.
+- instalar `bcrypt`, `jsonwebtoken`, `cookie-parser`, `express-rate-limit` y `zod`;
+- crear utilidades para hashear contraseñas;
+- crear utilidades para firmar/verificar JWT;
+- preparar validaciones con `zod`;
+- no crear todavía endpoints completos de login/register.
 
 ## Bloqueos
 
