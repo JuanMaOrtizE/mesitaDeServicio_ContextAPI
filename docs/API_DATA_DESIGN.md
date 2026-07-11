@@ -2,13 +2,14 @@
 
 ## Objetivo
 
-Este documento define la estructura inicial de datos que se usará posteriormente para crear `db.json` con JSON Server.
+Este documento define la estructura de datos usada por `db.json` con JSON Server.
 
-Por ahora no se instala JSON Server ni se crea `db.json`. Esta fase solo deja decidido qué colecciones existirán, qué campos tendrá cada una y cómo se relacionan.
+JSON Server ya está incorporado al proyecto. La estructura descrita aquí sirve como referencia del modelo persistido y de las relaciones entre colecciones.
 
 ## Reglas del modelo
 
 - Las relaciones se guardan mediante identificadores terminados en `Id`.
+- Los identificadores se manejan como `string`, alineado con el comportamiento observado de `json-server@1.0.0-beta.15`.
 - Los tickets no guardan clientes, agentes ni categorías como objetos anidados.
 - Los valores internos de estado y prioridad se mantienen en inglés.
 - La interfaz puede mostrar etiquetas en español, pero no debe cambiar los valores internos.
@@ -24,6 +25,12 @@ La API simulada tendrá estas colecciones:
 - `categories`
 - `tickets`
 - `comments`
+
+## Nota sobre los ejemplos
+
+Los ejemplos originales de este documento usaban IDs numéricos. La implementación actual usa IDs como `string` en `db.json`, por ejemplo `"id": "2"` y `"ticketId": "2"`.
+
+Si se agregan o ajustan datos manualmente, se debe mantener esa convención para evitar conversiones innecesarias en React, React Router y formularios.
 
 ## Datos iniciales propuestos
 

@@ -171,6 +171,14 @@
       "body": "sdfsdafgagdsg",
       "createdAt": "2026-07-10T22:10:22.338Z",
       "id": "C67nZRY0arc"
+    },
+    {
+      "ticketId": "EKDMbIvULW0",
+      "authorId": "1",
+      "authorName": "Admin Demo",
+      "body": "no lo resolveré",
+      "createdAt": "2026-07-11T15:57:40.019Z",
+      "id": "bQchxAeL9mQ"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

@@ -2,7 +2,7 @@
 
 ## Estado actual
 
-- Las fases 0, 1, 2, 3 y 4 están completadas.
+- Las fases 0, 1, 2, 3, 4 y 5 están completadas.
 - Tailwind CSS `4.3.2` está instalado, configurado y usado en el layout, formularios, lista de tickets y páginas secundarias.
 - React Router está configurado con Data Router.
 - La aplicación mantiene datos locales en memoria mediante `useState`.
@@ -26,6 +26,7 @@
 - La pantalla de detalle muestra cliente, categoría y agente resolviendo relaciones desde JSON Server.
 - La pantalla de detalle muestra comentarios del ticket mediante lectura desde JSON Server.
 - La pantalla de detalle permite crear comentarios nuevos y persistirlos en JSON Server mediante `POST /comments`.
+- La pantalla de detalle tiene presentación visual organizada para datos principales, relaciones, comentarios, formulario, carga, error y enlace de regreso.
 - Vite ignora cambios en `db.json` para evitar recargas cuando JSON Server persiste datos.
 - Context API y `useReducer` aún no se han incorporado.
 
@@ -36,6 +37,7 @@
 - **Fase 2:** estado local con `useState`, búsqueda, filtros, creación, edición y eliminación local de tickets.
 - **Fase 3:** navegación con React Router usando `createBrowserRouter` y `RouterProvider`.
 - **Fase 4:** sistema visual con Tailwind CSS.
+- **Fase 5:** persistencia con JSON Server, servicios de API, CRUD de tickets, relaciones y comentarios.
 
 ## Últimas tareas cerradas
 
@@ -89,6 +91,12 @@
   - autor demo fijo;
   - persistencia en `db.json`;
   - actualización local de la lista sin recargar.
+- Estilos de la pantalla de detalle:
+  - bloque principal del ticket organizado;
+  - metadatos agrupados;
+  - comentarios en entradas visuales separadas;
+  - formulario de nuevo comentario estilizado;
+  - estados de carga/error y enlace de regreso consistentes.
 
 ## Validación
 
@@ -111,22 +119,24 @@
 - La pantalla de detalle resuelve relaciones en memoria usando las listas de clientes, categorías y agentes ya expuestas por sus servicios.
 - Debido al comportamiento de `json-server@1.0.0-beta.15`, los comentarios se leen desde `/comments` y se filtran en el servicio con comparación string contra string.
 - La creación de comentarios usa temporalmente `authorId: "1"` y `authorName: "Admin Demo"` hasta incorporar autenticación simulada y roles.
+- La mejora visual del detalle no cambió la lógica existente; solo organizó presentación y estados visuales.
+- La Fase 5 queda cerrada con servicios separados por recurso y persistencia funcional en tickets, relaciones y comentarios.
 
 ## Tarea actual
 
-Ninguna tarea activa. La creación de comentarios desde la pantalla de detalle queda cerrada.
+Ninguna tarea activa. La Fase 5 queda cerrada.
 
 ## Próximo paso
 
-Continuar la **Fase 5 — Persistencia con JSON Server**.
+Continuar la **Fase 6 — Sesión compartida con Context API**.
 
-La siguiente tarea recomendada es mejorar la presentación visual de la pantalla de detalle:
+La siguiente tarea recomendada es diseñar la autenticación simulada antes de implementarla:
 
-- organizar la información principal del ticket en secciones;
-- mejorar la legibilidad de cliente, categoría, agente, estado y prioridad;
-- estilizar la lista de comentarios;
-- estilizar el formulario de nuevo comentario;
-- mantener la lógica actual sin introducir nuevas funcionalidades.
+- definir usuario activo;
+- definir roles iniciales (`admin` y `agent`);
+- decidir qué datos compartirá el contexto;
+- decidir qué acciones expondrá el contexto;
+- preparar la implementación de `AuthContext` en una tarea posterior.
 
 ## Bloqueos
 

@@ -40,7 +40,7 @@
 
 **Resultado:** interfaz coherente y responsive sin cambiar la lógica existente.
 
-## Fase 5 — Persistencia con JSON Server (siguiente)
+## Fase 5 — Persistencia con JSON Server (completada)
 
 - Justificar e instalar JSON Server.
 - Crear las colecciones y datos iniciales según el modelo acordado.
@@ -50,7 +50,7 @@
 
 **Resultado:** datos persistentes en una API simulada.
 
-## Fase 6 — Sesión compartida con Context API
+## Fase 6 — Sesión compartida con Context API (siguiente)
 
 - Implementar autenticación simulada.
 - Compartir el usuario activo y las operaciones de sesión.

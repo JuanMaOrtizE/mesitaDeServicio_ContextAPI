@@ -14,7 +14,7 @@ export async function getTickets() {
 export async function getTicketById(ticketId) {
   const response = await fetch(`${API_URL}/tickets/${ticketId}`);
   if (!response.ok) {
-    throw new Error("No se pudieron cargar el ticket");
+    throw new Error("No se pudo cargar el ticket.");
   }
 
   const data = await response.json();

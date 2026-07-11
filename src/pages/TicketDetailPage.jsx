@@ -101,7 +101,7 @@ function TicketDetailPage() {
     }
   }
 
-  const classNameMetaData = `font-medium text-slate-700`;
+  const classNameMetaData = "font-medium text-slate-700";
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -112,9 +112,20 @@ function TicketDetailPage() {
       </header>
       <p className="mt-2 text-sm text-slate-600">Ticket #{ticketId}</p>
       <div className="mt-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        {isLoading && <p>Cargando ticket...</p>}
+        {isLoading && (
+          <p className="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-600">
+            Cargando ticket...
+          </p>
+        )}
 
-        {loadError && <p role="alert">{loadError}</p>}
+        {loadError && (
+          <p
+            className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+            role="alert"
+          >
+            {loadError}
+          </p>
+        )}
 
         {!isLoading && !loadError && ticket && (
           <>
@@ -208,7 +219,7 @@ function TicketDetailPage() {
               />
 
               <button
-                className="mt-3 rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
+                className="mt-3 rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 cursor-pointer disabled:cursor-not-allowed disabled:bg-slate-400"
                 type="submit"
                 disabled={isCreatingComment}
               >
@@ -217,9 +228,9 @@ function TicketDetailPage() {
             </form>
           </>
         )}
-        <p>
+        <p className="mt-6">
           <Link
-            className="mt-4 inline-flex text-sm font-medium text-slate-600 hover:text-slate-900 visible:outline-slate-500"
+            className="inline-flex text-sm font-medium text-slate-600 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500"
             to="/tickets"
           >
             Regresar a tickets

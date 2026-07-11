@@ -90,10 +90,10 @@ function TicketsPage() {
   async function handleTicketAgentChange(ticketId, newAgentId) {
     try {
       setLoadError("");
-      const updatedAgent = await updateTicketAgent(ticketId, newAgentId);
+      const updatedTicket = await updateTicketAgent(ticketId, newAgentId);
       setTickets((previousTickets) =>
         previousTickets.map((ticket) =>
-          ticket.id === ticketId ? updatedAgent : ticket,
+          ticket.id === ticketId ? updatedTicket : ticket,
         ),
       );
     } catch (error) {
