@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { registerSchema } from "../validations/authSchemas.js";
-import { hashPassword } from "../utils/password.js";
+import { loginSchema, registerSchema } from "../validations/authSchemas.js";
+import { hashPassword, verifyPassword } from "../utils/password.js";
+import { signAuthToken } from "../utils/jwt.js";
 import prisma from "../lib/prisma.js";
 import { ZodError } from "zod";
 
@@ -46,6 +47,59 @@ router.post("/register", async (req, res) => {
         errors: error.issues,
       });
     }
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+});
+
+router.post("/login", async (req, res) => {
+  try {
+    const parsedData = loginSchema.parse(req.body);
+    const user = await prisma.user.findUnique({
+      where: {
+        email: parsedData.email,
+      },
+    });
+
+    if (!user) return res.status(401).json({ message: "Invalid credentials" });
+
+    const isValidPassword = await verifyPassword(
+      parsedData.password,
+      user.passwordHash,
+    );
+
+    if (!isValidPassword)
+      return res.status(401).json({ message: "Invalid credentials" });
+
+    const token = signAuthToken(user);
+
+    res.cookie("authToken", token, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 1000,
+    });
+
+    const publicUser = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      agentId: user.agentId,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
+
+    return res.status(200).json(publicUser);
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        message: "Invalid login data",
+        errors: error.issues,
+      });
+    }
+
     return res.status(500).json({
       message: "Internal server error",
     });
