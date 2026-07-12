@@ -121,11 +121,29 @@
   - crea `PrismaPg`;
   - instancia `PrismaClient` con adapter;
   - permite consultar PostgreSQL desde rutas Express.
+- Utilidades base de autenticación:
+  - `bcrypt`, `jsonwebtoken`, `cookie-parser`, `express-rate-limit` y `zod` instalados en `backend/`;
+  - `cookie-parser` configurado como middleware global de Express;
+  - `src/utils/password.js` creado para hashear y verificar contraseñas;
+  - `src/utils/jwt.js` creado para firmar y verificar JWT;
+  - `src/validations/authSchemas.js` creado con validaciones para registro y login.
+- Endpoint de registro:
+  - `src/routes/authRoutes.js` creado;
+  - `POST /api/auth/register` implementado;
+  - validación de entrada con `registerSchema`;
+  - verificación de email duplicado con respuesta `409`;
+  - contraseña hasheada antes de guardar;
+  - usuario creado con Prisma en PostgreSQL;
+  - respuesta pública sin `passwordHash`;
+  - errores de Zod respondidos como JSON con status `400`.
 
 ## Validación
 
 - `npm run lint` finaliza correctamente.
 - `npm run build` finaliza correctamente.
+- `npm run dev` del backend arranca correctamente después de agregar las utilidades base de autenticación.
+- `GET /api/health` sigue respondiendo correctamente.
+- `POST /api/auth/register` fue probado con registro válido, email duplicado y datos inválidos.
 
 ## Decisiones registradas
 
@@ -159,22 +177,30 @@
 - Con Prisma 7, la URL de conexión se lee desde `prisma.config.ts` usando `process.env["DATABASE_URL"]`.
 - Con Prisma 7 y el generador actual, `PrismaClient` se instancia con `@prisma/adapter-pg`.
 - `GET /api/users` es una ruta temporal de aprendizaje para validar conexión; no representa todavía una API pública final.
+- Las contraseñas se manejarán con `bcrypt`; nunca se guardará la contraseña real en PostgreSQL.
+- El JWT contendrá datos mínimos (`userId` y `role`) y no incluirá `passwordHash` ni datos sensibles.
+- El backend usará `JWT_SECRET` desde `.env`; los valores reales no deben documentarse ni subirse al repositorio.
+- Las validaciones de entrada se centralizan con Zod antes de crear los endpoints reales de autenticación.
+- `GET /api/users` no debe exponer `passwordHash`, incluso si sigue siendo una ruta temporal de aprendizaje.
+- Los endpoints de autenticación deben responder JSON controlado en errores de validación, no HTML ni errores genéricos sin manejar.
 
 ## Tarea actual
 
-Ninguna tarea activa. Cliente Prisma reutilizable y ruta temporal de usuarios cerrados.
+Ninguna tarea activa. Endpoint de registro cerrado.
 
 ## Próximo paso
 
 Continuar la **Fase 6 — Backend Express Auth**.
 
-La siguiente tarea recomendada es preparar utilidades base de autenticación:
+La siguiente tarea recomendada es crear el endpoint de login:
 
-- instalar `bcrypt`, `jsonwebtoken`, `cookie-parser`, `express-rate-limit` y `zod`;
-- crear utilidades para hashear contraseñas;
-- crear utilidades para firmar/verificar JWT;
-- preparar validaciones con `zod`;
-- no crear todavía endpoints completos de login/register.
+- implementar `POST /api/auth/login` dentro de `src/routes/authRoutes.js`;
+- validar el body con `loginSchema`;
+- buscar el usuario por email;
+- comparar la contraseña con `verifyPassword`;
+- crear un JWT con `signAuthToken`;
+- enviarlo en una cookie `httpOnly`;
+- responder con el usuario público.
 
 ## Bloqueos
 

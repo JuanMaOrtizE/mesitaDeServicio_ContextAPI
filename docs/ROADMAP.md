@@ -50,11 +50,12 @@
 
 **Resultado:** datos persistentes en una API simulada.
 
-## Fase 6 — Backend Express Auth (siguiente)
+## Fase 6 — Backend Express Auth (en progreso)
 
 - Crear documentación y estructura base del backend.
 - Crear servidor Express local.
 - Configurar PostgreSQL local y Prisma.
+- Preparar utilidades base de autenticación con `bcrypt`, JWT y Zod.
 - Implementar registro, login, logout, sesión actual y recuperación de contraseña.
 - Usar JWT en cookie `httpOnly`.
 
