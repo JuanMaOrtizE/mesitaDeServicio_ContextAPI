@@ -136,6 +136,24 @@
   - usuario creado con Prisma en PostgreSQL;
   - respuesta pública sin `passwordHash`;
   - errores de Zod respondidos como JSON con status `400`.
+- Endpoint de login:
+  - `POST /api/auth/login` implementado;
+  - validación de entrada con `loginSchema`;
+  - búsqueda de usuario por email;
+  - comparación de contraseña con `verifyPassword`;
+  - credenciales inválidas respondidas con `401`;
+  - JWT creado con `signAuthToken`;
+  - cookie `authToken` enviada como `httpOnly`;
+  - respuesta pública sin `passwordHash`;
+  - errores de Zod respondidos como JSON con status `400`.
+- Sesión actual:
+  - `authMiddleware` creado para proteger rutas;
+  - lectura de cookie `authToken` mediante `cookie-parser`;
+  - verificación del JWT con `verifyAuthToken`;
+  - búsqueda del usuario autenticado en PostgreSQL;
+  - usuario público agregado a `req.user`;
+  - `GET /api/auth/me` implementado;
+  - respuestas `401` para cookie ausente, token inválido o usuario inexistente.
 
 ## Validación
 
@@ -144,6 +162,8 @@
 - `npm run dev` del backend arranca correctamente después de agregar las utilidades base de autenticación.
 - `GET /api/health` sigue respondiendo correctamente.
 - `POST /api/auth/register` fue probado con registro válido, email duplicado y datos inválidos.
+- `POST /api/auth/login` fue probado con credenciales válidas, email inexistente, contraseña incorrecta y datos inválidos.
+- `GET /api/auth/me` fue probado con cookie válida y sin cookie.
 
 ## Decisiones registradas
 
@@ -183,24 +203,25 @@
 - Las validaciones de entrada se centralizan con Zod antes de crear los endpoints reales de autenticación.
 - `GET /api/users` no debe exponer `passwordHash`, incluso si sigue siendo una ruta temporal de aprendizaje.
 - Los endpoints de autenticación deben responder JSON controlado en errores de validación, no HTML ni errores genéricos sin manejar.
+- El login envía el JWT en cookie `httpOnly` llamada `authToken`.
+- Las credenciales inválidas en login deben responder el mismo mensaje genérico para email inexistente y contraseña incorrecta.
+- Las rutas protegidas deben usar `authMiddleware` para centralizar lectura de cookie, verificación de JWT y carga del usuario.
+- Las respuestas `401` no deben exponer detalles internos del error ni el token recibido.
 
 ## Tarea actual
 
-Ninguna tarea activa. Endpoint de registro cerrado.
+Ninguna tarea activa. Sesión actual con `/api/auth/me` cerrada.
 
 ## Próximo paso
 
 Continuar la **Fase 6 — Backend Express Auth**.
 
-La siguiente tarea recomendada es crear el endpoint de login:
+La siguiente tarea recomendada es crear logout:
 
-- implementar `POST /api/auth/login` dentro de `src/routes/authRoutes.js`;
-- validar el body con `loginSchema`;
-- buscar el usuario por email;
-- comparar la contraseña con `verifyPassword`;
-- crear un JWT con `signAuthToken`;
-- enviarlo en una cookie `httpOnly`;
-- responder con el usuario público.
+- implementar `POST /api/auth/logout`;
+- limpiar la cookie `authToken`;
+- responder con mensaje de cierre de sesión exitoso;
+- probar que después de logout `GET /api/auth/me` responda `401`.
 
 ## Bloqueos
 

@@ -4,6 +4,7 @@ import { hashPassword, verifyPassword } from "../utils/password.js";
 import { signAuthToken } from "../utils/jwt.js";
 import prisma from "../lib/prisma.js";
 import { ZodError } from "zod";
+import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const router = Router();
 
@@ -104,6 +105,22 @@ router.post("/login", async (req, res) => {
       message: "Internal server error",
     });
   }
+});
+
+router.get("/me", authMiddleware, async (req, res) => {
+  return res.json(req.user);
+});
+
+router.post("/logout", (req, res) => {
+  res.clearCookie("authToken", {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+  });
+
+  return res.status(200).json({
+    message: "Logged out successfully",
+  });
 });
 
 export default router;
