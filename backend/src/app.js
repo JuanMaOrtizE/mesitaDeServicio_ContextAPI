@@ -4,11 +4,13 @@ import helmet from "helmet";
 import dotenv from "dotenv";
 import healthRoutes from "./routes/healthRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
 const app = express();
 
+app.use(cookieParser());
 app.use(express.json());
 app.use(helmet());
 app.use(cors({ origin: process.env.CLIENT_ORIGIN }));
