@@ -179,6 +179,15 @@
   - guardado de `passwordResetToken` y `passwordResetExpiresAt`;
   - respuesta genérica para no revelar si el email existe;
   - `resetToken` devuelto solo fuera de producción para pruebas locales.
+- Restablecimiento de contraseña:
+  - `POST /api/auth/reset-password` implementado;
+  - validación de entrada con `resetPasswordSchema`;
+  - búsqueda de usuario por `passwordResetToken`;
+  - validación de expiración con `passwordResetExpiresAt`;
+  - nueva contraseña hasheada con `hashPassword`;
+  - `passwordHash` actualizado;
+  - `passwordResetToken` y `passwordResetExpiresAt` limpiados después del uso;
+  - token de recuperación no reutilizable.
 
 ## Validación
 
@@ -193,6 +202,7 @@
 - `POST /api/auth/login` fue probado con rate limit hasta recibir `429`.
 - Backend probado después de la migración de recuperación de contraseña.
 - `POST /api/auth/forgot-password` fue probado con email existente, email inexistente y email inválido.
+- `POST /api/auth/reset-password` fue probado con token válido, contraseña anterior, contraseña nueva y reutilización de token.
 
 ## Decisiones registradas
 
@@ -242,25 +252,22 @@
 - Los campos de recuperación de contraseña son opcionales porque solo se llenan durante una solicitud activa de recuperación.
 - El token de recuperación se devuelve solo cuando `NODE_ENV !== "production"`; en producción debería enviarse por email y no exponerse en la respuesta HTTP.
 - La respuesta de `forgot-password` debe ser genérica para evitar enumeración de usuarios.
+- Después de restablecer contraseña, los campos de recuperación deben limpiarse para impedir reutilización del token.
 
 ## Tarea actual
 
-Ninguna tarea activa. Solicitud de recuperación de contraseña cerrada.
+Ninguna tarea activa. Restablecimiento de contraseña cerrado.
 
 ## Próximo paso
 
 Continuar la **Fase 6 — Backend Express Auth**.
 
-La siguiente tarea recomendada es implementar restablecimiento de contraseña:
+La siguiente tarea recomendada es hacer un refactor mínimo de autenticación:
 
-- implementar `POST /api/auth/reset-password`;
-- validar el body con `resetPasswordSchema`;
-- buscar usuario por `passwordResetToken`;
-- verificar que `passwordResetExpiresAt` no esté vencido;
-- hashear la nueva contraseña;
-- actualizar `passwordHash`;
-- limpiar token y expiración de recuperación;
-- probar login con la nueva contraseña.
+- crear una utilidad pequeña para construir usuario público sin `passwordHash`;
+- reemplazar duplicación de `publicUser` en register, login y middleware;
+- mantener exactamente las mismas respuestas públicas;
+- no cambiar comportamiento de endpoints.
 
 ## Bloqueos
 
