@@ -154,6 +154,31 @@
   - usuario público agregado a `req.user`;
   - `GET /api/auth/me` implementado;
   - respuestas `401` para cookie ausente, token inválido o usuario inexistente.
+- Logout:
+  - `POST /api/auth/logout` implementado;
+  - cookie `authToken` eliminada con `res.clearCookie`;
+  - respuesta JSON de cierre de sesión exitoso;
+  - `/api/auth/me` responde `401` después de cerrar sesión.
+- Rate limiting de autenticación:
+  - `src/middleware/authRateLimiter.js` creado;
+  - `express-rate-limit` configurado para autenticación;
+  - `POST /api/auth/login` protegido con `authRateLimiter`;
+  - límite configurado en 5 intentos cada 15 minutos por IP;
+  - exceso de intentos responde `429 Too Many Requests`.
+- Preparación de recuperación de contraseña:
+  - modelo `User` extendido con `passwordResetToken`;
+  - modelo `User` extendido con `passwordResetExpiresAt`;
+  - migración `add_password_reset_fields` creada y aplicada;
+  - `forgotPasswordSchema` agregado;
+  - `resetPasswordSchema` agregado.
+- Solicitud de recuperación de contraseña:
+  - `POST /api/auth/forgot-password` implementado;
+  - validación de entrada con `forgotPasswordSchema`;
+  - búsqueda de usuario por email;
+  - generación de token con `node:crypto`;
+  - guardado de `passwordResetToken` y `passwordResetExpiresAt`;
+  - respuesta genérica para no revelar si el email existe;
+  - `resetToken` devuelto solo fuera de producción para pruebas locales.
 
 ## Validación
 
@@ -164,6 +189,10 @@
 - `POST /api/auth/register` fue probado con registro válido, email duplicado y datos inválidos.
 - `POST /api/auth/login` fue probado con credenciales válidas, email inexistente, contraseña incorrecta y datos inválidos.
 - `GET /api/auth/me` fue probado con cookie válida y sin cookie.
+- `POST /api/auth/logout` fue probado dentro del flujo login → me → logout → me.
+- `POST /api/auth/login` fue probado con rate limit hasta recibir `429`.
+- Backend probado después de la migración de recuperación de contraseña.
+- `POST /api/auth/forgot-password` fue probado con email existente, email inexistente y email inválido.
 
 ## Decisiones registradas
 
@@ -207,21 +236,31 @@
 - Las credenciales inválidas en login deben responder el mismo mensaje genérico para email inexistente y contraseña incorrecta.
 - Las rutas protegidas deben usar `authMiddleware` para centralizar lectura de cookie, verificación de JWT y carga del usuario.
 - Las respuestas `401` no deben exponer detalles internos del error ni el token recibido.
+- Logout se mantiene idempotente: puede responder correctamente aunque no exista una sesión activa.
+- El rate limit se aplica inicialmente solo a login para reducir intentos repetidos de autenticación sin afectar rutas no sensibles.
+- La recuperación de contraseña se implementará primero como flujo de desarrollo sin email real.
+- Los campos de recuperación de contraseña son opcionales porque solo se llenan durante una solicitud activa de recuperación.
+- El token de recuperación se devuelve solo cuando `NODE_ENV !== "production"`; en producción debería enviarse por email y no exponerse en la respuesta HTTP.
+- La respuesta de `forgot-password` debe ser genérica para evitar enumeración de usuarios.
 
 ## Tarea actual
 
-Ninguna tarea activa. Sesión actual con `/api/auth/me` cerrada.
+Ninguna tarea activa. Solicitud de recuperación de contraseña cerrada.
 
 ## Próximo paso
 
 Continuar la **Fase 6 — Backend Express Auth**.
 
-La siguiente tarea recomendada es crear logout:
+La siguiente tarea recomendada es implementar restablecimiento de contraseña:
 
-- implementar `POST /api/auth/logout`;
-- limpiar la cookie `authToken`;
-- responder con mensaje de cierre de sesión exitoso;
-- probar que después de logout `GET /api/auth/me` responda `401`.
+- implementar `POST /api/auth/reset-password`;
+- validar el body con `resetPasswordSchema`;
+- buscar usuario por `passwordResetToken`;
+- verificar que `passwordResetExpiresAt` no esté vencido;
+- hashear la nueva contraseña;
+- actualizar `passwordHash`;
+- limpiar token y expiración de recuperación;
+- probar login con la nueva contraseña.
 
 ## Bloqueos
 

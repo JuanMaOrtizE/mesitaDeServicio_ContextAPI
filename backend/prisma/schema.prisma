@@ -21,4 +21,6 @@ model User {
   agentId      String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  passwordResetToken     String?
+  passwordResetExpiresAt DateTime?
 }

@@ -1,10 +1,17 @@
 import { Router } from "express";
-import { loginSchema, registerSchema } from "../validations/authSchemas.js";
+import crypto from "node:crypto";
+import {
+  loginSchema,
+  registerSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+} from "../validations/authSchemas.js";
 import { hashPassword, verifyPassword } from "../utils/password.js";
 import { signAuthToken } from "../utils/jwt.js";
 import prisma from "../lib/prisma.js";
 import { ZodError } from "zod";
 import { authMiddleware } from "../middleware/authMiddleware.js";
+import { authRateLimiter } from "../middleware/authRateLimiter.js";
 
 const router = Router();
 
@@ -54,7 +61,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", authRateLimiter, async (req, res) => {
   try {
     const parsedData = loginSchema.parse(req.body);
     const user = await prisma.user.findUnique({
@@ -121,6 +128,112 @@ router.post("/logout", (req, res) => {
   return res.status(200).json({
     message: "Logged out successfully",
   });
+});
+
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const parsedData = forgotPasswordSchema.parse(req.body);
+
+    const user = await prisma.user.findUnique({
+      where: {
+        email: parsedData.email,
+      },
+    });
+
+    if (!user)
+      return res.status(200).json({
+        message: "If the email exists, a password reset token was generated",
+      });
+
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const resetExpiresAt = new Date(Date.now() + 15 * 60 * 1000);
+
+    await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        passwordResetToken: resetToken,
+        passwordResetExpiresAt: resetExpiresAt,
+      },
+    });
+
+    const response = {
+      message: "If the email exists, a password reset token was generated",
+    };
+
+    if (process.env.NODE_ENV !== "production") {
+      response.resetToken = resetToken;
+    }
+
+    return res.status(200).json(response);
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        message: "Invalid forgot password data",
+        errors: error.issues,
+      });
+    }
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+});
+
+router.post("/reset-password", async (req, res) => {
+  try {
+    const parsedData = resetPasswordSchema.parse(req.body);
+
+    const user = await prisma.user.findFirst({
+      where: {
+        passwordResetToken: parsedData.token,
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid or expired reset token",
+      });
+    }
+
+    if (
+      !user.passwordResetExpiresAt ||
+      user.passwordResetExpiresAt < new Date()
+    ) {
+      return res.status(400).json({
+        message: "Invalid or expired reset token",
+      });
+    }
+
+    const passwordHash = await hashPassword(parsedData.password);
+
+    await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+
+      data: {
+        passwordHash,
+        passwordResetToken: null,
+        passwordResetExpiresAt: null,
+      },
+    });
+
+    return res.status(200).json({
+      message: "Password reset successfully",
+    });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        message: "Invalid reset password data",
+        errors: error.issues,
+      });
+    }
+
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
 });
 
 export default router;
