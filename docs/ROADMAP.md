@@ -50,7 +50,7 @@
 
 **Resultado:** datos persistentes en una API simulada.
 
-## Fase 6 — Backend Express Auth (en progreso)
+## Fase 6 — Backend Express Auth (completada)
 
 - Crear documentación y estructura base del backend.
 - Crear servidor Express local.
@@ -61,7 +61,7 @@
 
 **Resultado:** autenticación real disponible desde una API Express local.
 
-## Fase 7 — Integración frontend con AuthContext
+## Fase 7 — Integración frontend con AuthContext (siguiente)
 
 - Crear servicios frontend para autenticación.
 - Compartir el usuario activo mediante Context API.

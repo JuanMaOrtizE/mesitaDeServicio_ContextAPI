@@ -12,6 +12,7 @@ import prisma from "../lib/prisma.js";
 import { ZodError } from "zod";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 import { authRateLimiter } from "../middleware/authRateLimiter.js";
+import { toPublicUser } from "../utils/publicUser.js";
 
 const router = Router();
 
@@ -37,15 +38,7 @@ router.post("/register", async (req, res) => {
       },
     });
 
-    const publicUser = {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      agentId: user.agentId,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    };
+    const publicUser = toPublicUser(user);
 
     return res.status(201).json(publicUser);
   } catch (error) {
@@ -89,15 +82,7 @@ router.post("/login", authRateLimiter, async (req, res) => {
       maxAge: 60 * 60 * 1000,
     });
 
-    const publicUser = {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      agentId: user.agentId,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    };
+    const publicUser = toPublicUser(user);
 
     return res.status(200).json(publicUser);
   } catch (error) {

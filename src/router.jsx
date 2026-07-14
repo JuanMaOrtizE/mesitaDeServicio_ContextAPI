@@ -7,6 +7,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import TicketDetailPage from "./pages/TicketDetailPage";
 import CustomersPage from "./pages/CustomersPage";
 import AgentsPage from "./pages/AgentsPage";
+import AuthTestPage from "./pages/AuthTestPage";
 
 export const router = createBrowserRouter([
   {
@@ -19,6 +20,7 @@ export const router = createBrowserRouter([
       { path: "tickets/:ticketId", element: <TicketDetailPage /> },
       { path: "customers", element: <CustomersPage /> },
       { path: "agents", element: <AgentsPage /> },
+      { path: "auth-test", element: <AuthTestPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
   },

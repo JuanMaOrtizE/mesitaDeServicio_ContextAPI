@@ -2,7 +2,7 @@
 
 ## Estado actual
 
-- Las fases 0, 1, 2, 3, 4 y 5 están completadas.
+- Las fases 0, 1, 2, 3, 4, 5 y 6 están completadas.
 - Tailwind CSS `4.3.2` está instalado, configurado y usado en el layout, formularios, lista de tickets y páginas secundarias.
 - React Router está configurado con Data Router.
 - La aplicación mantiene datos locales en memoria mediante `useState`.
@@ -28,7 +28,9 @@
 - La pantalla de detalle permite crear comentarios nuevos y persistirlos en JSON Server mediante `POST /comments`.
 - La pantalla de detalle tiene presentación visual organizada para datos principales, relaciones, comentarios, formulario, carga, error y enlace de regreso.
 - Vite ignora cambios en `db.json` para evitar recargas cuando JSON Server persiste datos.
-- Context API y `useReducer` aún no se han incorporado.
+- Backend Express Auth está completado localmente.
+- La integración frontend de autenticación inició con servicios API.
+- Context API y `useReducer` aún no se han incorporado al frontend.
 
 ## Trabajo completado
 
@@ -38,7 +40,7 @@
 - **Fase 3:** navegación con React Router usando `createBrowserRouter` y `RouterProvider`.
 - **Fase 4:** sistema visual con Tailwind CSS.
 - **Fase 5:** persistencia con JSON Server, servicios de API, CRUD de tickets, relaciones y comentarios.
-- **Fase 6:** iniciada con backend Express mínimo.
+- **Fase 6:** backend Express Auth completado localmente.
 
 ## Últimas tareas cerradas
 
@@ -188,6 +190,28 @@
   - `passwordHash` actualizado;
   - `passwordResetToken` y `passwordResetExpiresAt` limpiados después del uso;
   - token de recuperación no reutilizable.
+- Refactor de usuario público:
+  - `src/utils/publicUser.js` creado;
+  - función `toPublicUser` centraliza los campos públicos del usuario;
+  - `register`, `login` y `authMiddleware` usan `toPublicUser`;
+  - se elimina duplicación de construcción de usuario público;
+  - se reduce el riesgo de exponer `passwordHash` o campos de recuperación.
+- Revisión final de Fase 6:
+  - endpoints de autenticación revisados;
+  - middleware de autenticación revisado;
+  - utilidades de seguridad revisadas;
+  - documentación actualizada para pasar a integración frontend.
+- Servicios frontend de autenticación:
+  - `src/services/authApi.js` creado;
+  - `registerUser`, `loginUser`, `logoutUser`, `getCurrentUser`, `forgotPassword` y `resetPassword` definidos;
+  - las peticiones usan `credentials: "include"` para trabajar con cookie `httpOnly`;
+  - errores del backend se convierten en errores de JavaScript mediante `throw new Error`.
+- Validación temporal de autenticación en frontend:
+  - `src/pages/AuthTestPage.jsx` creado;
+  - ruta temporal `/auth-test` agregada;
+  - `loginUser`, `getCurrentUser` y `logoutUser` probados desde React;
+  - cookie `authToken` validada desde navegador;
+  - comunicación frontend `5173` → backend `4000` confirmada con cookies.
 
 ## Validación
 
@@ -203,6 +227,10 @@
 - Backend probado después de la migración de recuperación de contraseña.
 - `POST /api/auth/forgot-password` fue probado con email existente, email inexistente y email inválido.
 - `POST /api/auth/reset-password` fue probado con token válido, contraseña anterior, contraseña nueva y reutilización de token.
+- `register`, `login` y `/me` fueron probados después del refactor de usuario público.
+- Revisión final de Fase 6 completada con `npm run lint` y `npm run build` exitosos.
+- `authApi.js` revisado estructuralmente; pendiente prueba desde UI temporal o integración controlada.
+- Flujo temporal de auth validado desde frontend: login → current user → logout → current user.
 
 ## Decisiones registradas
 
@@ -253,21 +281,27 @@
 - El token de recuperación se devuelve solo cuando `NODE_ENV !== "production"`; en producción debería enviarse por email y no exponerse en la respuesta HTTP.
 - La respuesta de `forgot-password` debe ser genérica para evitar enumeración de usuarios.
 - Después de restablecer contraseña, los campos de recuperación deben limpiarse para impedir reutilización del token.
+- Las respuestas con usuario deben pasar por `toPublicUser` para mantener una única definición de campos públicos.
+- La Fase 6 queda cerrada como backend auth local; el envío real de email y el deploy quedan para fases futuras.
+- La siguiente integración usará cookies `httpOnly`, por lo que las peticiones del frontend al backend deberán incluir credenciales.
+- Los servicios frontend de autenticación no deben usar `/users` fake de JSON Server; deben consumir `/api/auth` del backend Express.
+- `AuthTestPage` es temporal y debe eliminarse cuando `AuthContext` y las páginas reales de auth estén funcionando.
 
 ## Tarea actual
 
-Ninguna tarea activa. Restablecimiento de contraseña cerrado.
+Ninguna tarea activa. Validación temporal de auth frontend cerrada.
 
 ## Próximo paso
 
-Continuar la **Fase 6 — Backend Express Auth**.
+Continuar la **Fase 7 — Integración frontend con AuthContext**.
 
-La siguiente tarea recomendada es hacer un refactor mínimo de autenticación:
+La siguiente tarea recomendada es crear `AuthContext`:
 
-- crear una utilidad pequeña para construir usuario público sin `passwordHash`;
-- reemplazar duplicación de `publicUser` en register, login y middleware;
-- mantener exactamente las mismas respuestas públicas;
-- no cambiar comportamiento de endpoints.
+- crear un contexto para compartir `user`, `loading` y acciones de auth;
+- cargar la sesión inicial con `getCurrentUser`;
+- exponer `login`, `logout` y `refreshUser`;
+- envolver la app con el provider;
+- no proteger rutas todavía hasta validar el contexto.
 
 ## Bloqueos
 

@@ -14,7 +14,12 @@ const app = express();
 app.use(cookieParser());
 app.use(express.json());
 app.use(helmet());
-app.use(cors({ origin: process.env.CLIENT_ORIGIN }));
+app.use(
+  cors({
+    origin: process.env.CLIENT_ORIGIN,
+    credentials: true,
+  }),
+);
 
 app.use("/api/health", healthRoutes);
 app.use("/api/users", userRoutes);

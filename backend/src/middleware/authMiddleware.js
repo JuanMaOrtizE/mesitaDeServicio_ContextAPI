@@ -1,5 +1,6 @@
 import prisma from "../lib/prisma.js";
 import { verifyAuthToken } from "../utils/jwt.js";
+import { toPublicUser } from "../utils/publicUser.js";
 
 export async function authMiddleware(req, res, next) {
   try {
@@ -22,15 +23,7 @@ export async function authMiddleware(req, res, next) {
         message: "Unauthorized",
       });
 
-    req.user = {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      agentId: user.agentId,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    };
+    req.user = toPublicUser(user);
 
     return next();
   } catch {

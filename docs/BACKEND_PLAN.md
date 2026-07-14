@@ -132,14 +132,18 @@ Base de datos: Neon, Supabase, Railway o PostgreSQL gestionado
 
 Para facilitar ese deploy futuro, el código deberá evitar URLs fijas y usar variables de entorno.
 
-## Próxima tarea técnica
+## Estado actual del backend
 
-Crear el backend mínimo en `backend/` con:
+La Fase 6 de backend auth está completada localmente.
 
-- `package.json`;
-- servidor Express básico;
-- configuración de entorno;
-- endpoint `GET /api/health`;
-- script de desarrollo.
+Endpoints disponibles:
 
-No se implementará autenticación en esa primera tarea técnica.
+- `GET /api/health`;
+- `POST /api/auth/register`;
+- `POST /api/auth/login`;
+- `GET /api/auth/me`;
+- `POST /api/auth/logout`;
+- `POST /api/auth/forgot-password`;
+- `POST /api/auth/reset-password`.
+
+El siguiente paso del proyecto es integrar el frontend con estos endpoints mediante servicios de autenticación y posteriormente `AuthContext`.
