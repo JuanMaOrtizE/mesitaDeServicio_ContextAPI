@@ -7,7 +7,6 @@ import NotFoundPage from "./pages/NotFoundPage";
 import TicketDetailPage from "./pages/TicketDetailPage";
 import CustomersPage from "./pages/CustomersPage";
 import AgentsPage from "./pages/AgentsPage";
-import AuthTestPage from "./pages/AuthTestPage";
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -57,7 +56,6 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      { path: "auth-test", element: <AuthTestPage /> },
       { path: "login", element: <LoginPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],

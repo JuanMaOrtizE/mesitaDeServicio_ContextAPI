@@ -231,6 +231,13 @@
   - muestra usuario autenticado cuando hay sesión;
   - muestra botón `Cerrar sesión`;
   - logout desde la navegación limpia sesión y redirige a `/login`.
+- Rutas protegidas:
+  - `src/components/ProtectedRoute.jsx` creado;
+  - `ProtectedRoute` usa `useAuth`;
+  - muestra carga mientras se valida la sesión inicial;
+  - redirige a `/login` cuando no hay sesión;
+  - permite acceso cuando hay usuario autenticado;
+  - rutas principales protegidas: `/dashboard`, `/tickets`, `/tickets/:ticketId`, `/customers` y `/agents`.
 
 ## Validación
 
@@ -253,6 +260,7 @@
 - `AuthContext` probado desde `/auth-test`: login actualiza usuario global, logout limpia usuario global y refresh consulta sesión actual.
 - `/login` probado con credenciales inválidas, credenciales válidas y refresh posterior manteniendo sesión.
 - Navegación autenticada probada sin sesión, con sesión, tras refresh y después de logout.
+- Rutas protegidas probadas sin sesión, con sesión y tras refresh con cookie válida.
 
 ## Decisiones registradas
 
@@ -310,23 +318,22 @@
 - `AuthTestPage` es temporal y debe eliminarse cuando `AuthContext` y las páginas reales de auth estén funcionando.
 - El frontend no debe guardar ni leer el JWT; el estado global guarda el usuario público y la cookie `httpOnly` queda gestionada por el navegador.
 - Un `401` de `/api/auth/me` al cargar sin sesión es esperado y debe interpretarse como usuario no autenticado, no como fallo crítico de la app.
-- La navegación refleja estado de autenticación, pero las rutas aún no están protegidas.
+- La protección actual es solo por sesión; restricciones por rol se implementarán en una tarea posterior.
 
 ## Tarea actual
 
-Ninguna tarea activa. Navegación autenticada validada.
+Ninguna tarea activa. Rutas protegidas básicas validadas.
 
 ## Próximo paso
 
 Continuar la **Fase 7 — Integración frontend con AuthContext**.
 
-La siguiente tarea recomendada es crear protección básica de rutas:
+La siguiente tarea recomendada es limpiar la prueba temporal de autenticación:
 
-- crear un componente `ProtectedRoute`;
-- usar `useAuth` para revisar `loading` e `isAuthenticated`;
-- redirigir a `/login` si no hay sesión;
-- proteger inicialmente rutas principales como `/tickets`, `/dashboard`, `/customers` y `/agents`;
-- mantener `/login` pública.
+- eliminar la ruta temporal `/auth-test`;
+- eliminar `src/pages/AuthTestPage.jsx`;
+- confirmar que login, navegación y rutas protegidas siguen funcionando;
+- dejar la app sin herramientas temporales de prueba visibles.
 
 ## Bloqueos
 
