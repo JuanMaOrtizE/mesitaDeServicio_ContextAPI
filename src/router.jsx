@@ -8,6 +8,7 @@ import TicketDetailPage from "./pages/TicketDetailPage";
 import CustomersPage from "./pages/CustomersPage";
 import AgentsPage from "./pages/AgentsPage";
 import AuthTestPage from "./pages/AuthTestPage";
+import LoginPage from "./pages/LoginPage";
 
 export const router = createBrowserRouter([
   {
@@ -21,6 +22,7 @@ export const router = createBrowserRouter([
       { path: "customers", element: <CustomersPage /> },
       { path: "agents", element: <AgentsPage /> },
       { path: "auth-test", element: <AuthTestPage /> },
+      { path: "login", element: <LoginPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
   },

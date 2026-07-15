@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { getCurrentUser, loginUser, logoutUser } from "../services/authApi";
+import { useAuth } from "../context/AuthContext";
 
 function AuthTestPage() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
+  const { user, loading, isAuthenticated, login, logout, refreshUser } =
+    useAuth();
 
   async function handleLogin() {
     try {
       setError("");
-      const data = await loginUser({
+      const data = await login({
         email: "admin@example.com",
         password: "newPassword123",
       });
@@ -21,7 +23,7 @@ function AuthTestPage() {
   async function handleLogout() {
     try {
       setError("");
-      const data = await logoutUser();
+      const data = await logout();
 
       setResult(data);
     } catch (error) {
@@ -32,7 +34,7 @@ function AuthTestPage() {
   async function handleCurrentUser() {
     try {
       setError("");
-      const data = await getCurrentUser();
+      const data = await refreshUser();
 
       setResult(data);
     } catch (error) {
@@ -45,6 +47,9 @@ function AuthTestPage() {
       <button onClick={handleLogin}>Login</button>{" "}
       <button onClick={handleLogout}>Logout</button>
       <button onClick={handleCurrentUser}>Current User</button>
+      <p>Loading: {String(loading)}</p>
+      <p>Authenticated: {String(isAuthenticated)}</p>
+      <pre>{JSON.stringify(user, null, 2)}</pre>
       {error && <p>{error}</p>}
       {result && <pre>{JSON.stringify(result, null, 2)}</pre>}
     </div>

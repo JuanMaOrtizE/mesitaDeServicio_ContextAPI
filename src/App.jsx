@@ -1,4 +1,5 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
 
 const navLinkClass = ({ isActive }) =>
   `rounded-md px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${
@@ -8,6 +9,14 @@ const navLinkClass = ({ isActive }) =>
   }`;
 
 function App() {
+  const { user, isAuthenticated, loading, logout } = useAuth();
+  const navigate = useNavigate();
+
+  async function handleLogout() {
+    await logout();
+    navigate("/login");
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <header className="border-b border-slate-200 bg-white">
@@ -42,6 +51,16 @@ function App() {
               </li>
             </ul>
           </nav>
+          {loading ? (
+            <span>Cargando sesión...</span>
+          ) : isAuthenticated ? (
+            <>
+              <span>{user.name || user.email}</span>
+              <button onClick={handleLogout}>Cerrar sesión</button>
+            </>
+          ) : (
+            <NavLink to="/login">Iniciar sesión</NavLink>
+          )}
         </div>
       </header>
 

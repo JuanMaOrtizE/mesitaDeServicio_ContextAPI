@@ -212,6 +212,25 @@
   - `loginUser`, `getCurrentUser` y `logoutUser` probados desde React;
   - cookie `authToken` validada desde navegador;
   - comunicación frontend `5173` → backend `4000` confirmada con cookies.
+- AuthContext:
+  - `src/context/AuthContext.jsx` creado;
+  - `AuthProvider` envuelve la app desde `main.jsx`;
+  - sesión inicial cargada con `getCurrentUser`;
+  - `user`, `loading`, `isAuthenticated`, `login`, `logout` y `refreshUser` expuestos;
+  - `AuthTestPage` actualizada para validar autenticación desde contexto.
+- Página real de login:
+  - `src/pages/LoginPage.jsx` creado;
+  - ruta `/login` agregada;
+  - formulario controlado con email y contraseña;
+  - login conectado a `useAuth().login`;
+  - errores de credenciales mostrados en pantalla;
+  - redirección a `/tickets` después de login exitoso.
+- Navegación autenticada:
+  - `App.jsx` consume `useAuth`;
+  - muestra enlace a `/login` cuando no hay sesión;
+  - muestra usuario autenticado cuando hay sesión;
+  - muestra botón `Cerrar sesión`;
+  - logout desde la navegación limpia sesión y redirige a `/login`.
 
 ## Validación
 
@@ -231,6 +250,9 @@
 - Revisión final de Fase 6 completada con `npm run lint` y `npm run build` exitosos.
 - `authApi.js` revisado estructuralmente; pendiente prueba desde UI temporal o integración controlada.
 - Flujo temporal de auth validado desde frontend: login → current user → logout → current user.
+- `AuthContext` probado desde `/auth-test`: login actualiza usuario global, logout limpia usuario global y refresh consulta sesión actual.
+- `/login` probado con credenciales inválidas, credenciales válidas y refresh posterior manteniendo sesión.
+- Navegación autenticada probada sin sesión, con sesión, tras refresh y después de logout.
 
 ## Decisiones registradas
 
@@ -286,22 +308,25 @@
 - La siguiente integración usará cookies `httpOnly`, por lo que las peticiones del frontend al backend deberán incluir credenciales.
 - Los servicios frontend de autenticación no deben usar `/users` fake de JSON Server; deben consumir `/api/auth` del backend Express.
 - `AuthTestPage` es temporal y debe eliminarse cuando `AuthContext` y las páginas reales de auth estén funcionando.
+- El frontend no debe guardar ni leer el JWT; el estado global guarda el usuario público y la cookie `httpOnly` queda gestionada por el navegador.
+- Un `401` de `/api/auth/me` al cargar sin sesión es esperado y debe interpretarse como usuario no autenticado, no como fallo crítico de la app.
+- La navegación refleja estado de autenticación, pero las rutas aún no están protegidas.
 
 ## Tarea actual
 
-Ninguna tarea activa. Validación temporal de auth frontend cerrada.
+Ninguna tarea activa. Navegación autenticada validada.
 
 ## Próximo paso
 
 Continuar la **Fase 7 — Integración frontend con AuthContext**.
 
-La siguiente tarea recomendada es crear `AuthContext`:
+La siguiente tarea recomendada es crear protección básica de rutas:
 
-- crear un contexto para compartir `user`, `loading` y acciones de auth;
-- cargar la sesión inicial con `getCurrentUser`;
-- exponer `login`, `logout` y `refreshUser`;
-- envolver la app con el provider;
-- no proteger rutas todavía hasta validar el contexto.
+- crear un componente `ProtectedRoute`;
+- usar `useAuth` para revisar `loading` e `isAuthenticated`;
+- redirigir a `/login` si no hay sesión;
+- proteger inicialmente rutas principales como `/tickets`, `/dashboard`, `/customers` y `/agents`;
+- mantener `/login` pública.
 
 ## Bloqueos
 
