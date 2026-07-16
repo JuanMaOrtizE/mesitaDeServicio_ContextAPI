@@ -61,16 +61,16 @@
 
 **Resultado:** autenticación real disponible desde una API Express local.
 
-## Fase 7 — Integración frontend con AuthContext (siguiente)
+## Fase 7 — Integración frontend con AuthContext (completada)
 
 - Crear servicios frontend para autenticación.
 - Compartir el usuario activo mediante Context API.
-- Crear páginas de login, registro y recuperación.
+- Crear páginas de login, recuperación, restablecimiento de contraseña y registro.
 - Consultar la sesión actual desde el backend.
 
 **Resultado:** frontend conectado a la autenticación real del backend.
 
-## Fase 8 — Roles y rutas protegidas
+## Fase 8 — Roles y rutas protegidas (siguiente)
 
 - Proteger rutas del frontend según sesión.
 - Adaptar navegación según rol.

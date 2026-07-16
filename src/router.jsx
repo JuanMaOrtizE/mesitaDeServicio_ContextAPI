@@ -10,6 +10,8 @@ import AgentsPage from "./pages/AgentsPage";
 import LoginPage from "./pages/LoginPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
+import RegisterPage from "./pages/RegisterPage";
 
 export const router = createBrowserRouter([
   {
@@ -60,6 +62,14 @@ export const router = createBrowserRouter([
       {
         path: "forgot-password",
         element: <ForgotPasswordPage />,
+      },
+      {
+        path: "reset-password",
+        element: <ResetPasswordPage />,
+      },
+      {
+        path: "register",
+        element: <RegisterPage />,
       },
       { path: "login", element: <LoginPage /> },
       { path: "*", element: <NotFoundPage /> },

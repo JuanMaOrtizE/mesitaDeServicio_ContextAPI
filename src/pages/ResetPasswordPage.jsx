@@ -1,33 +1,32 @@
 import { useState } from "react";
-import { useAuth } from "../context/useAuth";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { resetPassword } from "../services/authApi";
 
-function LoginPage() {
+function ResetPasswordPage() {
   const [formData, setFormData] = useState({
-    email: "",
+    token: "",
     password: "",
   });
-
+  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-
-  const { login } = useAuth();
-  const navigate = useNavigate();
 
   function handleChange(e) {
     const { name, value } = e.target;
     setFormData((previousData) => ({ ...previousData, [name]: value }));
   }
 
-  async function handleSubmit(event) {
-    event.preventDefault();
+  async function handleSubmit(e) {
+    e.preventDefault();
+
     try {
+      setMessage("");
       setError("");
       setSubmitting(true);
 
-      await login(formData);
+      const data = await resetPassword(formData);
 
-      navigate("/tickets");
+      setMessage(data.message);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -39,20 +38,19 @@ function LoginPage() {
     <form onSubmit={handleSubmit}>
       <div>
         <div>
-          <label htmlFor="email">Email</label>
+          <label htmlFor="token">Token</label>
           <input
-            id="email"
-            name="email"
-            type="email"
-            value={formData.email}
+            id="token"
+            name="token"
+            type="text"
+            value={formData.token}
             onChange={handleChange}
           />
         </div>
-
         <div>
-          <label htmlFor="password">Contraseña</label>
+          <label htmlFor="new-password">Nueva contraseña</label>
           <input
-            id="password"
+            id="new-password"
             name="password"
             type="password"
             value={formData.password}
@@ -60,17 +58,16 @@ function LoginPage() {
           />
         </div>
       </div>
-
       <div>
         <button type="submit" disabled={submitting}>
-          {submitting ? "Ingresando..." : "Iniciar sesión"}
+          {submitting ? "Enviando..." : "Cambiar contraseña"}
         </button>
+        {message && <p>{message}</p>}
         {error && <p>{error}</p>}
-        <Link to="/forgot-password">Olvidé mi contraseña</Link>
-        <Link to="/register">Crear cuenta</Link>
+        <Link to="/login">volver al login</Link>
       </div>
     </form>
   );
 }
 
-export default LoginPage;
+export default ResetPasswordPage;

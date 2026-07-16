@@ -49,7 +49,17 @@ function ForgotPasswordPage() {
           {submitting ? "Enviando..." : "Enviar instrucciones"}
         </button>
         {message && <p>{message}</p>}
-        {resetToken && <pre>{resetToken}</pre>}
+        {resetToken && (
+          <div>
+            <p>
+              El token generado se usa sólo para desarrollo local. Es
+              indispensable pegarlo en la página de restablecimiento de
+              contraseña:
+            </p>
+            <pre>{resetToken}</pre>
+            <Link to="/reset-password">Ir a restablecer contraseña</Link>
+          </div>
+        )}
         {error && <p>{error}</p>}
         <Link to="/login">volver al login</Link>
       </div>

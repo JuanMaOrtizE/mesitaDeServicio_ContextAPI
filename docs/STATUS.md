@@ -243,7 +243,7 @@
     - `src/pages/AuthTestPage.jsx` eliminado;
     - contexto separado en `authContext.js`, `AuthContext.jsx` y `useAuth.js`;
     - advertencia de Fast Refresh corregida.
-  - Página real de recuperación de contraseña:
+- Página real de recuperación de contraseña:
     - `src/pages/ForgotPasswordPage.jsx` creado;
     - ruta pública `/forgot-password` agregada;
     - `LoginPage` enlaza hacia recuperación de contraseña;
@@ -252,6 +252,33 @@
     - mensaje genérico de éxito mostrado en pantalla;
     - errores del backend mostrados en pantalla;
     - `resetToken` mostrado en desarrollo para poder probar el flujo local sin email real.
+- Página real de restablecimiento de contraseña:
+    - `src/pages/ResetPasswordPage.jsx` creado;
+    - ruta pública `/reset-password` agregada;
+    - formulario controlado con token y nueva contraseña;
+    - petición conectada a `resetPassword(formData)`;
+    - mensaje de éxito mostrado en pantalla;
+    - errores del backend mostrados en pantalla;
+    - navegación de regreso a `/login` disponible.
+- Navegación entre recuperación y restablecimiento:
+    - `/forgot-password` muestra explicación clara cuando existe `resetToken`;
+    - `resetToken` se conserva visible solo para desarrollo local;
+    - enlace hacia `/reset-password` agregado dentro del flujo de recuperación;
+    - enlace de regreso a `/login` conservado.
+  - Revisión del flujo básico de autenticación real en frontend:
+    - login validado;
+    - sesión inicial tras refresh validada;
+    - logout validado;
+    - rutas protegidas validadas;
+    - recuperación y restablecimiento de contraseña validados.
+  - Página real de registro:
+    - `src/pages/RegisterPage.jsx` creado;
+    - ruta pública `/register` agregada;
+    - formulario controlado con `name`, `email`, `password` y `role`;
+    - conexión con `registerUser(formData)`;
+    - mensaje local de éxito mostrado después de registro correcto;
+    - errores del backend mostrados en pantalla;
+    - navegación `/login` ↔ `/register` agregada.
 
 ## Validación
 
@@ -278,6 +305,16 @@
 - `npm run lint` finaliza correctamente después de separar `useAuth`.
 - `npm run build` finaliza correctamente después de eliminar `auth-test`.
 - `/forgot-password` probado desde la interfaz con email existente, email inexistente y email inválido.
+- `/reset-password` probado desde la interfaz usando token de desarrollo.
+- Login probado después de restablecer contraseña correctamente.
+- `npm run lint` finaliza correctamente después de crear `ResetPasswordPage`.
+- `npm run build` finaliza correctamente después de crear `ResetPasswordPage`.
+- `npm run lint` finaliza correctamente después de conectar visualmente recuperación y restablecimiento.
+- `npm run build` finaliza correctamente después de conectar visualmente recuperación y restablecimiento.
+- Revisión manual del flujo completo de autenticación básica reportada como correcta.
+- `/register` probado con flujo completo de registro y posterior login.
+- `npm run lint` finaliza correctamente después de crear `RegisterPage`.
+- `npm run build` finaliza correctamente después de crear `RegisterPage`.
 
 ## Decisiones registradas
 
@@ -338,24 +375,25 @@
 - La protección actual es solo por sesión; restricciones por rol se implementarán en una tarea posterior.
 - El hook `useAuth` vive en archivo separado para cumplir `react-refresh/only-export-components`.
 - La página `/forgot-password` puede mostrar el `resetToken` solamente durante desarrollo porque el backend lo devuelve fuera de producción. En producción, ese token no debe mostrarse en la UI ni devolverse al cliente directamente; debe enviarse por email.
+- La ruta `/reset-password` debe permanecer pública porque el usuario que la usa normalmente no tiene una sesión activa.
+- El flujo de recuperación se mantiene manual por ahora: copiar token desde `/forgot-password` y pegarlo en `/reset-password`. No se automatiza todavía con query params.
+- La respuesta exitosa de `/api/auth/register` devuelve usuario público y no `message`; por eso `RegisterPage` muestra un mensaje local fijo después de una respuesta exitosa.
+- La Fase 7 queda cerrada: el frontend ya tiene servicios de auth, `AuthContext`, login, logout, sesión inicial, rutas protegidas, recuperación, restablecimiento y registro.
 
 ## Tarea actual
 
-Ninguna tarea activa. Página real de recuperación de contraseña creada y probada.
+Ninguna tarea activa. Fase 7 cerrada con integración frontend de autenticación real validada.
 
 ## Próximo paso
 
-Continuar la **Fase 7 — Integración frontend con AuthContext**.
+Iniciar la **Fase 8 — Roles y permisos**.
 
-La siguiente tarea recomendada es crear la página real de restablecimiento de contraseña:
+La siguiente tarea recomendada es revisar el uso actual de roles y definir restricciones iniciales:
 
-- crear `src/pages/ResetPasswordPage.jsx`;
-- agregar ruta pública `/reset-password`;
-- construir un formulario controlado con `token` y nueva contraseña;
-- conectar el formulario con `resetPassword`;
-- mostrar mensaje de éxito o error;
-- agregar navegación de regreso a `/login`;
-- probar el flujo usando el `resetToken` obtenido desde `/forgot-password`.
+- revisar qué rutas deben estar disponibles para `admin`, `agent` y `customer`;
+- decidir si `customer` tendrá acceso real por ahora o si se pospone;
+- adaptar navegación según rol;
+- reemplazar gradualmente el autor demo de comentarios por el usuario autenticado.
 
 ## Bloqueos
 
