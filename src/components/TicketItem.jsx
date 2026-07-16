@@ -10,6 +10,8 @@ function TicketItem({
   onAgentChange,
   onEdit,
   onDelete,
+  canDeleteTicket,
+  canAssignAgent,
 }) {
   const selectId = `ticket-status-${ticket.id}`;
   const selectIdAgent = `ticket-agent-${ticket.id}`;
@@ -25,9 +27,11 @@ function TicketItem({
   const category = categories.find(
     (category) => category.id === ticket.categoryId,
   );
+  const assignedAgent = agents.find((agent) => agent.id === ticket.agentId);
 
   const customerName = customer?.name ?? "Cliente no encontrado";
   const categoryName = category?.name ?? "Categoría no encontrada";
+  const assignedAgentName = assignedAgent?.name ?? "Sin asignar";
 
   const priorityLabels = {
     low: "Baja",
@@ -93,22 +97,27 @@ function TicketItem({
             Agente
           </label>
 
-          <select
-            className="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500"
-            id={selectIdAgent}
-            value={ticket.agentId ?? ""}
-            onChange={(e) => {
-              const newAgentId = e.target.value === "" ? null : e.target.value;
-              onAgentChange(ticket.id, newAgentId);
-            }}
-          >
-            <option value="">Sin asignar</option>
-            {agents.map((agent) => (
-              <option key={agent.id} value={agent.id}>
-                {agent.name}
-              </option>
-            ))}
-          </select>
+          {canAssignAgent ? (
+            <select
+              className="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              id={selectIdAgent}
+              value={ticket.agentId ?? ""}
+              onChange={(e) => {
+                const newAgentId =
+                  e.target.value === "" ? null : e.target.value;
+                onAgentChange(ticket.id, newAgentId);
+              }}
+            >
+              <option value="">Sin asignar</option>
+              {agents.map((agent) => (
+                <option key={agent.id} value={agent.id}>
+                  {agent.name}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <p>{assignedAgentName}</p>
+          )}
         </div>
       </div>
       <div className="mt-4 grid min-w-0 gap-4 sm:grid-cols-2">
@@ -141,14 +150,16 @@ function TicketItem({
         >
           Editar ticket
         </button>
-        <button
-          className="rounded-md border border-red-200 bg-white px-3 py-2 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 cursor-pointer"
-          onClick={() => onDelete(ticket.id)}
-          type="button"
-          aria-label={`Eliminar ticket: ${ticket.title}`}
-        >
-          Eliminar ticket
-        </button>
+        {canDeleteTicket && (
+          <button
+            className="rounded-md border border-red-200 bg-white px-3 py-2 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 cursor-pointer"
+            onClick={() => onDelete(ticket.id)}
+            type="button"
+            aria-label={`Eliminar ticket: ${ticket.title}`}
+          >
+            Eliminar ticket
+          </button>
+        )}
       </div>
     </div>
   );

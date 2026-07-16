@@ -15,6 +15,8 @@ import { getCustomers } from "../services/customersApi";
 import { getCategories } from "../services/categoriesApi";
 import { getAgents } from "../services/agentsApi";
 
+import { useAuth } from "../context/useAuth.js";
+
 function TicketsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -27,6 +29,10 @@ function TicketsPage() {
   const [customers, setCustomers] = useState([]);
   const [categories, setCategories] = useState([]);
   const [agents, setAgents] = useState([]);
+
+  const { user } = useAuth();
+  const canDeleteTicket = user?.role === "admin";
+  const canAssignAgent = user?.role === "admin";
 
   useEffect(() => {
     async function loadTickets() {
@@ -229,6 +235,8 @@ function TicketsPage() {
           onTicketAgentChange={handleTicketAgentChange}
           onEditTicket={handleStartEdit}
           onDeleteTicket={handleDeleteTicket}
+          canDeleteTicket={canDeleteTicket}
+          canAssignAgent={canAssignAgent}
         />
       )}
 

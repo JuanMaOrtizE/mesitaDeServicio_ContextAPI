@@ -5,6 +5,7 @@ import { getCustomers } from "../services/customersApi";
 import { getCategories } from "../services/categoriesApi";
 import { getAgents } from "../services/agentsApi";
 import { createComment, getCommentsByTicketId } from "../services/commentsApi";
+import { useAuth } from "../context/useAuth";
 
 function TicketDetailPage() {
   const { ticketId } = useParams();
@@ -20,6 +21,8 @@ function TicketDetailPage() {
 
   const [commentBody, setCommentBody] = useState("");
   const [isCreatingComment, setIsCreatingComment] = useState(false);
+
+  const { user } = useAuth();
 
   useEffect(() => {
     async function loadTicket() {
@@ -76,6 +79,7 @@ function TicketDetailPage() {
     const trimmedBody = commentBody.trim();
 
     if (!trimmedBody) return;
+    if (!user) return;
     try {
       setLoadError("");
       setIsCreatingComment(true);
@@ -84,8 +88,8 @@ function TicketDetailPage() {
 
       const newComment = {
         ticketId: ticketId,
-        authorId: "1",
-        authorName: "Admin Demo",
+        authorId: user.id,
+        authorName: user.name || user.email,
         body: trimmedBody,
         createdAt: now,
       };

@@ -49,6 +49,13 @@ function App() {
                   Agentes
                 </NavLink>
               </li>
+              {user?.role === "admin" && (
+                <li>
+                  <NavLink className={navLinkClass} to="/register">
+                    Crear usuario
+                  </NavLink>
+                </li>
+              )}
             </ul>
           </nav>
           {loading ? (

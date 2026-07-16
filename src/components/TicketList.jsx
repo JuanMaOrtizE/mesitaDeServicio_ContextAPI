@@ -10,6 +10,8 @@ function TicketList({
   onTicketAgentChange,
   onEditTicket,
   onDeleteTicket,
+  canDeleteTicket,
+  canAssignAgent,
 }) {
   if (tickets.length === 0) {
     return (
@@ -32,6 +34,8 @@ function TicketList({
           onAgentChange={onTicketAgentChange}
           onEdit={onEditTicket}
           onDelete={onDeleteTicket}
+          canDeleteTicket={canDeleteTicket}
+          canAssignAgent={canAssignAgent}
         />
       ))}
     </div>

@@ -327,6 +327,12 @@
 - `POST /api/auth/register` probado como endpoint protegido: sin sesión, con usuario `agent` y con usuario `admin`.
 - `npm run lint` finaliza correctamente después de proteger `/api/auth/register`.
 - `npm run build` finaliza correctamente después de proteger `/api/auth/register`.
+- Navegación interna validada: el enlace `Crear usuario` solo aparece para `admin`.
+- `npm run lint` finaliza correctamente después de adaptar navegación por rol.
+- `npm run build` finaliza correctamente después de adaptar navegación por rol.
+- Permiso visual de eliminación validado estructuralmente: `admin` conserva el botón y `agent` no lo recibe por UI.
+- `npm run lint` finaliza correctamente después de ocultar eliminación para `agent`.
+- `npm run build` finaliza correctamente después de ocultar eliminación para `agent`.
 
 ## Decisiones registradas
 
@@ -395,21 +401,42 @@
 - El registro evolucionará a creación interna de usuarios: un `admin` creará usuarios y el usuario creado deberá definir/cambiar su contraseña.
 - La protección frontend por rol mejora la experiencia, pero no es seguridad suficiente. El endpoint backend `/api/auth/register` también debe exigir usuario autenticado con rol `admin`.
 - La autorización por rol en backend queda centralizada en `authorizeRoles`, para poder reutilizarla en endpoints futuros.
+- La visibilidad del enlace `Crear usuario` es una mejora de experiencia, no una barrera de seguridad. La barrera real sigue siendo `ProtectedRoute` y `authorizeRoles("admin")`.
+- Matriz inicial de permisos aceptada:
+  - `admin`: control total sobre usuarios y gestión de tickets;
+  - `agent`: puede gestionar tickets, cambiar estados y comentar, pero no crear usuarios ni eliminar tickets;
+  - `customer`: queda pospuesto por ahora porque todavía no existe flujo propio ni relación completa con el modelo `Customer`.
+- Mientras tickets, clientes, agentes, categorías y comentarios sigan en JSON Server, las restricciones sobre esas acciones serán principalmente de frontend. La protección real llegará al migrar esos recursos a Express.
+- La eliminación de tickets queda oculta para `agent` solo a nivel visual mientras los tickets dependan de JSON Server.
+- Permiso de asignación de agentes aceptado:
+  - `admin` puede cambiar el agente asignado a un ticket;
+  - `agent` solo puede ver el agente asignado por ahora;
+  - `customer` sigue pospuesto.
+- Permiso visual de asignación de agentes aplicado:
+  - `TicketsPage` calcula `canAssignAgent` desde `user?.role === "admin"`;
+  - `TicketList` recibe y propaga `canAssignAgent`;
+  - `TicketItem` muestra el selector de agente solo cuando `canAssignAgent` es verdadero;
+  - usuarios sin permiso ven el nombre del agente asignado o `Sin asignar`.
+- Autor real en comentarios:
+  - `TicketDetailPage` consume `useAuth`;
+  - los nuevos comentarios usan `authorId: user.id`;
+  - los nuevos comentarios usan `authorName: user.name || user.email`;
+  - se conserva la validación local para evitar comentarios vacíos.
 
 ## Tarea actual
 
-Ninguna tarea activa. La creación interna de usuarios ya está restringida a `admin` en frontend y backend.
+Ninguna tarea activa. Autor real de comentarios aplicado en detalle de ticket.
 
 ## Próximo paso
 
 Iniciar la **Fase 8 — Roles y permisos**.
 
-La siguiente tarea recomendada es adaptar la navegación interna para usuarios `admin`:
+La siguiente tarea recomendada es aplicar permisos explícitos al formulario de comentarios:
 
-- mostrar un enlace interno hacia `/register` solo cuando `user.role === "admin"`;
-- mantener oculto ese enlace para `agent` y `customer`;
-- conservar `/register` protegido aunque el enlace esté oculto;
-- decidir después si la ruta se renombra a `/users/new` o `/admin/users/new`.
+- permitir comentar solo a `admin` y `agent`;
+- ocultar o deshabilitar el formulario para `customer`;
+- mantener `customer` pospuesto hasta definir su experiencia;
+- documentar que la protección real de comentarios llegará al migrarlos a Express.
 
 ## Bloqueos
 

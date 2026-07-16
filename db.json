@@ -179,6 +179,30 @@
       "body": "no lo resolveré",
       "createdAt": "2026-07-11T15:57:40.019Z",
       "id": "bQchxAeL9mQ"
+    },
+    {
+      "ticketId": "2",
+      "authorId": "1",
+      "authorName": "Admin Demo",
+      "body": "dsf",
+      "createdAt": "2026-07-16T22:06:55.513Z",
+      "id": "tstt3W8QdBU"
+    },
+    {
+      "ticketId": "2",
+      "authorId": "1",
+      "authorName": "Admin Demo",
+      "body": "hey",
+      "createdAt": "2026-07-16T22:12:15.110Z",
+      "id": "YZG_cNID1sU"
+    },
+    {
+      "ticketId": "2",
+      "authorId": "cmrnt7by00000vwuq4hxa0hsn",
+      "authorName": "juanmita",
+      "body": "hola",
+      "createdAt": "2026-07-16T22:16:43.073Z",
+      "id": "wBEK6nZ7DtA"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
