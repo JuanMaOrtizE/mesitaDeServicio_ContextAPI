@@ -13,46 +13,52 @@ import { ZodError } from "zod";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 import { authRateLimiter } from "../middleware/authRateLimiter.js";
 import { toPublicUser } from "../utils/publicUser.js";
+import { authorizeRoles } from "../middleware/authorizeRoles.js";
 
 const router = Router();
 
-router.post("/register", async (req, res) => {
-  try {
-    const parsedData = registerSchema.parse(req.body);
-    const existingUser = await prisma.user.findUnique({
-      where: { email: parsedData.email },
-    });
+router.post(
+  "/register",
+  authMiddleware,
+  authorizeRoles("admin"),
+  async (req, res) => {
+    try {
+      const parsedData = registerSchema.parse(req.body);
+      const existingUser = await prisma.user.findUnique({
+        where: { email: parsedData.email },
+      });
 
-    if (existingUser) {
-      return res.status(409).json({ message: "Email already in use" });
-    }
+      if (existingUser) {
+        return res.status(409).json({ message: "Email already in use" });
+      }
 
-    const passwordHash = await hashPassword(parsedData.password);
+      const passwordHash = await hashPassword(parsedData.password);
 
-    const user = await prisma.user.create({
-      data: {
-        name: parsedData.name,
-        email: parsedData.email,
-        passwordHash,
-        role: parsedData.role,
-      },
-    });
+      const user = await prisma.user.create({
+        data: {
+          name: parsedData.name,
+          email: parsedData.email,
+          passwordHash,
+          role: parsedData.role,
+        },
+      });
 
-    const publicUser = toPublicUser(user);
+      const publicUser = toPublicUser(user);
 
-    return res.status(201).json(publicUser);
-  } catch (error) {
-    if (error instanceof ZodError) {
-      return res.status(400).json({
-        message: "Invalid register data",
-        errors: error.issues,
+      return res.status(201).json(publicUser);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({
+          message: "Invalid register data",
+          errors: error.issues,
+        });
+      }
+      return res.status(500).json({
+        message: "Internal server error",
       });
     }
-    return res.status(500).json({
-      message: "Internal server error",
-    });
-  }
-});
+  },
+);
 
 router.post("/login", authRateLimiter, async (req, res) => {
   try {

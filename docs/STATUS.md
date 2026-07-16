@@ -279,6 +279,12 @@
     - mensaje local de éxito mostrado después de registro correcto;
     - errores del backend mostrados en pantalla;
     - navegación `/login` ↔ `/register` agregada.
+  - Restricción frontend de creación de usuarios:
+    - `ProtectedRoute` acepta `allowedRoles`;
+    - `/register` queda protegido con `allowedRoles={["admin"]}`;
+    - usuarios no autenticados son redirigidos a `/login`;
+    - usuarios autenticados sin rol permitido son redirigidos a `/tickets`;
+    - el enlace público `Crear cuenta` fue eliminado de `LoginPage`.
 
 ## Validación
 
@@ -315,6 +321,12 @@
 - `/register` probado con flujo completo de registro y posterior login.
 - `npm run lint` finaliza correctamente después de crear `RegisterPage`.
 - `npm run build` finaliza correctamente después de crear `RegisterPage`.
+- Restricción frontend de `/register` probada sin sesión, con usuario `agent` y con usuario `admin`.
+- `npm run lint` finaliza correctamente después de restringir `/register` en frontend.
+- `npm run build` finaliza correctamente después de restringir `/register` en frontend.
+- `POST /api/auth/register` probado como endpoint protegido: sin sesión, con usuario `agent` y con usuario `admin`.
+- `npm run lint` finaliza correctamente después de proteger `/api/auth/register`.
+- `npm run build` finaliza correctamente después de proteger `/api/auth/register`.
 
 ## Decisiones registradas
 
@@ -379,21 +391,25 @@
 - El flujo de recuperación se mantiene manual por ahora: copiar token desde `/forgot-password` y pegarlo en `/reset-password`. No se automatiza todavía con query params.
 - La respuesta exitosa de `/api/auth/register` devuelve usuario público y no `message`; por eso `RegisterPage` muestra un mensaje local fijo después de una respuesta exitosa.
 - La Fase 7 queda cerrada: el frontend ya tiene servicios de auth, `AuthContext`, login, logout, sesión inicial, rutas protegidas, recuperación, restablecimiento y registro.
+- El registro público abierto no es adecuado para esta Help Desk porque permite que cualquier usuario se asigne rol `admin`.
+- El registro evolucionará a creación interna de usuarios: un `admin` creará usuarios y el usuario creado deberá definir/cambiar su contraseña.
+- La protección frontend por rol mejora la experiencia, pero no es seguridad suficiente. El endpoint backend `/api/auth/register` también debe exigir usuario autenticado con rol `admin`.
+- La autorización por rol en backend queda centralizada en `authorizeRoles`, para poder reutilizarla en endpoints futuros.
 
 ## Tarea actual
 
-Ninguna tarea activa. Fase 7 cerrada con integración frontend de autenticación real validada.
+Ninguna tarea activa. La creación interna de usuarios ya está restringida a `admin` en frontend y backend.
 
 ## Próximo paso
 
 Iniciar la **Fase 8 — Roles y permisos**.
 
-La siguiente tarea recomendada es revisar el uso actual de roles y definir restricciones iniciales:
+La siguiente tarea recomendada es adaptar la navegación interna para usuarios `admin`:
 
-- revisar qué rutas deben estar disponibles para `admin`, `agent` y `customer`;
-- decidir si `customer` tendrá acceso real por ahora o si se pospone;
-- adaptar navegación según rol;
-- reemplazar gradualmente el autor demo de comentarios por el usuario autenticado.
+- mostrar un enlace interno hacia `/register` solo cuando `user.role === "admin"`;
+- mantener oculto ese enlace para `agent` y `customer`;
+- conservar `/register` protegido aunque el enlace esté oculto;
+- decidir después si la ruta se renombra a `/users/new` o `/admin/users/new`.
 
 ## Bloqueos
 

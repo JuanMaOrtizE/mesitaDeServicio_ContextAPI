@@ -67,7 +67,6 @@ function LoginPage() {
         </button>
         {error && <p>{error}</p>}
         <Link to="/forgot-password">Olvidé mi contraseña</Link>
-        <Link to="/register">Crear cuenta</Link>
       </div>
     </form>
   );
