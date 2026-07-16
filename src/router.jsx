@@ -8,6 +8,7 @@ import TicketDetailPage from "./pages/TicketDetailPage";
 import CustomersPage from "./pages/CustomersPage";
 import AgentsPage from "./pages/AgentsPage";
 import LoginPage from "./pages/LoginPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 export const router = createBrowserRouter([
@@ -55,6 +56,10 @@ export const router = createBrowserRouter([
             <AgentsPage />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "forgot-password",
+        element: <ForgotPasswordPage />,
       },
       { path: "login", element: <LoginPage /> },
       { path: "*", element: <NotFoundPage /> },

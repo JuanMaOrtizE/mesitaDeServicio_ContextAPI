@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
+import { Link, useNavigate } from "react-router-dom";
 
 function LoginPage() {
   const [formData, setFormData] = useState({
@@ -66,6 +66,7 @@ function LoginPage() {
           {submitting ? "Ingresando..." : "Iniciar sesión"}
         </button>
         {error && <p>{error}</p>}
+        <Link to="/forgot-password">Olvidé mi contraseña</Link>
       </div>
     </form>
   );

@@ -238,6 +238,20 @@
   - redirige a `/login` cuando no hay sesión;
   - permite acceso cuando hay usuario autenticado;
   - rutas principales protegidas: `/dashboard`, `/tickets`, `/tickets/:ticketId`, `/customers` y `/agents`.
+- Limpieza de prueba temporal y ajuste de contexto:
+    - ruta temporal `/auth-test` eliminada;
+    - `src/pages/AuthTestPage.jsx` eliminado;
+    - contexto separado en `authContext.js`, `AuthContext.jsx` y `useAuth.js`;
+    - advertencia de Fast Refresh corregida.
+  - Página real de recuperación de contraseña:
+    - `src/pages/ForgotPasswordPage.jsx` creado;
+    - ruta pública `/forgot-password` agregada;
+    - `LoginPage` enlaza hacia recuperación de contraseña;
+    - formulario controlado con email;
+    - petición conectada a `forgotPassword(email)`;
+    - mensaje genérico de éxito mostrado en pantalla;
+    - errores del backend mostrados en pantalla;
+    - `resetToken` mostrado en desarrollo para poder probar el flujo local sin email real.
 
 ## Validación
 
@@ -261,6 +275,9 @@
 - `/login` probado con credenciales inválidas, credenciales válidas y refresh posterior manteniendo sesión.
 - Navegación autenticada probada sin sesión, con sesión, tras refresh y después de logout.
 - Rutas protegidas probadas sin sesión, con sesión y tras refresh con cookie válida.
+- `npm run lint` finaliza correctamente después de separar `useAuth`.
+- `npm run build` finaliza correctamente después de eliminar `auth-test`.
+- `/forgot-password` probado desde la interfaz con email existente, email inexistente y email inválido.
 
 ## Decisiones registradas
 
@@ -319,21 +336,26 @@
 - El frontend no debe guardar ni leer el JWT; el estado global guarda el usuario público y la cookie `httpOnly` queda gestionada por el navegador.
 - Un `401` de `/api/auth/me` al cargar sin sesión es esperado y debe interpretarse como usuario no autenticado, no como fallo crítico de la app.
 - La protección actual es solo por sesión; restricciones por rol se implementarán en una tarea posterior.
+- El hook `useAuth` vive en archivo separado para cumplir `react-refresh/only-export-components`.
+- La página `/forgot-password` puede mostrar el `resetToken` solamente durante desarrollo porque el backend lo devuelve fuera de producción. En producción, ese token no debe mostrarse en la UI ni devolverse al cliente directamente; debe enviarse por email.
 
 ## Tarea actual
 
-Ninguna tarea activa. Rutas protegidas básicas validadas.
+Ninguna tarea activa. Página real de recuperación de contraseña creada y probada.
 
 ## Próximo paso
 
 Continuar la **Fase 7 — Integración frontend con AuthContext**.
 
-La siguiente tarea recomendada es limpiar la prueba temporal de autenticación:
+La siguiente tarea recomendada es crear la página real de restablecimiento de contraseña:
 
-- eliminar la ruta temporal `/auth-test`;
-- eliminar `src/pages/AuthTestPage.jsx`;
-- confirmar que login, navegación y rutas protegidas siguen funcionando;
-- dejar la app sin herramientas temporales de prueba visibles.
+- crear `src/pages/ResetPasswordPage.jsx`;
+- agregar ruta pública `/reset-password`;
+- construir un formulario controlado con `token` y nueva contraseña;
+- conectar el formulario con `resetPassword`;
+- mostrar mensaje de éxito o error;
+- agregar navegación de regreso a `/login`;
+- probar el flujo usando el `resetToken` obtenido desde `/forgot-password`.
 
 ## Bloqueos
 
