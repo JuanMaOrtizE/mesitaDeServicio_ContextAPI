@@ -475,25 +475,40 @@
   - se crearon 3 tickets usando IDs reales de `Customer`, `Category` y `Agent`;
   - un ticket quedó sin agente asignado con `agentId: null`;
   - se validó que las relaciones Prisma devuelven cliente, categoría y agente correctamente.
+- Endpoints de lectura de tickets:
+  - `backend/src/routes/ticketRoutes.js` creado;
+  - `GET /api/tickets` implementado con relaciones `customer`, `category` y `agent`;
+  - `GET /api/tickets/:id` implementado con respuesta `404` cuando no existe;
+  - rutas protegidas con `authMiddleware` y `authorizeRoles("admin", "agent")`;
+  - `backend/src/app.js` registra `/api/tickets`;
+  - pruebas manuales confirmadas con sesión, roles y caso `404`.
+- Lectura de tickets desde Express en frontend:
+  - `getTickets` consume `http://localhost:4000/api/tickets`;
+  - `getTicketById` consume `http://localhost:4000/api/tickets/:id`;
+  - ambas peticiones usan `credentials: "include"` para enviar la cookie de sesión;
+  - las operaciones de escritura de tickets siguen temporalmente en JSON Server.
+- Relaciones incluidas usadas en UI:
+  - `TicketItem` muestra cliente, categoría y agente desde `ticket.customer`, `ticket.category` y `ticket.agent`;
+  - `TicketDetailPage` usa las relaciones incluidas del ticket;
+  - el detalle de ticket ya no necesita cargar listas completas de clientes, categorías y agentes solo para mostrar nombres;
+  - `TicketsPage` conserva la carga de clientes, categorías y agentes porque `TicketForm` y el selector de asignación todavía los necesitan.
 
 ## Tarea actual
 
-Crear endpoints de lectura de tickets en Express.
+Ninguna tarea activa.
 
-La tarea consiste en exponer `GET /api/tickets` y `GET /api/tickets/:id`, protegidos por sesión y roles `admin`/`agent`.
+La lectura de tickets ya está conectada a Express y la UI ya usa las relaciones incluidas por Prisma.
 
 ## Próximo paso
 
-Iniciar la **Fase 9 — Migración gradual del dominio a Express**.
+Continuar la **Fase 9 — Migración gradual del dominio a Express**.
 
-La tarea actual recomendada es crear endpoints de lectura de tickets:
+La siguiente tarea recomendada es crear la escritura de tickets en Express:
 
-- crear `backend/src/routes/ticketRoutes.js`;
-- proteger rutas con `authMiddleware` y `authorizeRoles("admin", "agent")`;
-- implementar `GET /api/tickets` con relaciones incluidas;
-- implementar `GET /api/tickets/:id`;
-- registrar la ruta en `backend/src/app.js`;
-- probar desde Postman o navegador autenticado antes de cambiar el frontend.
+- `POST /api/tickets` para crear tickets;
+- `PATCH /api/tickets/:id` para editar ticket, estado y agente asignado;
+- `DELETE /api/tickets/:id` para eliminar tickets;
+- después, actualizar `ticketsApi.js` para dejar de usar JSON Server en operaciones de escritura.
 
 ## Bloqueos
 

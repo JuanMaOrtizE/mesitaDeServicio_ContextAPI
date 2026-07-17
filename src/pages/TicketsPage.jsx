@@ -227,8 +227,6 @@ function TicketsPage() {
       {!isLoading && !loadError && (
         <TicketList
           agents={agents}
-          customers={customers}
-          categories={categories}
           tickets={filteredStatusTickets}
           emptyMessage={emptyMessage}
           onTicketStatusChange={handleTicketStatusChange}

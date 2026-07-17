@@ -1,9 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getTicketById } from "../services/ticketsApi";
-import { getCustomers } from "../services/customersApi";
-import { getCategories } from "../services/categoriesApi";
-import { getAgents } from "../services/agentsApi";
+
 import { createComment, getCommentsByTicketId } from "../services/commentsApi";
 import { useAuth } from "../context/useAuth";
 
@@ -11,9 +9,7 @@ function TicketDetailPage() {
   const { ticketId } = useParams();
 
   const [ticket, setTicket] = useState(null);
-  const [customers, setCustomers] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [agents, setAgents] = useState([]);
+
   const [comments, setComments] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -30,24 +26,12 @@ function TicketDetailPage() {
       try {
         setIsLoading(true);
         setLoadError("");
-        const [
-          ticketsData,
-          customersData,
-          categoriesData,
-          agentsData,
-          commentsData,
-        ] = await Promise.all([
+        const [ticketsData, commentsData] = await Promise.all([
           getTicketById(ticketId),
-          getCustomers(),
-          getCategories(),
-          getAgents(),
           getCommentsByTicketId(ticketId),
         ]);
 
         setTicket(ticketsData);
-        setCustomers(customersData);
-        setCategories(categoriesData);
-        setAgents(agentsData);
         setComments(commentsData);
       } catch (error) {
         setLoadError(error.message ?? "Ocurrió un error al cargar el ticket.");
@@ -58,21 +42,9 @@ function TicketDetailPage() {
     loadTicket();
   }, [ticketId]);
 
-  const customer = ticket
-    ? customers.find((customer) => customer.id === ticket.customerId)
-    : null;
-
-  const category = ticket
-    ? categories.find((category) => category.id === ticket.categoryId)
-    : null;
-
-  const agent = ticket
-    ? agents.find((agent) => agent.id === ticket.agentId)
-    : null;
-
-  const customerName = customer?.name ?? "Cliente no encontrado";
-  const categoryName = category?.name ?? "Categoría no encontrada";
-  const agentName = agent?.name ?? "Sin asignar";
+  const customerName = ticket?.customer?.name ?? "Cliente no encontrado";
+  const categoryName = ticket?.category?.name ?? "Categoría no encontrada";
+  const agentName = ticket?.agent?.name ?? "Sin asignar";
 
   async function handleCreateComment(e) {
     e.preventDefault();

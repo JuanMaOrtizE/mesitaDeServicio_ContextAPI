@@ -1,7 +1,10 @@
-const API_URL = "http://localhost:3000";
+const EXPRESS_API_URL = "http://localhost:4000/api";
+const JSON_SERVER_URL = "http://localhost:3000";
 
 export async function getTickets() {
-  const response = await fetch(`${API_URL}/tickets`);
+  const response = await fetch(`${EXPRESS_API_URL}/tickets`, {
+    credentials: "include",
+  });
   if (!response.ok) {
     throw new Error("No se pudieron cargar los datos de los tickets");
   }
@@ -12,7 +15,9 @@ export async function getTickets() {
 }
 
 export async function getTicketById(ticketId) {
-  const response = await fetch(`${API_URL}/tickets/${ticketId}`);
+  const response = await fetch(`${EXPRESS_API_URL}/tickets/${ticketId}`, {
+    credentials: "include",
+  });
   if (!response.ok) {
     throw new Error("No se pudo cargar el ticket.");
   }
@@ -23,7 +28,7 @@ export async function getTicketById(ticketId) {
 }
 
 export async function createTicket(ticket) {
-  const response = await fetch(`${API_URL}/tickets`, {
+  const response = await fetch(`${JSON_SERVER_URL}/tickets`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -40,7 +45,7 @@ export async function createTicket(ticket) {
 
 export async function updateTicketStatus(ticketId, status) {
   const updatedAt = new Date().toISOString();
-  const response = await fetch(`${API_URL}/tickets/${ticketId}`, {
+  const response = await fetch(`${JSON_SERVER_URL}/tickets/${ticketId}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -56,7 +61,7 @@ export async function updateTicketStatus(ticketId, status) {
 
 export async function updateTicketAgent(ticketId, agentId) {
   const updatedAt = new Date().toISOString();
-  const response = await fetch(`${API_URL}/tickets/${ticketId}`, {
+  const response = await fetch(`${JSON_SERVER_URL}/tickets/${ticketId}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -71,7 +76,7 @@ export async function updateTicketAgent(ticketId, agentId) {
 }
 
 export async function updateTicket(ticketId, updates) {
-  const response = await fetch(`${API_URL}/tickets/${ticketId}`, {
+  const response = await fetch(`${JSON_SERVER_URL}/tickets/${ticketId}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -86,7 +91,7 @@ export async function updateTicket(ticketId, updates) {
 }
 
 export async function deleteTicket(ticketId) {
-  const response = await fetch(`${API_URL}/tickets/${ticketId}`, {
+  const response = await fetch(`${JSON_SERVER_URL}/tickets/${ticketId}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

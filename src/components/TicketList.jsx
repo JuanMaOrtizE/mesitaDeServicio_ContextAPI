@@ -2,8 +2,6 @@ import TicketItem from "./TicketItem";
 
 function TicketList({
   agents,
-  customers,
-  categories,
   tickets,
   emptyMessage,
   onTicketStatusChange,
@@ -27,8 +25,6 @@ function TicketList({
         <TicketItem
           key={ticket.id}
           agents={agents}
-          customers={customers}
-          categories={categories}
           ticket={ticket}
           onStatusChange={onTicketStatusChange}
           onAgentChange={onTicketAgentChange}

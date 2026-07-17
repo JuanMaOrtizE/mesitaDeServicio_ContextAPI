@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 function TicketItem({
   agents,
   ticket,
-  customers,
-  categories,
   onStatusChange,
   onAgentChange,
   onEdit,
@@ -21,17 +19,9 @@ function TicketItem({
     isLongDescription && !isDescriptionExpanded ? "line-clamp-3" : ""
   }`;
 
-  const customer = customers.find(
-    (customer) => customer.id === ticket.customerId,
-  );
-  const category = categories.find(
-    (category) => category.id === ticket.categoryId,
-  );
-  const assignedAgent = agents.find((agent) => agent.id === ticket.agentId);
-
-  const customerName = customer?.name ?? "Cliente no encontrado";
-  const categoryName = category?.name ?? "Categoría no encontrada";
-  const assignedAgentName = assignedAgent?.name ?? "Sin asignar";
+  const customerName = ticket.customer?.name ?? "Cliente no encontrado";
+  const categoryName = ticket.category?.name ?? "Categoría no encontrada";
+  const assignedAgentName = ticket.agent?.name ?? "Sin asignar";
 
   const priorityLabels = {
     low: "Baja",
