@@ -22,7 +22,7 @@ export const router = createBrowserRouter([
       {
         path: "dashboard",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={["admin", "agent"]}>
             <DashboardPage />
           </ProtectedRoute>
         ),
@@ -30,7 +30,7 @@ export const router = createBrowserRouter([
       {
         path: "tickets",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={["admin", "agent"]}>
             <TicketsPage />
           </ProtectedRoute>
         ),
@@ -38,7 +38,7 @@ export const router = createBrowserRouter([
       {
         path: "tickets/:ticketId",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={["admin", "agent"]}>
             <TicketDetailPage />
           </ProtectedRoute>
         ),
@@ -46,7 +46,7 @@ export const router = createBrowserRouter([
       {
         path: "customers",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={["admin", "agent"]}>
             <CustomersPage />
           </ProtectedRoute>
         ),
@@ -54,7 +54,7 @@ export const router = createBrowserRouter([
       {
         path: "agents",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={["admin", "agent"]}>
             <AgentsPage />
           </ProtectedRoute>
         ),

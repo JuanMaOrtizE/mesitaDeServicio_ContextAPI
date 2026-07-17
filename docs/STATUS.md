@@ -407,6 +407,8 @@
   - `agent`: puede gestionar tickets, cambiar estados y comentar, pero no crear usuarios ni eliminar tickets;
   - `customer`: queda pospuesto por ahora porque todavía no existe flujo propio ni relación completa con el modelo `Customer`.
 - Mientras tickets, clientes, agentes, categorías y comentarios sigan en JSON Server, las restricciones sobre esas acciones serán principalmente de frontend. La protección real llegará al migrar esos recursos a Express.
+- Durante la migración gradual puede haber desajustes temporales de IDs entre recursos migrados a PostgreSQL y recursos que siguen en JSON Server. El caso actual es `ticket.categoryId`: los tickets siguen usando IDs de JSON Server y las categorías ya tienen IDs de PostgreSQL.
+- Se acepta esperar a la migración de `tickets` para resolver definitivamente las relaciones con `categoryId`, en lugar de forzar los IDs antiguos en PostgreSQL.
 - La eliminación de tickets queda oculta para `agent` solo a nivel visual mientras los tickets dependan de JSON Server.
 - Permiso de asignación de agentes aceptado:
   - `admin` puede cambiar el agente asignado a un ticket;
@@ -422,21 +424,53 @@
   - los nuevos comentarios usan `authorId: user.id`;
   - los nuevos comentarios usan `authorName: user.name || user.email`;
   - se conserva la validación local para evitar comentarios vacíos.
+- Permiso visual de comentarios:
+  - `TicketDetailPage` calcula `canCreateComment` para roles `admin` y `agent`;
+  - el formulario de comentario se muestra solo cuando `canCreateComment` es verdadero;
+  - `customer` o usuarios sin permiso ven un mensaje informativo;
+  - `handleCreateComment` también corta la ejecución si el usuario no tiene permiso.
+- Revisión parcial de Fase 8:
+  - navegación interna por rol revisada;
+  - creación de usuarios restringida a `admin` en frontend y backend;
+  - eliminación de tickets restringida visualmente a `admin`;
+  - asignación de agentes restringida visualmente a `admin`;
+  - comentarios permitidos visualmente para `admin` y `agent`;
+  - pendiente restringir rutas principales para que `customer` no acceda mientras su flujo esté pospuesto.
+- Restricción de rutas principales:
+  - `/dashboard`, `/tickets`, `/tickets/:ticketId`, `/customers` y `/agents` quedan restringidas a `admin` y `agent`;
+  - `/register` se mantiene restringida solo a `admin`;
+  - rutas públicas de autenticación se mantienen sin cambios.
+- Revisión final de Fase 8:
+  - flujo probado con usuario `admin`;
+  - flujo probado con usuario `agent`;
+  - acceso de `customer` a rutas principales bloqueado mientras su experiencia está pospuesta;
+  - Fase 8 cerrada.
+- Migración inicial de categorías:
+  - modelo Prisma `Category` creado;
+  - migración `add_categories` aplicada;
+  - categorías iniciales cargadas en PostgreSQL;
+  - ruta backend `GET /api/categories` creada y protegida con `authMiddleware`;
+  - `src/services/categoriesApi.js` actualizado para consumir `http://localhost:4000/api/categories` con `credentials: "include"`.
 
 ## Tarea actual
 
-Ninguna tarea activa. Autor real de comentarios aplicado en detalle de ticket.
+Migrar `customers` desde JSON Server hacia Express + PostgreSQL como segundo recurso del dominio Help Desk.
+
+La tarea consiste en crear el modelo `Customer`, exponer un endpoint protegido `GET /api/customers` y después cambiar el servicio frontend `customersApi.js` para leer desde Express.
 
 ## Próximo paso
 
-Iniciar la **Fase 8 — Roles y permisos**.
+Iniciar la **Fase 9 — Migración gradual del dominio a Express**.
 
-La siguiente tarea recomendada es aplicar permisos explícitos al formulario de comentarios:
+La tarea actual recomendada es migrar `customers`:
 
-- permitir comentar solo a `admin` y `agent`;
-- ocultar o deshabilitar el formulario para `customer`;
-- mantener `customer` pospuesto hasta definir su experiencia;
-- documentar que la protección real de comentarios llegará al migrarlos a Express.
+- crear modelo Prisma `Customer`;
+- aplicar migración;
+- cargar clientes iniciales en PostgreSQL;
+- crear ruta backend `GET /api/customers`;
+- protegerla con `authMiddleware`;
+- cambiar `src/services/customersApi.js` para consumir Express;
+- mantener JSON Server para tickets, agents y comments por ahora.
 
 ## Bloqueos
 

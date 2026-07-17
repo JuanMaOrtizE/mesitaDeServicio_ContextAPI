@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import healthRoutes from "./routes/healthRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -24,4 +25,5 @@ app.use(
 app.use("/api/health", healthRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/categories", categoryRoutes);
 export default app;

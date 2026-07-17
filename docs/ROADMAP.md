@@ -70,7 +70,7 @@
 
 **Resultado:** frontend conectado a la autenticación real del backend.
 
-## Fase 8 — Roles y rutas protegidas (siguiente)
+## Fase 8 — Roles y rutas protegidas (completada)
 
 - Proteger rutas del frontend según sesión.
 - Adaptar navegación según rol.
@@ -79,7 +79,7 @@
 
 **Resultado:** experiencia autenticada y diferenciada por rol.
 
-## Fase 9 — Migración gradual del dominio a Express
+## Fase 9 — Migración gradual del dominio a Express (siguiente)
 
 - Migrar tickets, clientes, agentes, categorías y comentarios desde JSON Server a Express + PostgreSQL.
 - Reemplazar servicios frontend para apuntar al backend Express.

@@ -23,6 +23,7 @@ function TicketDetailPage() {
   const [isCreatingComment, setIsCreatingComment] = useState(false);
 
   const { user } = useAuth();
+  const canCreateComment = user?.role === "admin" || user?.role === "agent";
 
   useEffect(() => {
     async function loadTicket() {
@@ -80,6 +81,7 @@ function TicketDetailPage() {
 
     if (!trimmedBody) return;
     if (!user) return;
+    if (!canCreateComment) return;
     try {
       setLoadError("");
       setIsCreatingComment(true);
@@ -204,32 +206,36 @@ function TicketDetailPage() {
               )}
             </section>
 
-            <form
-              className="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-4"
-              onSubmit={handleCreateComment}
-            >
-              <label
-                className="block text-sm font-medium text-slate-700"
-                htmlFor="comment-body"
+            {canCreateComment ? (
+              <form
+                className="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-4"
+                onSubmit={handleCreateComment}
               >
-                Nuevo comentario
-              </label>
+                <label
+                  className="block text-sm font-medium text-slate-700"
+                  htmlFor="comment-body"
+                >
+                  Nuevo comentario
+                </label>
 
-              <textarea
-                className="mt-2 min-h-28 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                id="comment-body"
-                value={commentBody}
-                onChange={(e) => setCommentBody(e.target.value)}
-              />
+                <textarea
+                  className="mt-2 min-h-28 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                  id="comment-body"
+                  value={commentBody}
+                  onChange={(e) => setCommentBody(e.target.value)}
+                />
 
-              <button
-                className="mt-3 rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 cursor-pointer disabled:cursor-not-allowed disabled:bg-slate-400"
-                type="submit"
-                disabled={isCreatingComment}
-              >
-                {isCreatingComment ? "Guardando..." : "Agregar comentario"}
-              </button>
-            </form>
+                <button
+                  className="mt-3 rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 cursor-pointer disabled:cursor-not-allowed disabled:bg-slate-400"
+                  type="submit"
+                  disabled={isCreatingComment}
+                >
+                  {isCreatingComment ? "Guardando..." : "Agregar comentario"}
+                </button>
+              </form>
+            ) : (
+              <p>No tienes permiso para agregar comentarios.</p>
+            )}
           </>
         )}
         <p className="mt-6">
