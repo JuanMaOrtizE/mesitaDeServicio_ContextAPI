@@ -25,10 +25,51 @@ model User {
   passwordResetExpiresAt DateTime?
 }
 
+model Ticket {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  status      String
+  priority    String
+
+  customerId String
+  categoryId String
+  agentId    String?
+
+  customer Customer @relation(fields: [customerId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+  agent    Agent?   @relation(fields: [agentId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Category {
   id          String   @id @default(cuid())
   name        String
   description String?
+  tickets     Ticket[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  company   String?
+  phone     String?
+  tickets   Ticket[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Agent {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  isActive  Boolean  @default(true)
+  tickets   Ticket[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

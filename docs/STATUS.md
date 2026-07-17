@@ -407,8 +407,9 @@
   - `agent`: puede gestionar tickets, cambiar estados y comentar, pero no crear usuarios ni eliminar tickets;
   - `customer`: queda pospuesto por ahora porque todavía no existe flujo propio ni relación completa con el modelo `Customer`.
 - Mientras tickets, clientes, agentes, categorías y comentarios sigan en JSON Server, las restricciones sobre esas acciones serán principalmente de frontend. La protección real llegará al migrar esos recursos a Express.
-- Durante la migración gradual puede haber desajustes temporales de IDs entre recursos migrados a PostgreSQL y recursos que siguen en JSON Server. El caso actual es `ticket.categoryId`: los tickets siguen usando IDs de JSON Server y las categorías ya tienen IDs de PostgreSQL.
-- Se acepta esperar a la migración de `tickets` para resolver definitivamente las relaciones con `categoryId`, en lugar de forzar los IDs antiguos en PostgreSQL.
+- Se decide abandonar compatibilidad con IDs antiguos de JSON Server para el dominio migrado.
+- A partir de `tickets`, el dominio Help Desk en PostgreSQL usará relaciones reales con llaves foráneas mediante Prisma.
+- Los IDs viejos de `db.json` pueden descartarse. La migración se tratará como reconstrucción limpia del dominio sobre PostgreSQL.
 - La eliminación de tickets queda oculta para `agent` solo a nivel visual mientras los tickets dependan de JSON Server.
 - Permiso de asignación de agentes aceptado:
   - `admin` puede cambiar el agente asignado a un ticket;
@@ -451,26 +452,48 @@
   - categorías iniciales cargadas en PostgreSQL;
   - ruta backend `GET /api/categories` creada y protegida con `authMiddleware`;
   - `src/services/categoriesApi.js` actualizado para consumir `http://localhost:4000/api/categories` con `credentials: "include"`.
+- Migración inicial de clientes:
+  - modelo Prisma `Customer` creado;
+  - migración `add_customers` aplicada;
+  - clientes iniciales cargados en PostgreSQL;
+  - ruta backend `GET /api/customers` creada y protegida con `authMiddleware`;
+  - `src/services/customersApi.js` actualizado para consumir `http://localhost:4000/api/customers` con `credentials: "include"`;
+  - carga confirmada desde frontend.
+- Migración inicial de agentes:
+  - modelo Prisma `Agent` creado;
+  - migración `add_agents` aplicada;
+  - agentes iniciales cargados en PostgreSQL;
+  - ruta backend `GET /api/agents` creada y protegida con `authMiddleware`;
+  - `src/services/agentsApi.js` actualizado para consumir `http://localhost:4000/api/agents` con `credentials: "include"`.
+- Rediseño relacional de tickets:
+  - modelo Prisma `Ticket` creado;
+  - migración `add_ticket_relations` aplicada;
+  - `Customer`, `Category` y `Agent` tienen relación inversa `tickets Ticket[]`;
+  - `Ticket` define llaves foráneas reales hacia `Customer`, `Category` y `Agent`;
+  - `agentId` queda opcional para permitir tickets sin asignar.
+- Tickets iniciales en PostgreSQL:
+  - se crearon 3 tickets usando IDs reales de `Customer`, `Category` y `Agent`;
+  - un ticket quedó sin agente asignado con `agentId: null`;
+  - se validó que las relaciones Prisma devuelven cliente, categoría y agente correctamente.
 
 ## Tarea actual
 
-Migrar `customers` desde JSON Server hacia Express + PostgreSQL como segundo recurso del dominio Help Desk.
+Crear endpoints de lectura de tickets en Express.
 
-La tarea consiste en crear el modelo `Customer`, exponer un endpoint protegido `GET /api/customers` y después cambiar el servicio frontend `customersApi.js` para leer desde Express.
+La tarea consiste en exponer `GET /api/tickets` y `GET /api/tickets/:id`, protegidos por sesión y roles `admin`/`agent`.
 
 ## Próximo paso
 
 Iniciar la **Fase 9 — Migración gradual del dominio a Express**.
 
-La tarea actual recomendada es migrar `customers`:
+La tarea actual recomendada es crear endpoints de lectura de tickets:
 
-- crear modelo Prisma `Customer`;
-- aplicar migración;
-- cargar clientes iniciales en PostgreSQL;
-- crear ruta backend `GET /api/customers`;
-- protegerla con `authMiddleware`;
-- cambiar `src/services/customersApi.js` para consumir Express;
-- mantener JSON Server para tickets, agents y comments por ahora.
+- crear `backend/src/routes/ticketRoutes.js`;
+- proteger rutas con `authMiddleware` y `authorizeRoles("admin", "agent")`;
+- implementar `GET /api/tickets` con relaciones incluidas;
+- implementar `GET /api/tickets/:id`;
+- registrar la ruta en `backend/src/app.js`;
+- probar desde Postman o navegador autenticado antes de cambiar el frontend.
 
 ## Bloqueos
 

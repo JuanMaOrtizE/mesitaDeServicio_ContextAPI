@@ -69,44 +69,7 @@
       "description": "Consultas o problemas relacionados con envíos y entregas."
     }
   ],
-  "tickets": [
-    {
-      "id": "2",
-      "title": "Error en la página de pagos",
-      "description": "El cliente no puede completar el pago.",
-      "status": "in-progress",
-      "priority": "medium",
-      "customerId": "2",
-      "agentId": null,
-      "categoryId": "2",
-      "createdAt": "2026-06-29T14:30:00.000Z",
-      "updatedAt": "2026-07-10T17:32:18.542Z"
-    },
-    {
-      "id": "3",
-      "title": "Problema con la entrega",
-      "description": "El cliente no ha recibido su pedido.",
-      "status": "resolved",
-      "priority": "low",
-      "customerId": "3",
-      "agentId": "1",
-      "categoryId": "3",
-      "createdAt": "2026-06-28T11:20:00.000Z",
-      "updatedAt": "2026-07-09T23:39:42.690Z"
-    },
-    {
-      "title": "sdfds",
-      "description": "sdaf",
-      "priority": "medium",
-      "customerId": "1",
-      "categoryId": "1",
-      "status": "open",
-      "agentId": null,
-      "createdAt": "2026-07-10T22:06:25.529Z",
-      "updatedAt": "2026-07-10T22:06:25.529Z",
-      "id": "EKDMbIvULW0"
-    }
-  ],
+  "tickets": [],
   "comments": [
     {
       "id": "1",
@@ -118,7 +81,7 @@
     },
     {
       "id": "2",
-      "ticketId": "2",
+      "ticketId": null,
       "authorId": "2",
       "authorName": "Sofía Martínez",
       "body": "Se reproduce el error en el flujo de pagos y queda en revisión.",
@@ -126,14 +89,14 @@
     },
     {
       "id": "3",
-      "ticketId": "3",
+      "ticketId": null,
       "authorId": "2",
       "authorName": "Sofía Martínez",
       "body": "Se confirma con logística que la entrega fue completada.",
       "createdAt": "2026-06-29T16:40:00.000Z"
     },
     {
-      "ticketId": "3",
+      "ticketId": null,
       "authorId": "1",
       "authorName": "Admin Demo",
       "body": "new",
@@ -141,7 +104,7 @@
       "id": "krmOfCFGK5U"
     },
     {
-      "ticketId": "3",
+      "ticketId": null,
       "authorId": "1",
       "authorName": "Admin Demo",
       "body": "fdggggggggggggggggggggggggggg",
@@ -149,7 +112,7 @@
       "id": "T_TxAEfNLMw"
     },
     {
-      "ticketId": "3",
+      "ticketId": null,
       "authorId": "1",
       "authorName": "Admin Demo",
       "body": "dsfsdfdgfg",
@@ -157,7 +120,7 @@
       "id": "HLoRoA7AWfQ"
     },
     {
-      "ticketId": "3",
+      "ticketId": null,
       "authorId": "1",
       "authorName": "Admin Demo",
       "body": "sdfsadfsdf",
@@ -165,7 +128,7 @@
       "id": "06ehe8Eio2k"
     },
     {
-      "ticketId": "3",
+      "ticketId": null,
       "authorId": "1",
       "authorName": "Admin Demo",
       "body": "sdfsdafgagdsg",
@@ -173,7 +136,7 @@
       "id": "C67nZRY0arc"
     },
     {
-      "ticketId": "EKDMbIvULW0",
+      "ticketId": null,
       "authorId": "1",
       "authorName": "Admin Demo",
       "body": "no lo resolveré",
@@ -181,7 +144,7 @@
       "id": "bQchxAeL9mQ"
     },
     {
-      "ticketId": "2",
+      "ticketId": null,
       "authorId": "1",
       "authorName": "Admin Demo",
       "body": "dsf",
@@ -189,7 +152,7 @@
       "id": "tstt3W8QdBU"
     },
     {
-      "ticketId": "2",
+      "ticketId": null,
       "authorId": "1",
       "authorName": "Admin Demo",
       "body": "hey",
@@ -197,7 +160,7 @@
       "id": "YZG_cNID1sU"
     },
     {
-      "ticketId": "2",
+      "ticketId": null,
       "authorId": "cmrnt7by00000vwuq4hxa0hsn",
       "authorName": "juanmita",
       "body": "hola",
