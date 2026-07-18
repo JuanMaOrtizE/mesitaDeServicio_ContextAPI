@@ -25,6 +25,7 @@ function TicketsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loadError, setLoadError] = useState("");
+  const [formError, setFormError] = useState("");
 
   const [customers, setCustomers] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -39,6 +40,7 @@ function TicketsPage() {
       try {
         setIsLoading(true);
         setLoadError("");
+        setFormError("");
 
         const [ticketsData, customersData, categoriesData, agentsData] =
           await Promise.all([
@@ -111,24 +113,20 @@ function TicketsPage() {
 
   async function handleCreateTicket(draft) {
     try {
-      setLoadError("");
+      setFormError("");
       setIsSubmitting(true);
-
-      const now = new Date().toISOString();
 
       const newTicket = {
         ...draft,
         status: "open",
         agentId: null,
-        createdAt: now,
-        updatedAt: now,
       };
 
       const createdTicket = await createTicket(newTicket);
 
       setTickets((previousTickets) => [createdTicket, ...previousTickets]);
     } catch (error) {
-      setLoadError(error.message ?? "Ocurrió un error al crear el ticket.");
+      setFormError(error.message ?? "Ocurrió un error al crear el ticket.");
     } finally {
       setIsSubmitting(false);
     }
@@ -139,12 +137,10 @@ function TicketsPage() {
 
   async function handleUpdateTicket(draft) {
     try {
-      setLoadError("");
-      const updatedAt = new Date().toISOString();
+      setFormError("");
 
       const updatedTicket = await updateTicket(editingTicketId, {
         ...draft,
-        updatedAt,
       });
 
       setTickets((previousTickets) =>
@@ -154,17 +150,19 @@ function TicketsPage() {
       );
       setEditingTicketId(null);
     } catch (error) {
-      setLoadError(
+      setFormError(
         error.message ?? "Ocurrió un error al actualizar el ticket.",
       );
     }
   }
 
   function handleStartEdit(ticketId) {
+    setFormError("");
     setEditingTicketId(ticketId);
   }
 
   function handleCancelEdit() {
+    setFormError("");
     setEditingTicketId(null);
   }
 
@@ -218,13 +216,7 @@ function TicketsPage() {
         </p>
       )}
 
-      {isSubmitting && (
-        <p className="mb-4 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-600 shadow-sm">
-          Creando ticket...
-        </p>
-      )}
-
-      {!isLoading && !loadError && (
+      {!isLoading && (
         <TicketList
           agents={agents}
           tickets={filteredStatusTickets}
@@ -239,16 +231,33 @@ function TicketsPage() {
       )}
 
       {customers.length > 0 && categories.length > 0 && (
-        <TicketForm
-          customers={customers}
-          categories={categories}
-          onSubmitTicket={
-            editingTicket ? handleUpdateTicket : handleCreateTicket
-          }
-          onCancelEdit={handleCancelEdit}
-          key={editingTicket?.id ?? "new"}
-          initialTicket={editingTicket}
-        />
+        <>
+          {formError && (
+            <p
+              className="mt-6 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
+              role="alert"
+            >
+              {formError}
+            </p>
+          )}
+
+          {isSubmitting && (
+            <p className="mt-6 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-600 shadow-sm">
+              Creando ticket...
+            </p>
+          )}
+
+          <TicketForm
+            customers={customers}
+            categories={categories}
+            onSubmitTicket={
+              editingTicket ? handleUpdateTicket : handleCreateTicket
+            }
+            onCancelEdit={handleCancelEdit}
+            key={editingTicket?.id ?? "new"}
+            initialTicket={editingTicket}
+          />
+        </>
       )}
     </div>
   );

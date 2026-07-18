@@ -148,4 +148,35 @@ router.patch(
   },
 );
 
+router.delete(
+  "/:id",
+  authMiddleware,
+  authorizeRoles("admin"),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const existingTicket = await prisma.ticket.findUnique({
+        where: { id },
+      });
+
+      if (!existingTicket)
+        return res.status(404).json({
+          message: "Ticket not found",
+        });
+
+      await prisma.ticket.delete({
+        where: { id },
+      });
+
+      return res.status(200).json({
+        message: "Ticket deleted successfully",
+      });
+    } catch {
+      return res.status(500).json({
+        message: "Internal server error",
+      });
+    }
+  },
+);
+
 export default router;

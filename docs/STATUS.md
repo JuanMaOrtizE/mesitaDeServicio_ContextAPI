@@ -507,24 +507,43 @@
   - permite quitar agente usando `agentId: null`;
   - responde `404` cuando el ticket no existe;
   - devuelve el ticket actualizado incluyendo `customer`, `category` y `agent`.
+- Eliminación de tickets en Express:
+  - `DELETE /api/tickets/:id` implementado en Express;
+  - la ruta está protegida con `authMiddleware` y `authorizeRoles("admin")`;
+  - responde `404` cuando el ticket no existe;
+  - elimina el ticket real de PostgreSQL;
+  - responde mensaje JSON de eliminación exitosa;
+  - endpoint probado manualmente por el usuario.
+- Escritura de tickets conectada a Express desde frontend:
+  - `createTicket` usa `POST http://localhost:4000/api/tickets`;
+  - `updateTicketStatus`, `updateTicketAgent` y `updateTicket` usan `PATCH http://localhost:4000/api/tickets/:id`;
+  - `deleteTicket` usa `DELETE http://localhost:4000/api/tickets/:id`;
+  - todas las operaciones usan `credentials: "include"`;
+  - `ticketsApi.js` ya no usa `JSON_SERVER_URL`;
+  - `TicketsPage` dejó de enviar `createdAt` y `updatedAt`; esas fechas quedan bajo responsabilidad de Prisma.
+- Manejo de errores de tickets:
+  - `ticketsApi.js` lee mensajes JSON del backend antes de lanzar errores;
+  - los errores de Zod pueden mostrarse en frontend con mensajes específicos;
+  - `createTicketSchema` y `updateTicketSchema` tienen mensajes personalizados para título, descripción, cliente y categoría;
+  - `TicketsPage` separa `loadError` y `formError`;
+  - los errores de creación/edición se muestran junto al formulario;
+  - la lista de tickets permanece visible aunque falle una acción del formulario.
 
 ## Tarea actual
 
 Ninguna tarea activa.
 
-`PATCH /api/tickets/:id` quedó implementado y validado estructuralmente.
+El manejo de errores de tickets quedó mejorado y validado.
 
 ## Próximo paso
 
 Continuar la **Fase 9 — Migración gradual del dominio a Express**.
 
-La siguiente tarea recomendada es implementar eliminación de tickets:
+La siguiente tarea recomendada es revisar y limpiar la dependencia restante de JSON Server:
 
-- crear `DELETE /api/tickets/:id`;
-- proteger la ruta con `authMiddleware` y `authorizeRoles("admin")`;
-- responder `404` si el ticket no existe;
-- eliminar el ticket real de PostgreSQL;
-- después, actualizar `ticketsApi.js` para dejar de usar JSON Server en operaciones de escritura.
+- identificar qué recursos siguen consumiéndose desde JSON Server;
+- decidir si comentarios se migran ahora o si se mantiene JSON Server temporalmente solo para comentarios;
+- evitar que tickets dependan nuevamente de `db.json`.
 
 ## Bloqueos
 
