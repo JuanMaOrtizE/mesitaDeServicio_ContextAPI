@@ -492,22 +492,38 @@
   - `TicketDetailPage` usa las relaciones incluidas del ticket;
   - el detalle de ticket ya no necesita cargar listas completas de clientes, categorías y agentes solo para mostrar nombres;
   - `TicketsPage` conserva la carga de clientes, categorías y agentes porque `TicketForm` y el selector de asignación todavía los necesitan.
+- Creación de tickets en Express:
+  - `createTicketSchema` creado para validar datos de creación;
+  - `POST /api/tickets` implementado en Express;
+  - la ruta está protegida con `authMiddleware` y `authorizeRoles("admin", "agent")`;
+  - el ticket se crea en PostgreSQL mediante Prisma;
+  - la respuesta incluye `customer`, `category` y `agent`;
+  - creación probada correctamente desde Postman.
+- Actualización de tickets en Express:
+  - `updateTicketSchema` creado para validar datos parciales;
+  - `PATCH /api/tickets/:id` implementado en Express;
+  - la ruta está protegida con `authMiddleware` y `authorizeRoles("admin", "agent")`;
+  - permite actualizar parcialmente título, descripción, estado, prioridad, cliente, categoría y agente;
+  - permite quitar agente usando `agentId: null`;
+  - responde `404` cuando el ticket no existe;
+  - devuelve el ticket actualizado incluyendo `customer`, `category` y `agent`.
 
 ## Tarea actual
 
 Ninguna tarea activa.
 
-La lectura de tickets ya está conectada a Express y la UI ya usa las relaciones incluidas por Prisma.
+`PATCH /api/tickets/:id` quedó implementado y validado estructuralmente.
 
 ## Próximo paso
 
 Continuar la **Fase 9 — Migración gradual del dominio a Express**.
 
-La siguiente tarea recomendada es crear la escritura de tickets en Express:
+La siguiente tarea recomendada es implementar eliminación de tickets:
 
-- `POST /api/tickets` para crear tickets;
-- `PATCH /api/tickets/:id` para editar ticket, estado y agente asignado;
-- `DELETE /api/tickets/:id` para eliminar tickets;
+- crear `DELETE /api/tickets/:id`;
+- proteger la ruta con `authMiddleware` y `authorizeRoles("admin")`;
+- responder `404` si el ticket no existe;
+- eliminar el ticket real de PostgreSQL;
 - después, actualizar `ticketsApi.js` para dejar de usar JSON Server en operaciones de escritura.
 
 ## Bloqueos

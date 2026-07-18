@@ -1,8 +1,13 @@
 import { Router } from "express";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 import { authorizeRoles } from "../middleware/authorizeRoles.js";
+import {
+  createTicketSchema,
+  updateTicketSchema,
+} from "../validations/ticketSchemas.js";
 
 import prisma from "../lib/prisma.js";
+import { ZodError } from "zod";
 
 const router = Router();
 
@@ -57,6 +62,89 @@ router.get(
     }
 
     return res.json(ticket);
+  },
+);
+
+router.post(
+  "/",
+  authMiddleware,
+  authorizeRoles("admin", "agent"),
+  async (req, res) => {
+    try {
+      const parsedData = createTicketSchema.parse(req.body);
+      const agentId = parsedData.agentId === "" ? null : parsedData.agentId;
+
+      const ticket = await prisma.ticket.create({
+        data: {
+          title: parsedData.title,
+          description: parsedData.description,
+          status: parsedData.status,
+          priority: parsedData.priority,
+          customerId: parsedData.customerId,
+          categoryId: parsedData.categoryId,
+          agentId,
+        },
+        include: {
+          customer: true,
+          category: true,
+          agent: true,
+        },
+      });
+
+      return res.status(201).json(ticket);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({
+          message: "Invalid ticket data",
+          errors: error.issues,
+        });
+      }
+    }
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  },
+);
+
+router.patch(
+  "/:id",
+  authMiddleware,
+  authorizeRoles("admin", "agent"),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const parsedData = updateTicketSchema.parse(req.body);
+
+      const existingTicket = await prisma.ticket.findUnique({
+        where: { id },
+      });
+
+      if (!existingTicket) {
+        return res.status(404).json({ message: "Ticket not found" });
+      }
+
+      const updatedTicket = await prisma.ticket.update({
+        where: { id },
+        data: parsedData,
+        include: {
+          customer: true,
+          category: true,
+          agent: true,
+        },
+      });
+
+      return res.status(200).json(updatedTicket);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({
+          message: "Invalid ticket data",
+          errors: error.issues,
+        });
+      }
+    }
+    return res.status(500).json({
+      message: "Internal server error",
+    });
   },
 );
 
