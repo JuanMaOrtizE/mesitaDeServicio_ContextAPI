@@ -166,6 +166,14 @@
       "body": "hola",
       "createdAt": "2026-07-16T22:16:43.073Z",
       "id": "wBEK6nZ7DtA"
+    },
+    {
+      "ticketId": "cmrpqzait0000hguq9w65ocxl",
+      "authorId": "cmri7nzar000058uquv6p8ioa",
+      "authorName": "Admin Demo",
+      "body": "veri gud",
+      "createdAt": "2026-07-18T23:52:10.406Z",
+      "id": "b_tiEA84pnU"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

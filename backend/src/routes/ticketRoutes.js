@@ -8,6 +8,7 @@ import {
 
 import prisma from "../lib/prisma.js";
 import { ZodError } from "zod";
+import { createCommentSchema } from "../validations/commentSchemas.js";
 
 const router = Router();
 
@@ -172,6 +173,79 @@ router.delete(
         message: "Ticket deleted successfully",
       });
     } catch {
+      return res.status(500).json({
+        message: "Internal server error",
+      });
+    }
+  },
+);
+
+router.get(
+  "/:ticketId/comments",
+  authMiddleware,
+  authorizeRoles("admin", "agent"),
+  async (req, res) => {
+    try {
+      const { ticketId } = req.params;
+      const existingTicket = await prisma.ticket.findUnique({
+        where: { id: ticketId },
+      });
+
+      if (!existingTicket)
+        return res.status(404).json({
+          message: "Ticket not found",
+        });
+
+      const comments = await prisma.comment.findMany({
+        where: {
+          ticketId,
+        },
+        orderBy: { createdAt: "asc" },
+      });
+
+      return res.status(200).json(comments);
+    } catch {
+      return res.status(500).json({
+        message: "Internal server error",
+      });
+    }
+  },
+);
+
+router.post(
+  "/:ticketId/comments",
+  authMiddleware,
+  authorizeRoles("admin", "agent"),
+  async (req, res) => {
+    try {
+      const { ticketId } = req.params;
+      const parsedData = createCommentSchema.parse(req.body);
+      const existingTicket = await prisma.ticket.findUnique({
+        where: { id: ticketId },
+      });
+
+      if (!existingTicket)
+        return res.status(404).json({
+          message: "Ticket not found",
+        });
+
+      const comment = await prisma.comment.create({
+        data: {
+          ticketId,
+          authorId: req.user.id,
+          authorName: req.user.name || req.user.email,
+          body: parsedData.body,
+        },
+      });
+
+      return res.status(201).json(comment);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({
+          message: "Invalid comment data",
+          errors: error.issues,
+        });
+      }
       return res.status(500).json({
         message: "Internal server error",
       });
