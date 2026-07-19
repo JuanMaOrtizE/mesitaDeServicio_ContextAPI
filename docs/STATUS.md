@@ -2,35 +2,33 @@
 
 ## Estado actual
 
-- Las fases 0, 1, 2, 3, 4, 5 y 6 están completadas.
+- Las fases 0, 1, 2, 3, 4, 5, 6, 7 y 8 están completadas.
+- La Fase 9 está en curso: migración gradual del dominio Help Desk a Express/PostgreSQL.
 - Tailwind CSS `4.3.2` está instalado, configurado y usado en el layout, formularios, lista de tickets y páginas secundarias.
 - React Router está configurado con Data Router.
-- La aplicación mantiene datos locales en memoria mediante `useState`.
-- JSON Server `1.0.0-beta.15` está instalado como dependencia de desarrollo.
-- `db.json` está creado con las colecciones iniciales de la API simulada.
-- El script `npm run server` está configurado para ejecutar `json-server db.json`.
-- El diseño inicial de datos para JSON Server está documentado en `docs/API_DATA_DESIGN.md`.
-- La pantalla de tickets carga la lista inicial desde `http://localhost:3000/tickets` mediante `fetch`.
-- La lectura de tickets está extraída a `src/services/ticketsApi.js` mediante `getTickets`.
-- Clientes y categorías se cargan desde JSON Server mediante `GET /customers` y `GET /categories`.
-- Agentes se cargan desde JSON Server mediante `GET /agents`.
-- Las funciones de API están separadas por recurso en `ticketsApi.js`, `customersApi.js` y `categoriesApi.js`.
-- Las cards de tickets muestran el cliente y la categoría relacionados a partir de `customerId` y `categoryId`.
-- Las cards de tickets muestran el agente asignado a partir de `agentId`, usando `Sin asignar` cuando no existe asignación.
-- La creación de tickets está conectada a JSON Server mediante `POST /tickets`.
-- El cambio de estado de tickets está conectado a JSON Server mediante `PATCH /tickets/:id`.
-- La edición completa de tickets está conectada a JSON Server mediante `PATCH /tickets/:id`.
-- La eliminación de tickets está conectada a JSON Server mediante `DELETE /tickets/:id`.
-- La asignación de agentes está conectada a JSON Server mediante `PATCH /tickets/:id`.
-- La pantalla de detalle de ticket carga un ticket real desde JSON Server mediante `GET /tickets/:id`.
-- La pantalla de detalle muestra cliente, categoría y agente resolviendo relaciones desde JSON Server.
-- La pantalla de detalle muestra comentarios del ticket mediante lectura desde JSON Server.
-- La pantalla de detalle permite crear comentarios nuevos y persistirlos en JSON Server mediante `POST /comments`.
+- El frontend mantiene estado de UI en memoria mediante `useState`.
+- Auth usa Context API mediante `AuthContext`.
+- JSON Server fue retirado del flujo activo:
+  - `db.json` fue eliminado;
+  - el script `npm run server` fue eliminado;
+  - la dependencia `json-server` fue eliminada de `package.json` y `package-lock.json`;
+  - Vite ya no contiene configuración especial para ignorar `db.json`.
+- Express/PostgreSQL es la fuente actual de datos para:
+  - autenticación;
+  - usuarios;
+  - clientes;
+  - agentes;
+  - categorías;
+  - tickets;
+  - comentarios.
+- Los servicios frontend consumen `http://localhost:4000/api` con `credentials: "include"` cuando la ruta requiere sesión.
+- La pantalla de tickets carga, crea, edita, actualiza estado, asigna agente y elimina tickets usando Express/PostgreSQL.
+- La pantalla de detalle carga el ticket y sus comentarios desde Express/PostgreSQL.
+- La pantalla de detalle permite crear comentarios persistidos en PostgreSQL.
 - La pantalla de detalle tiene presentación visual organizada para datos principales, relaciones, comentarios, formulario, carga, error y enlace de regreso.
-- Vite ignora cambios en `db.json` para evitar recargas cuando JSON Server persiste datos.
 - Backend Express Auth está completado localmente.
-- La integración frontend de autenticación inició con servicios API.
-- Context API y `useReducer` aún no se han incorporado al frontend.
+- La integración frontend de autenticación está implementada con servicios API, `AuthContext`, rutas protegidas y navegación por sesión/rol.
+- `useReducer` aún no se ha incorporado al frontend.
 
 ## Trabajo completado
 
@@ -41,6 +39,9 @@
 - **Fase 4:** sistema visual con Tailwind CSS.
 - **Fase 5:** persistencia con JSON Server, servicios de API, CRUD de tickets, relaciones y comentarios.
 - **Fase 6:** backend Express Auth completado localmente.
+- **Fase 7:** integración frontend de autenticación real.
+- **Fase 8:** permisos iniciales por rol en frontend/backend.
+- **Fase 9:** migración del dominio a Express/PostgreSQL en curso.
 
 ## Últimas tareas cerradas
 
@@ -528,22 +529,38 @@
   - `TicketsPage` separa `loadError` y `formError`;
   - los errores de creación/edición se muestran junto al formulario;
   - la lista de tickets permanece visible aunque falle una acción del formulario.
+- Migración de comentarios a Express/PostgreSQL:
+  - modelo Prisma `Comment` creado y relacionado con `Ticket`;
+  - migración `add_comments` aplicada;
+  - `GET /api/tickets/:ticketId/comments` implementado;
+  - `POST /api/tickets/:ticketId/comments` implementado;
+  - `createCommentSchema` valida que el comentario no esté vacío;
+  - el backend obtiene `authorId` y `authorName` desde `req.user`;
+  - `commentsApi.js` consume Express con `credentials: "include"`;
+  - `TicketDetailPage` dejó de construir `authorId`, `authorName` y `createdAt` en frontend.
+- Retiro de JSON Server:
+  - `db.json` eliminado;
+  - script `server` eliminado de `package.json`;
+  - `json-server` eliminado de `devDependencies`;
+  - `package-lock.json` actualizado con `npm install`;
+  - configuración especial de Vite para ignorar `db.json` eliminada;
+  - búsqueda global confirma que no quedan referencias activas a `localhost:3000` ni `json-server` fuera de documentación histórica.
 
 ## Tarea actual
 
 Ninguna tarea activa.
 
-El manejo de errores de tickets quedó mejorado y validado.
+La limpieza de JSON Server quedó realizada en configuración y dependencias.
 
 ## Próximo paso
 
 Continuar la **Fase 9 — Migración gradual del dominio a Express**.
 
-La siguiente tarea recomendada es revisar y limpiar la dependencia restante de JSON Server:
+La siguiente tarea recomendada es revisar la documentación y decidir el siguiente foco funcional:
 
-- identificar qué recursos siguen consumiéndose desde JSON Server;
-- decidir si comentarios se migran ahora o si se mantiene JSON Server temporalmente solo para comentarios;
-- evitar que tickets dependan nuevamente de `db.json`.
+- mantener `docs/API_DATA_DESIGN.md` como documento histórico de la fase JSON Server;
+- mantener `docs/BACKEND_PLAN.md` como plan inicial histórico, con nota de que el backend ya evolucionó más allá de autenticación;
+- continuar con una nueva mejora del dominio, probablemente dashboard con métricas reales o limpieza/refactor de servicios.
 
 ## Bloqueos
 

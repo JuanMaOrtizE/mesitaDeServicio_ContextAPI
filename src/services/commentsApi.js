@@ -1,25 +1,34 @@
-const API_URL = "http://localhost:3000";
+const EXPRESS_API_URL = "http://localhost:4000/api";
 
 export async function getCommentsByTicketId(ticketId) {
-  const response = await fetch(`${API_URL}/comments`);
+  const response = await fetch(
+    `${EXPRESS_API_URL}/tickets/${ticketId}/comments`,
+    {
+      credentials: "include",
+    },
+  );
 
   if (!response.ok) {
     throw new Error("No se pudieron cargar los comentarios");
   }
 
-  const comments = await response.json();
-
-  return comments.filter((comment) => comment.ticketId === ticketId);
+  return response.json();
 }
 
 export async function createComment(comment) {
-  const response = await fetch(`${API_URL}/comments`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const response = await fetch(
+    `${EXPRESS_API_URL}/tickets/${comment.ticketId}/comments`,
+    {
+      credentials: "include",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        body: comment.body,
+      }),
     },
-    body: JSON.stringify(comment),
-  });
+  );
 
   if (!response.ok) {
     throw new Error("No se pudo crear el comentario.");

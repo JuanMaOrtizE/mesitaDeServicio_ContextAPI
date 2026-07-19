@@ -1,5 +1,9 @@
 # Plan del backend Express
 
+> Estado: plan inicial histórico.
+>
+> Este documento describe la intención original del backend: empezar por autenticación y mantener temporalmente el dominio Help Desk en JSON Server. El estado actual ya avanzó más: tickets, clientes, agentes, categorías y comentarios fueron migrados a Express/PostgreSQL. Para estado vigente, consultar `docs/STATUS.md`.
+
 ## Objetivo
 
 Agregar un backend real con Express.js para manejar autenticación segura y preparar el proyecto para una evolución full-stack.
@@ -17,7 +21,7 @@ La primera etapa del backend manejará únicamente autenticación:
 - JWT enviado en cookie `httpOnly`;
 - recuperación de contraseña con token de desarrollo.
 
-El dominio Help Desk seguirá temporalmente en JSON Server:
+En el plan inicial, el dominio Help Desk seguía temporalmente en JSON Server:
 
 - tickets;
 - clientes;
@@ -37,7 +41,7 @@ Backend Express
 PostgreSQL local
 ```
 
-JSON Server seguirá disponible temporalmente:
+JSON Server estuvo disponible temporalmente durante la fase de transición:
 
 ```txt
 JSON Server

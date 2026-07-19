@@ -1,10 +1,14 @@
 # Diseño inicial de datos para JSON Server
 
+> Estado: documento histórico.
+>
+> JSON Server fue usado durante la Fase 5 para aprender persistencia simulada. El flujo activo del proyecto ya no usa `db.json` ni `json-server`; los datos actuales viven en Express/PostgreSQL mediante Prisma. Este documento se conserva solo como referencia del modelo inicial.
+
 ## Objetivo
 
-Este documento define la estructura de datos usada por `db.json` con JSON Server.
+Este documento define la estructura de datos que fue usada por `db.json` con JSON Server durante la fase inicial de persistencia simulada.
 
-JSON Server ya está incorporado al proyecto. La estructura descrita aquí sirve como referencia del modelo persistido y de las relaciones entre colecciones.
+La estructura descrita aquí sirve como referencia histórica del modelo persistido y de las relaciones entre colecciones antes de la migración a Express/PostgreSQL.
 
 ## Reglas del modelo
 

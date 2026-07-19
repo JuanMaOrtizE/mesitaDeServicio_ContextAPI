@@ -58,14 +58,9 @@ function TicketDetailPage() {
       setLoadError("");
       setIsCreatingComment(true);
 
-      const now = new Date().toISOString();
-
       const newComment = {
         ticketId: ticketId,
-        authorId: user.id,
-        authorName: user.name || user.email,
         body: trimmedBody,
-        createdAt: now,
       };
 
       const createdComment = await createComment(newComment);
