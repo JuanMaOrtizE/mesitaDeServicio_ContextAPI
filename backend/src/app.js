@@ -9,6 +9,7 @@ import categoryRoutes from "./routes/categoryRoutes.js";
 import customerRoutes from "./routes/customerRoutes.js";
 import agentRoutes from "./routes/agentRoutes.js";
 import ticketRoutes from "./routes/ticketRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -32,4 +33,5 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/customers", customerRoutes);
 app.use("/api/agents", agentRoutes);
 app.use("/api/tickets", ticketRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 export default app;

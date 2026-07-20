@@ -545,22 +545,31 @@
   - `package-lock.json` actualizado con `npm install`;
   - configuración especial de Vite para ignorar `db.json` eliminada;
   - búsqueda global confirma que no quedan referencias activas a `localhost:3000` ni `json-server` fuera de documentación histórica.
+- Dashboard backend:
+  - `backend/src/routes/dashboardRoutes.js` creado;
+  - `GET /api/dashboard/summary` implementado;
+  - la ruta está protegida con `authMiddleware` y `authorizeRoles("admin", "agent")`;
+  - calcula métricas de tickets por estado, prioridad alta y tickets sin agente;
+  - calcula totales de clientes, agentes y comentarios;
+  - `backend/src/app.js` registra `/api/dashboard`.
 
 ## Tarea actual
 
 Ninguna tarea activa.
 
-La limpieza de JSON Server quedó realizada en configuración y dependencias.
+El endpoint de resumen del dashboard quedó implementado y validado estructuralmente.
 
 ## Próximo paso
 
 Continuar la **Fase 9 — Migración gradual del dominio a Express**.
 
-La siguiente tarea recomendada es revisar la documentación y decidir el siguiente foco funcional:
+La siguiente tarea recomendada es conectar el dashboard frontend a Express:
 
-- mantener `docs/API_DATA_DESIGN.md` como documento histórico de la fase JSON Server;
-- mantener `docs/BACKEND_PLAN.md` como plan inicial histórico, con nota de que el backend ya evolucionó más allá de autenticación;
-- continuar con una nueva mejora del dominio, probablemente dashboard con métricas reales o limpieza/refactor de servicios.
+- crear `src/services/dashboardApi.js`;
+- consumir `GET http://localhost:4000/api/dashboard/summary` con `credentials: "include"`;
+- cargar las métricas en `DashboardPage`;
+- mostrar estados de carga y error;
+- renderizar las métricas en cards simples.
 
 ## Bloqueos
 
