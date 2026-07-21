@@ -8,20 +8,25 @@ import { updateAgentStatusSchema } from "../validations/agentSchemas.js";
 
 const router = Router();
 
-router.get("/", authMiddleware, async (req, res) => {
-  const agents = await prisma.agent.findMany({
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      isActive: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-  });
+router.get(
+  "/",
+  authMiddleware,
+  authorizeRoles("admin", "agent"),
+  async (req, res) => {
+    const agents = await prisma.agent.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
 
-  res.json(agents);
-});
+    res.json(agents);
+  },
+);
 
 router.patch(
   "/:id/status",

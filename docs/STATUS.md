@@ -605,19 +605,26 @@
   - el backend responde error controlado si se intenta asignar un agente inexistente o inactivo;
   - la opción `Sin asignar` sigue disponible;
   - tarea validada por el usuario desde la interfaz.
+- Restricciones backend de lectura en recursos auxiliares:
+  - `GET /api/categories` requiere sesión y rol `admin` o `agent`;
+  - `GET /api/customers` requiere sesión y rol `admin` o `agent`;
+  - `GET /api/agents` requiere sesión y rol `admin` o `agent`;
+  - `PATCH /api/agents/:id/status` se mantiene restringido solo a `admin`.
 
 ## Tarea actual
 
-Fase 11 — revisión de restricciones backend por rol en recursos de dominio.
+Ninguna tarea activa.
+
+Fase 11 continúa en refinamiento funcional del dominio.
 
 ## Próximo paso
 
-La siguiente tarea es alinear permisos backend de lectura para recursos auxiliares del dominio:
+Definir la siguiente mejora de Fase 11 entre estas opciones:
 
-- agregar `authorizeRoles("admin", "agent")` a `GET /api/categories`;
-- agregar `authorizeRoles("admin", "agent")` a `GET /api/customers`;
-- agregar `authorizeRoles("admin", "agent")` a `GET /api/agents`;
-- confirmar que `ticketRoutes` y `dashboardRoutes` ya están alineadas.
+- CRUD administrativo básico para clientes;
+- CRUD administrativo básico para categorías;
+- refinamiento de filtros/búsqueda de tickets;
+- mejora visual y de formato de fechas/estados/prioridades en detalle de ticket.
 
 ## Bloqueos
 
