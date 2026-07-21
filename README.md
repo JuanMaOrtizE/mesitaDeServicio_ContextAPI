@@ -1,16 +1,135 @@
-# React + Vite
+# Mesa de Servicio — Help Desk Full-Stack
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación Help Desk construida como proyecto de portfolio para demostrar una base práctica en React y Express.
 
-Currently, two official plugins are available:
+El objetivo del proyecto no fue crear una aplicación empresarial completa, sino desarrollar una app full-stack funcional con autenticación, roles, tickets, clientes, agentes, categorías, comentarios y reglas de negocio básicas.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Durante el desarrollo utilicé Codex como apoyo de aprendizaje y guía técnica: planificación de tareas, revisión de decisiones, detección de errores comunes y acompañamiento para mantener una estructura progresiva. El código y las decisiones fueron trabajados paso a paso, evitando delegar el proyecto completo a la herramienta.
 
-## React Compiler
+## Funcionalidades principales
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Autenticación con JWT en cookie `httpOnly`.
+- Login, logout, sesión actual y recuperación de contraseña en flujo local.
+- Roles `admin` y `agent`.
+- Rutas protegidas en frontend y backend.
+- Gestión de tickets.
+- Asignación de agentes a tickets.
+- Bloqueo de asignación a agentes inactivos.
+- Clientes, agentes y categorías desde PostgreSQL.
+- Comentarios por ticket.
+- Dashboard con métricas básicas.
+- Manejo de errores, carga y estados vacíos.
 
-## Expanding the ESLint configuration
+## Tecnologías
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Frontend
+
+- React
+- React Router
+- Context API
+- `useState`
+- `useReducer`
+- Tailwind CSS
+- Vite
+
+### Backend
+
+- Node.js
+- Express
+- Prisma
+- PostgreSQL
+- Zod
+- bcrypt
+- JSON Web Token
+- Cookies `httpOnly`
+
+## Qué demuestra este proyecto
+
+### React
+
+- Componentes reutilizables.
+- Props y composición.
+- Renderizado condicional.
+- Listas y claves estables.
+- Formularios controlados.
+- Estado local con `useState`.
+- Estado global con Context API.
+- Uso puntual de `useReducer`.
+- Rutas protegidas.
+- Consumo de API.
+- Manejo de errores y estados de carga.
+
+### Express
+
+- API REST.
+- Rutas separadas.
+- Middlewares.
+- Autenticación y autorización.
+- Validación de datos con Zod.
+- Cookies seguras para sesión.
+- Conexión a PostgreSQL con Prisma.
+- Relaciones entre entidades.
+- Reglas de negocio en backend.
+
+## Cómo correr el proyecto
+
+El proyecto tiene frontend y backend separados. Necesitas tener PostgreSQL disponible y configurar las variables de entorno del backend.
+
+### 1. Configurar backend
+
+Crea un archivo `.env` dentro de `backend/` con estos valores:
+
+```env
+DATABASE_URL="postgresql://postgres:tu_password@localhost:5432/mesita_servicio"
+JWT_SECRET="un_secreto_seguro_para_desarrollo"
+CLIENT_ORIGIN="http://localhost:5173"
+PORT=4000
+```
+
+Luego ejecuta:
+
+```bash
+cd backend
+npm install
+npx prisma migrate dev
+npm run dev
+```
+
+El backend queda disponible en:
+
+```txt
+http://localhost:4000
+```
+
+### 2. Configurar frontend
+
+En otra terminal, desde la raíz del proyecto:
+
+```bash
+npm install
+npm run dev
+```
+
+El frontend queda disponible normalmente en:
+
+```txt
+http://localhost:5173
+```
+
+## Scripts útiles
+
+Frontend:
+
+```bash
+npm run dev
+npm run lint
+npm run build
+```
+
+Backend:
+
+```bash
+cd backend
+npm run dev
+npm start
+```
