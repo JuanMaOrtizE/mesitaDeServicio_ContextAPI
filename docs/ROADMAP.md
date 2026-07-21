@@ -79,7 +79,7 @@
 
 **Resultado:** experiencia autenticada y diferenciada por rol.
 
-## Fase 9 — Migración gradual del dominio a Express (siguiente)
+## Fase 9 — Migración gradual del dominio a Express (completada)
 
 - Migrar tickets, clientes, agentes, categorías y comentarios desde JSON Server a Express + PostgreSQL.
 - Reemplazar servicios frontend para apuntar al backend Express.
@@ -95,12 +95,12 @@
 
 **Resultado:** uso justificado de reducer, no una sustitución general de `useState`.
 
-## Fase 11 — Dominio completo
+## Fase 11 — Dominio completo y refinamiento funcional (siguiente)
 
-- Completar clientes, agentes, asignaciones y categorías.
-- Incorporar comentarios cronológicos.
-- Combinar búsqueda y filtros.
-- Aplicar las restricciones de rol acordadas.
+- Revisar y consolidar restricciones de rol en backend para recursos del dominio.
+- Completar o decidir el alcance final de clientes, agentes y categorías.
+- Refinar búsquedas, filtros y métricas.
+- Revisar estados vacíos, carga, error y consistencia visual general.
 
 **Resultado:** flujo principal del Help Desk completo.
 

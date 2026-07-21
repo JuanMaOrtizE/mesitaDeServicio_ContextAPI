@@ -2,8 +2,8 @@
 
 ## Estado actual
 
-- Las fases 0, 1, 2, 3, 4, 5, 6, 7 y 8 están completadas.
-- La Fase 9 está en curso: migración gradual del dominio Help Desk a Express/PostgreSQL.
+- Las fases 0, 1, 2, 3, 4, 5, 6, 7, 8 y 9 están completadas.
+- La Fase 10 inició con la incorporación de `useReducer` en `TicketForm`.
 - Tailwind CSS `4.3.2` está instalado, configurado y usado en el layout, formularios, lista de tickets y páginas secundarias.
 - React Router está configurado con Data Router.
 - El frontend mantiene estado de UI en memoria mediante `useState`.
@@ -41,7 +41,7 @@
 - **Fase 6:** backend Express Auth completado localmente.
 - **Fase 7:** integración frontend de autenticación real.
 - **Fase 8:** permisos iniciales por rol en frontend/backend.
-- **Fase 9:** migración del dominio a Express/PostgreSQL en curso.
+- **Fase 9:** migración del dominio a Express/PostgreSQL completada.
 - **Fase 10:** `useReducer` incorporado en el formulario de tickets.
 
 ## Últimas tareas cerradas
@@ -587,22 +587,34 @@
   - muestra agentes reales desde Express/PostgreSQL;
   - incluye estados de carga, error y lista vacía;
   - presenta nombre, email y estado activo/inactivo en cards.
+- Activación/desactivación de agentes:
+  - `PATCH /api/agents/:id/status` permite actualizar `isActive`;
+  - la ruta está protegida con `authMiddleware` y `authorizeRoles("admin")`;
+  - `updateAgentStatusSchema` valida que `isActive` sea booleano;
+  - `agentsApi.js` agrega `updateAgentStatus`;
+  - `AgentsPage` permite cambiar el estado desde un badge clickeable solo para usuarios `admin`;
+  - usuarios sin rol `admin` ven el estado como etiqueta no interactiva;
+  - el estado local se actualiza con el agente devuelto por el backend;
+  - tarea validada por el usuario desde la interfaz.
+- Restricción de asignación a agentes inactivos:
+  - `TicketItem` filtra el selector de asignación para mostrar solo agentes activos;
+  - si el ticket ya tiene asignado un agente inactivo, ese agente se conserva como opción visible;
+  - los agentes inactivos conservados en el select se muestran con la indicación `(inactivo)`;
+  - la opción `Sin asignar` sigue disponible;
+  - tarea validada por el usuario desde la interfaz.
 
 ## Tarea actual
 
-Ninguna tarea activa.
-
-`CustomersPage` y `AgentsPage` quedaron conectadas a datos reales y validadas.
+Fase 11 — revisión de restricciones backend por rol en recursos de dominio.
 
 ## Próximo paso
 
-Continuar con revisión de cierre de Fase 9/Fase 10.
+La siguiente tarea es alinear permisos backend de lectura para recursos auxiliares del dominio:
 
-La siguiente tarea recomendada es revisar si quedan pendientes funcionales antes de pasar a la siguiente fase:
-
-- revisar si Fase 9 puede cerrarse;
-- actualizar roadmap según el estado full-stack actual;
-- decidir la siguiente mejora funcional o de refactor.
+- agregar `authorizeRoles("admin", "agent")` a `GET /api/categories`;
+- agregar `authorizeRoles("admin", "agent")` a `GET /api/customers`;
+- agregar `authorizeRoles("admin", "agent")` a `GET /api/agents`;
+- confirmar que `ticketRoutes` y `dashboardRoutes` ya están alineadas.
 
 ## Bloqueos
 

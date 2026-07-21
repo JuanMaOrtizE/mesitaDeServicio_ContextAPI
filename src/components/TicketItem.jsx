@@ -22,6 +22,9 @@ function TicketItem({
   const customerName = ticket.customer?.name ?? "Cliente no encontrado";
   const categoryName = ticket.category?.name ?? "Categoría no encontrada";
   const assignedAgentName = ticket.agent?.name ?? "Sin asignar";
+  const assignableAgents = agents.filter(
+    (agent) => agent.isActive || agent.id === ticket.agentId,
+  );
 
   const priorityLabels = {
     low: "Baja",
@@ -99,9 +102,9 @@ function TicketItem({
               }}
             >
               <option value="">Sin asignar</option>
-              {agents.map((agent) => (
+              {assignableAgents.map((agent) => (
                 <option key={agent.id} value={agent.id}>
-                  {agent.name}
+                  {agent.isActive ? agent.name : `${agent.name} (inactivo)`}
                 </option>
               ))}
             </select>

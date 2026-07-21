@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
-import { getAgents } from "../services/agentsApi";
+import { getAgents, updateAgentStatus } from "../services/agentsApi";
+import { useAuth } from "../context/useAuth";
 
 function AgentsPage() {
   const [agents, setAgents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
+  const { user } = useAuth();
+
+  const canUpdateAgent = user?.role === "admin";
 
   useEffect(() => {
     async function loadAgents() {
@@ -24,6 +28,24 @@ function AgentsPage() {
 
     loadAgents();
   }, []);
+
+  async function handleToggleAgentStatus(agent) {
+    try {
+      setLoadError("");
+
+      const updatedAgent = await updateAgentStatus(agent.id, !agent.isActive);
+
+      setAgents((currentAgents) =>
+        currentAgents.map((currentAgent) =>
+          currentAgent.id === updatedAgent.id ? updatedAgent : currentAgent,
+        ),
+      );
+    } catch (error) {
+      setLoadError(
+        error.message ?? "No se pudo actualizar el estado del agente.",
+      );
+    }
+  }
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -68,20 +90,33 @@ function AgentsPage() {
                     <h2 className="text-base font-semibold text-slate-900">
                       {agent.name}
                     </h2>
-                    <p className="mt-1 text-sm text-slate-600">
-                      {agent.email}
-                    </p>
+                    <p className="mt-1 text-sm text-slate-600">{agent.email}</p>
                   </div>
 
-                  <span
-                    className={
-                      agent.isActive
-                        ? "rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700"
-                        : "rounded-full border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-600"
-                    }
-                  >
-                    {agent.isActive ? "Activo" : "Inactivo"}
-                  </span>
+                  {canUpdateAgent ? (
+                    <button
+                      onClick={() => {
+                        handleToggleAgentStatus(agent);
+                      }}
+                      className={
+                        agent.isActive
+                          ? "cursor-pointer rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700 transition hover:bg-emerald-100"
+                          : "cursor-pointer rounded-full border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-600 transition hover:bg-slate-100"
+                      }
+                    >
+                      {agent.isActive ? "Activo" : "Inactivo"}
+                    </button>
+                  ) : (
+                    <span
+                      className={
+                        agent.isActive
+                          ? "rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700"
+                          : "rounded-full border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-600"
+                      }
+                    >
+                      {agent.isActive ? "Activo" : "Inactivo"}
+                    </span>
+                  )}
                 </div>
               </article>
             ))}
