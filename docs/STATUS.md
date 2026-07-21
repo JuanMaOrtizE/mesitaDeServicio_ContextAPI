@@ -552,24 +552,40 @@
   - calcula métricas de tickets por estado, prioridad alta y tickets sin agente;
   - calcula totales de clientes, agentes y comentarios;
   - `backend/src/app.js` registra `/api/dashboard`.
+- Dashboard frontend:
+  - `src/services/dashboardApi.js` creado;
+  - `getDashboardSummary` consume `GET http://localhost:4000/api/dashboard/summary`;
+  - la petición usa `credentials: "include"`;
+  - `DashboardPage` carga métricas reales desde Express;
+  - muestra estado de carga y error;
+  - renderiza métricas en cards responsive básicas;
+  - métricas agrupadas visualmente en resumen general, estado de tickets y alertas operativas.
+- Pulido visual de autenticación:
+  - `LoginPage` estilizada con card centrada;
+  - campos, botón, error y enlace de recuperación tienen estilos consistentes con la app;
+  - botón de inicio de sesión usa cursor de mano y estado deshabilitado.
+  - `ForgotPasswordPage` estilizada con card centrada;
+  - mensaje de éxito, error y bloque de token de desarrollo tienen presentación visual consistente;
+  - enlace hacia restablecimiento y regreso al login conservan la lógica existente.
+  - `ResetPasswordPage` estilizada con card centrada;
+  - campos de token y nueva contraseña, botón, mensajes y enlace al login tienen estilos consistentes.
+  - `RegisterPage` estilizada con card centrada;
+  - campos de nombre, email, contraseña, rol, botón, mensajes y enlace tienen estilos consistentes.
 
 ## Tarea actual
 
 Ninguna tarea activa.
 
-El endpoint de resumen del dashboard quedó implementado y validado estructuralmente.
+Las páginas de autenticación quedaron estilizadas y validadas.
 
 ## Próximo paso
 
 Continuar la **Fase 9 — Migración gradual del dominio a Express**.
 
-La siguiente tarea recomendada es conectar el dashboard frontend a Express:
+La siguiente tarea recomendada es decidir el siguiente foco de Fase 9:
 
-- crear `src/services/dashboardApi.js`;
-- consumir `GET http://localhost:4000/api/dashboard/summary` con `credentials: "include"`;
-- cargar las métricas en `DashboardPage`;
-- mostrar estados de carga y error;
-- renderizar las métricas en cards simples.
+- cerrar revisión visual general de las páginas principales;
+- o avanzar hacia Fase 10 incorporando `useReducer` en un flujo que lo justifique.
 
 ## Bloqueos
 

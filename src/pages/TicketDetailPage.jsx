@@ -34,7 +34,9 @@ function TicketDetailPage() {
         setTicket(ticketsData);
         setComments(commentsData);
       } catch (error) {
-        setLoadError(error.message ?? "Ocurrió un error al cargar el ticket.");
+        setLoadError(
+          error.message ?? "Ocurrió un error al cargar las métricas",
+        );
       } finally {
         setIsLoading(false);
       }
