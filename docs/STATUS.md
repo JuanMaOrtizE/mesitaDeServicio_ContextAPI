@@ -600,6 +600,9 @@
   - `TicketItem` filtra el selector de asignación para mostrar solo agentes activos;
   - si el ticket ya tiene asignado un agente inactivo, ese agente se conserva como opción visible;
   - los agentes inactivos conservados en el select se muestran con la indicación `(inactivo)`;
+  - `TicketDetailPage` también muestra `(inactivo)` cuando el agente relacionado del ticket no está activo;
+  - `ticketRoutes` bloquea desde backend la creación o actualización de tickets con `agentId` de un agente inactivo;
+  - el backend responde error controlado si se intenta asignar un agente inexistente o inactivo;
   - la opción `Sin asignar` sigue disponible;
   - tarea validada por el usuario desde la interfaz.
 

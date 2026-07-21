@@ -12,6 +12,34 @@ import { createCommentSchema } from "../validations/commentSchemas.js";
 
 const router = Router();
 
+async function getAgentAssignmentError(agentId) {
+  if (!agentId) return null;
+
+  const agent = await prisma.agent.findUnique({
+    where: { id: agentId },
+    select: {
+      id: true,
+      isActive: true,
+    },
+  });
+
+  if (!agent) {
+    return {
+      status: 404,
+      message: "Agent not found",
+    };
+  }
+
+  if (!agent.isActive) {
+    return {
+      status: 400,
+      message: "No se puede asignar un agente inactivo.",
+    };
+  }
+
+  return null;
+}
+
 router.get(
   "/",
   authMiddleware,
@@ -74,6 +102,13 @@ router.post(
     try {
       const parsedData = createTicketSchema.parse(req.body);
       const agentId = parsedData.agentId === "" ? null : parsedData.agentId;
+      const agentAssignmentError = await getAgentAssignmentError(agentId);
+
+      if (agentAssignmentError) {
+        return res
+          .status(agentAssignmentError.status)
+          .json({ message: agentAssignmentError.message });
+      }
 
       const ticket = await prisma.ticket.create({
         data: {
@@ -124,9 +159,26 @@ router.patch(
         return res.status(404).json({ message: "Ticket not found" });
       }
 
+      const ticketData = { ...parsedData };
+
+      if (Object.prototype.hasOwnProperty.call(ticketData, "agentId")) {
+        ticketData.agentId =
+          ticketData.agentId === "" ? null : ticketData.agentId;
+
+        const agentAssignmentError = await getAgentAssignmentError(
+          ticketData.agentId,
+        );
+
+        if (agentAssignmentError) {
+          return res
+            .status(agentAssignmentError.status)
+            .json({ message: agentAssignmentError.message });
+        }
+      }
+
       const updatedTicket = await prisma.ticket.update({
         where: { id },
-        data: parsedData,
+        data: ticketData,
         include: {
           customer: true,
           category: true,

@@ -46,7 +46,11 @@ function TicketDetailPage() {
 
   const customerName = ticket?.customer?.name ?? "Cliente no encontrado";
   const categoryName = ticket?.category?.name ?? "Categoría no encontrada";
-  const agentName = ticket?.agent?.name ?? "Sin asignar";
+  const agentName = ticket?.agent
+    ? ticket.agent.isActive
+      ? ticket.agent.name
+      : `${ticket.agent.name} (inactivo)`
+    : "Sin asignar";
 
   async function handleCreateComment(e) {
     e.preventDefault();

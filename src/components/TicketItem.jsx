@@ -21,7 +21,11 @@ function TicketItem({
 
   const customerName = ticket.customer?.name ?? "Cliente no encontrado";
   const categoryName = ticket.category?.name ?? "Categoría no encontrada";
-  const assignedAgentName = ticket.agent?.name ?? "Sin asignar";
+  const assignedAgentName = ticket.agent
+    ? ticket.agent.isActive
+      ? ticket.agent.name
+      : `${ticket.agent.name} (inactivo)`
+    : "Sin asignar";
   const assignableAgents = agents.filter(
     (agent) => agent.isActive || agent.id === ticket.agentId,
   );
