@@ -28,7 +28,7 @@
 - La pantalla de detalle tiene presentación visual organizada para datos principales, relaciones, comentarios, formulario, carga, error y enlace de regreso.
 - Backend Express Auth está completado localmente.
 - La integración frontend de autenticación está implementada con servicios API, `AuthContext`, rutas protegidas y navegación por sesión/rol.
-- `useReducer` aún no se ha incorporado al frontend.
+- `useReducer` ya se incorporó en `TicketForm` para manejar estado del formulario y errores locales.
 
 ## Trabajo completado
 
@@ -42,6 +42,7 @@
 - **Fase 7:** integración frontend de autenticación real.
 - **Fase 8:** permisos iniciales por rol en frontend/backend.
 - **Fase 9:** migración del dominio a Express/PostgreSQL en curso.
+- **Fase 10:** `useReducer` incorporado en el formulario de tickets.
 
 ## Últimas tareas cerradas
 
@@ -571,21 +572,37 @@
   - campos de token y nueva contraseña, botón, mensajes y enlace al login tienen estilos consistentes.
   - `RegisterPage` estilizada con card centrada;
   - campos de nombre, email, contraseña, rol, botón, mensajes y enlace tienen estilos consistentes.
+- Uso de `useReducer`:
+  - `TicketForm` migrado de `useState` a `useReducer`;
+  - `ticketFormReducer` centraliza cambios de campo, errores de formulario y reset;
+  - el reducer se mantiene como función pura;
+  - el contrato con `TicketsPage` se conserva mediante el mismo `draft`.
+- Vista real de clientes:
+  - `CustomersPage` consume `getCustomers`;
+  - muestra clientes reales desde Express/PostgreSQL;
+  - incluye estados de carga, error y lista vacía;
+  - presenta datos básicos del cliente en cards.
+- Vista real de agentes:
+  - `AgentsPage` consume `getAgents`;
+  - muestra agentes reales desde Express/PostgreSQL;
+  - incluye estados de carga, error y lista vacía;
+  - presenta nombre, email y estado activo/inactivo en cards.
 
 ## Tarea actual
 
 Ninguna tarea activa.
 
-Las páginas de autenticación quedaron estilizadas y validadas.
+`CustomersPage` y `AgentsPage` quedaron conectadas a datos reales y validadas.
 
 ## Próximo paso
 
-Continuar la **Fase 9 — Migración gradual del dominio a Express**.
+Continuar con revisión de cierre de Fase 9/Fase 10.
 
-La siguiente tarea recomendada es decidir el siguiente foco de Fase 9:
+La siguiente tarea recomendada es revisar si quedan pendientes funcionales antes de pasar a la siguiente fase:
 
-- cerrar revisión visual general de las páginas principales;
-- o avanzar hacia Fase 10 incorporando `useReducer` en un flujo que lo justifique.
+- revisar si Fase 9 puede cerrarse;
+- actualizar roadmap según el estado full-stack actual;
+- decidir la siguiente mejora funcional o de refactor.
 
 ## Bloqueos
 

@@ -37,7 +37,7 @@ function LoginPage() {
 
   return (
     <div className="mx-auto max-w-md">
-      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm ">
+      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <h1 className="text-2xl font-bold tracking-tight text-slate-900">
           Iniciar sesión
         </h1>

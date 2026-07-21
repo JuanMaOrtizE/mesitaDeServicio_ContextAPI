@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useReducer } from "react";
 
 function getInitialFormData(initialTicket, customers, categories) {
   if (initialTicket) {
@@ -20,6 +20,31 @@ function getInitialFormData(initialTicket, customers, categories) {
   };
 }
 
+function ticketFormReducer(state, action) {
+  switch (action.type) {
+    case "fieldChanged":
+      return {
+        ...state,
+        formData: {
+          ...state.formData,
+          [action.payload.name]: action.payload.value,
+        },
+      };
+
+    case "formErrorSet":
+      return { ...state, formError: action.payload };
+
+    case "formReset":
+      return {
+        formData: action.payload,
+        formError: "",
+      };
+
+    default:
+      return state;
+  }
+}
+
 function TicketForm({
   customers,
   categories,
@@ -27,16 +52,17 @@ function TicketForm({
   initialTicket,
   onCancelEdit,
 }) {
-  const [formData, setFormData] = useState(
-    getInitialFormData(initialTicket, customers, categories),
-  );
+  const [state, dispatch] = useReducer(ticketFormReducer, {
+    formData: getInitialFormData(initialTicket, customers, categories),
+    formError: "",
+  });
 
-  const [formError, setFormError] = useState("");
+  const { formData, formError } = state;
 
   function handleChange(e) {
     const { name, value } = e.target;
 
-    setFormData((previousData) => ({ ...previousData, [name]: value }));
+    dispatch({ type: "fieldChanged", payload: { name, value } });
   }
 
   function handleSubmit(e) {
@@ -45,7 +71,11 @@ function TicketForm({
     const description = formData.description.trim();
 
     if (!title || !description) {
-      setFormError("El título y la descripción son obligatorias.");
+      dispatch({
+        type: "formErrorSet",
+        payload: "El título y la descripción son obligatorias.",
+      });
+
       return;
     }
 
@@ -59,14 +89,10 @@ function TicketForm({
 
     onSubmitTicket(draft);
 
-    setFormData({
-      title: "",
-      description: "",
-      priority: "medium",
-      customerId: String(customers[0].id),
-      categoryId: String(categories[0].id),
+    dispatch({
+      type: "formReset",
+      payload: getInitialFormData(null, customers, categories),
     });
-    setFormError("");
   }
 
   const labelClass = "text-sm font-medium text-slate-700";
